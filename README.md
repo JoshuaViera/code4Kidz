@@ -214,8 +214,8 @@ MIT License - see [LICENSE](LICENSE) for details
 
 ## 📬 Contact
 
-**Project Lead:** Josh  
-**Co-Founder:** Manny
+**Project Lead:** Joshua Viera
+**Co-Founder:** Nicole Rodriguez
 
 Questions? Ideas? Want to pilot Code4Kidz at your community center?  
 [Contact info will be added]
