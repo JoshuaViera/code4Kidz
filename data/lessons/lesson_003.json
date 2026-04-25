@@ -1,0 +1,482 @@
+{
+	"id": "lesson_003",
+	"schema_version": "1.2.0",
+	"version": 1,
+
+	"_changelog": "v1 — Initial build. First lesson introducing multi-paragraph narrative structure. Introduces all_instances_min_chars validation rule (schema v1.2) in challenge step. Warm-up recalls CSS from Lesson 2. Step 2C anatomy callback in Step 1 info activates prior skeleton knowledge.",
+
+	"meta": {
+		"title": "Write Your Story! 📝",
+		"slug": "write-your-story",
+		"emoji": "📝",
+		"age_range": { "min": 7, "max": 10 },
+		"prior_lesson_id": "lesson_002",
+		"next_lesson_id": "lesson_004",
+		"time_estimate_min": 16,
+		"total_xp": 100,
+		"_xp_note": "Step editors define 80 XP (3 × 20) + challenge 20 XP = 80 XP. total_xp is 100 per PRD spec. Same open question as lessons 001 and 002 — remaining 20 XP source unresolved. Flagged in PRD Section 11. CI XP sum validator will catch this.",
+		"objective": "By the end — you will write a story with three paragraphs.",
+		"concepts_introduced": [
+			"p_tag_deep",
+			"content_hierarchy",
+			"multiple_paragraphs",
+			"tag_bug_fix"
+		],
+		"concepts_required": [
+			"h1_tag",
+			"p_tag",
+			"tag_pairs",
+			"page_skeleton",
+			"head_tag",
+			"body_tag",
+			"css",
+			"color_property"
+		],
+		"tags": ["html", "paragraphs", "writing", "content", "web"]
+	},
+
+	"byte_arc": {
+		"opening_emotion": "excited",
+		"closing_emotion": "proud"
+	},
+
+	"steps": [
+		{
+			"id": "warmup",
+			"type": "warmup",
+			"order": 0,
+			"xp": 0,
+			"bootstrap_median_ms": 40000,
+			"progress_label": null,
+			"always_advance": true,
+			"time_limit_ms": 60000,
+			"byte": {
+				"emotion": "neutral",
+				"lines": ["Warm-up time.", "Can you remember last lesson?"]
+			},
+			"prompt_lines": [
+				"Add a color to your h1.",
+				"One CSS rule inside a style tag."
+			],
+			"starter_code": "",
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "style",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "css_property_set",
+					"selector": "h1",
+					"property": "color",
+					"not_default": true,
+					"error_type": "css_property_error"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Nice. You remembered.",
+					"emotion": "neutral"
+				},
+				"timeout": {
+					"byte_line": "No worries. Let's keep going.",
+					"emotion": "neutral"
+				}
+			}
+		},
+
+		{
+			"id": "mascot_intro",
+			"type": "mascot_intro",
+			"order": 1,
+			"xp": 0,
+			"bootstrap_median_ms": 8000,
+			"progress_label": null,
+			"byte": {
+				"emotion": "excited",
+				"lines": [
+					"A heading tells WHAT the page is about.",
+					"A paragraph tells the STORY."
+				]
+			},
+			"cta": "Let's write! →",
+			"byte_story_moment": {
+				"lines": [
+					"When I learned about paragraphs I wrote one sentence — forty words long.",
+					"The browser tried its best. It was not great."
+				],
+				"emotion": "story",
+				"auto_dismiss_ms": 8000,
+				"dismiss_label": "Got it"
+			}
+		},
+
+		{
+			"id": "step_1_info",
+			"type": "info",
+			"order": 2,
+			"xp": 0,
+			"bootstrap_median_ms": 15000,
+			"progress_label": "1 of 5",
+			"title": "One p. One Idea.",
+			"content_lines": [
+				"One `<p>` tag holds one idea.",
+				"Three `<p>` tags?",
+				"That's a story."
+			],
+			"byte": {
+				"emotion": "neutral",
+				"lines": ["Every great page has a story.", "This is how you tell it."]
+			},
+			"animation": "story_build_sequence",
+			"_animation_note": "Three p tags appear one at a time inside a body region. Each fades in with its text already written: first p 'My dog Biscuit loves to run.' Second p 'He is fast and very loud.' Third p 'He once ate my homework. No joke.' After all three are visible, a subtle bracket appears on the right labeled 'a story.' Satisfying, sequential, shows the concept in action.",
+			"code_animation": {
+				"type": "sequential_appear",
+				"elements": [
+					{
+						"token": "<p>My dog Biscuit loves to run.</p>",
+						"label": "idea 1",
+						"delay_ms": 0
+					},
+					{
+						"token": "<p>He is fast and very loud.</p>",
+						"label": "idea 2",
+						"delay_ms": 1200
+					},
+					{
+						"token": "<p>He once ate my homework. No joke.</p>",
+						"label": "idea 3",
+						"delay_ms": 1200
+					}
+				],
+				"final_label": "a story.",
+				"final_label_delay_ms": 800
+			}
+		},
+
+		{
+			"id": "step_1_quiz",
+			"type": "quiz",
+			"order": 3,
+			"xp": 0,
+			"bootstrap_median_ms": 12000,
+			"progress_label": "1 of 5",
+			"prompt": "What does each p tag hold?",
+			"byte": {
+				"emotion": "curious",
+				"lines": ["What does each p tag hold?"]
+			},
+			"options": [
+				{ "id": "opt_a", "text": "One whole book", "is_correct": false },
+				{ "id": "opt_b", "text": "One idea or sentence", "is_correct": true }
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "One idea. Stack a few — you have a story.",
+					"emotion": "happy"
+				},
+				"incorrect": {
+					"byte_line": "One p tag. One idea. That's the whole rule.",
+					"emotion": "thinking",
+					"action": "reset"
+				}
+			},
+			"tap_target": null
+		},
+
+		{
+			"id": "step_2_info",
+			"type": "info",
+			"order": 4,
+			"xp": 0,
+			"bootstrap_median_ms": 14000,
+			"progress_label": "2 of 5",
+			"title": "h1 and p Work Together",
+			"_design_note": "Piaget — concrete before abstract. Show the relationship visually before any typing. The skeleton callback (using the labeled blueprint from Lesson 1 Step 2C) activates prior knowledge and lowers cognitive load. Ausubel advance organizer theory.",
+			"content_lines": [
+				"h1 says **what** the page is about.",
+				"p fills in the details.",
+				"They work together."
+			],
+			"byte": {
+				"emotion": "neutral",
+				"lines": ["You already know both tags.", "Now use them together."]
+			},
+			"animation": "h1_p_relationship",
+			"_animation_note": "Left side: h1 tag appears — 'My Dog Biscuit' — labeled 'THE TOPIC'. A downward arrow. Then a p tag appears below — 'Biscuit loves to run in the park.' — labeled 'THE STORY'. Simple, clear, concrete. No more than 3 seconds per element.",
+			"code_animation": {
+				"type": "relationship_build",
+				"elements": [
+					{
+						"token": "<h1>My Dog Biscuit</h1>",
+						"label": "THE TOPIC",
+						"label_color": "#5C3EBC",
+						"delay_ms": 0
+					},
+					{ "connector": "↓", "delay_ms": 900 },
+					{
+						"token": "<p>Biscuit loves to run in the park.</p>",
+						"label": "THE STORY",
+						"label_color": "#0D7C7B",
+						"delay_ms": 900
+					}
+				]
+			}
+		},
+
+		{
+			"id": "step_2_quiz",
+			"type": "quiz",
+			"order": 5,
+			"xp": 0,
+			"bootstrap_median_ms": 11000,
+			"progress_label": "2 of 5",
+			"prompt": "Which tag tells the STORY?",
+			"byte": {
+				"emotion": "curious",
+				"lines": ["Which tag tells the STORY?"]
+			},
+			"options": [
+				{ "id": "opt_a", "text": "h1", "is_correct": false },
+				{ "id": "opt_b", "text": "p", "is_correct": true }
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "p tells the story. h1 names the topic.",
+					"emotion": "happy"
+				},
+				"incorrect": {
+					"byte_line": "h1 is the title. p is everything after that.",
+					"emotion": "thinking",
+					"action": "reset"
+				}
+			},
+			"tap_target": null
+		},
+
+		{
+			"id": "step_3_editor",
+			"type": "code_editor",
+			"order": 6,
+			"xp": 20,
+			"bootstrap_median_ms": 55000,
+			"progress_label": "3 of 5",
+			"title": "Your First Paragraph",
+			"content_lines": [
+				"Pick a topic.",
+				"Anything you know or love.",
+				"Add one `<p>` tag with one sentence about it."
+			],
+			"prompt_code": "<p>I love dogs because they are loyal.</p>",
+			"starter_code": "<h1>My Topic</h1>\n\n",
+			"_starter_note": "Starter code has h1 already present with placeholder text. Cursor blinking on line 3. Student does not need to write the h1 — it's given. This reduces cognitive load: they focus on the p tag only. The h1 placeholder 'My Topic' is intentionally generic — students should personalize it but validation does not require it at this step.",
+			"byte": {
+				"emotion": "neutral",
+				"lines": ["One sentence. Your topic.", "Write it."]
+			},
+			"hint_delay_ms": 30000,
+			"hint": "Type `<p>` then your sentence then `</p>` to close it.",
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "p",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "p",
+					"min": 5,
+					"_min_note": "Minimum 5 chars for p tags in this lesson — longer than Lessons 1-2 (which used min:2) because we are teaching sentence-level writing. 'Hi.' passes min:2 but is not a sentence about a topic. 5 chars catches single-word entries while allowing very short sentences like 'I like cats.' (12 chars).",
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "One paragraph. One idea. Your page is starting to say something.",
+					"emotion": "happy",
+					"animation": "sparkle_preview"
+				}
+			}
+		},
+
+		{
+			"id": "step_4_editor",
+			"type": "code_editor",
+			"order": 7,
+			"xp": 20,
+			"bootstrap_median_ms": 50000,
+			"progress_label": "4 of 5",
+			"title": "Add Another One",
+			"content_lines": [
+				"Good.",
+				"Now add another `<p>`.",
+				"Something different — a fact, a question, anything."
+			],
+			"prompt_code": null,
+			"starter_code": "<h1>My Topic</h1>\n<p>Your first paragraph here.</p>\n\n",
+			"_starter_note": "Starter shows h1 and one p already present — represents the student's work from Step 3. The placeholder text 'Your first paragraph here.' is used because we cannot carry the actual student input forward in the lesson definition (that's a runtime concern). The validation only checks for tag_count p min:2, so the placeholder p satisfies the first p and the student adds the second.",
+			"byte": {
+				"emotion": "neutral",
+				"lines": ["A fact. A question. Anything.", "Add one more `<p>`."]
+			},
+			"hint_delay_ms": 30000,
+			"hint": "Add a new line. Type `<p>` then something new then `</p>`.",
+			"validation_rules": [
+				{
+					"rule": "tag_count",
+					"tag": "p",
+					"min": 2,
+					"error_type": "wrong_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "p",
+					"min": 5,
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Two ideas on the same page. That's called paragraphs. Real ones.",
+					"emotion": "happy",
+					"animation": "sparkle_preview"
+				}
+			}
+		},
+
+		{
+			"id": "step_5_editor",
+			"type": "code_editor",
+			"order": 8,
+			"xp": 20,
+			"bootstrap_median_ms": 60000,
+			"_bootstrap_note": "60s median is deliberate — bug-finding takes longer for 7-year-olds than writing. They have to scan the code visually, identify the difference between the two p tags, and recognize the missing closing tag. This is a higher-order task. The 30s hint delay gives them a real attempt before Byte intervenes.",
+			"progress_label": "5 of 5",
+			"title": "Find the Missing Buddy",
+			"content_lines": [
+				"Byte's page has a problem.",
+				"One tag is missing its buddy."
+			],
+			"prompt_code": null,
+			"starter_code": "<h1>My Favorite Sport</h1>\n<p>I love basketball.\n<p>It is fast and exciting.</p>",
+			"_bug_note": "The bug: first p tag is missing its closing </p>. The second p tag is correctly closed. Some browsers will attempt to auto-close the first p when they encounter the second opening p tag — the page may look correct visually. This is intentional: kids learn that correct syntax matters even when the browser is forgiving. The validator checks tag pairing via DOM parsing, not visual output. Implementation: parse the HTML into a DOM, querySelectorAll('p'), check each element has a corresponding closing tag in the source. Alternatively: check that the number of opening p tags equals the number of closing p tags via regex count on the source string as a secondary check — but DOM parsing is preferred.",
+			"byte": {
+				"emotion": "thinking",
+				"lines": ["One tag is missing its buddy.", "Can you find it?"]
+			},
+			"hint_delay_ms": 30000,
+			"hint": "Find the p tag without a little line at the end. Add `</p>` to close it.",
+			"validation_rules": [
+				{
+					"rule": "tag_count",
+					"tag": "p",
+					"min": 2,
+					"error_type": "wrong_tag"
+				},
+				{
+					"rule": "all_instances_min_chars",
+					"tag": "p",
+					"min": 5,
+					"error_type": "empty_content"
+				},
+				{
+					"rule": "tag_present",
+					"tag": "p",
+					"error_type": "missing_closing_tag",
+					"_note": "This rule checks DOM-parsed tag integrity. If the first p is unclosed, querySelectorAll('p') may return unexpected results depending on browser parser behavior. The validator should cross-check: count of '<p' in source === count of '</p>' in source. Flag discrepancy as missing_closing_tag."
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Found it. Every tag needs its buddy. Every time.",
+					"emotion": "happy",
+					"animation": "sparkle_preview"
+				}
+			}
+		},
+
+		{
+			"id": "challenge",
+			"type": "challenge",
+			"order": 9,
+			"xp": 20,
+			"bootstrap_median_ms": 120000,
+			"_bootstrap_note": "120s median (2 minutes) is the highest in the curriculum so far. Writing three distinct sentences about a chosen topic is a genuine creative writing task for a 7-year-old. The traffic light threshold should use this value — a student spending 4 minutes on the challenge is not stuck, they are writing. Do not flag them red until 3× this median (360s = 6 minutes).",
+			"progress_label": null,
+			"byte": {
+				"emotion": "proud",
+				"lines": ["Okay.", "I'm not helping this time.", "You've got this."]
+			},
+			"tasks": [
+				{ "description": "A heading with your **topic**" },
+				{ "description": "A `<p>` — what it IS" },
+				{ "description": "A `<p>` with **one cool fact**" },
+				{ "description": "A `<p>` that ends with **something surprising**" }
+			],
+			"_tasks_note": "Four tasks but three p tags — task 1 maps to h1, tasks 2-4 map to the three p tags. The 'something surprising' framing on the third p is pedagogically intentional: it teaches narrative arc (intro → detail → surprise/twist), which maps directly to the K-3 ELA standard for opinion writing structure. DoE reviewers will recognize this.",
+			"starter_code": "<h1></h1>\n<p></p>\n<p></p>\n<p></p>",
+			"hints_enabled": false,
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "h1",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "h1",
+					"min": 2,
+					"error_type": "empty_content"
+				},
+				{
+					"rule": "tag_count",
+					"tag": "p",
+					"min": 3,
+					"error_type": "wrong_tag"
+				},
+				{
+					"rule": "all_instances_min_chars",
+					"tag": "p",
+					"min": 5,
+					"_rule_note": "Schema v1.2 rule. Checks ALL three p tags have ≥ 5 chars of content. A student who writes one real paragraph and leaves the others empty passes tag_count but must not pass the challenge. This rule closes that gap. Implementation: querySelectorAll('p'), forEach, check textContent.trim().replace(/\\s+/g, '').length >= 5.",
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_lines": [
+						"Three paragraphs. Your page tells a story now.",
+						"Someone could read this and learn something.",
+						"You're a writer AND a coder."
+					],
+					"emotion": "celebrating",
+					"animation": "confetti"
+				}
+			}
+		},
+
+		{
+			"id": "lesson_complete",
+			"type": "lesson_complete",
+			"order": 10,
+			"xp": 0,
+			"bootstrap_median_ms": 20000,
+			"progress_label": null,
+			"byte": {
+				"emotion": "proud",
+				"lines": [
+					"You wrote three paragraphs today.",
+					"Real content. Your words. Your page."
+				]
+			},
+			"summary": [
+				{ "concept": "One idea", "tag": "p" },
+				{ "concept": "Three ideas", "note": "three p tags" },
+				{ "concept": "h1 and p together", "note": "title + story" },
+				{ "concept": "Every tag needs a buddy", "note": "always" }
+			],
+			"total_xp": 100,
+			"next_lesson_teaser": "Make it Big or Small"
+		}
+	]
+}

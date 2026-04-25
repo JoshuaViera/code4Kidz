@@ -1,0 +1,443 @@
+{
+	"id": "lesson_002",
+	"schema_version": "1.0.0",
+	"version": 1,
+
+	"_note": "This file introduces two new constructs not yet in schema v1.0: (1) step type 'warmup' — needs to be added to the schema's valid step types. (2) validation rule 'css_property_set' — needs to be added to the validation rule enum. Both are flagged in Open Questions in the PRD. The schema doc must be updated before CI validation will pass for this file.",
+
+	"meta": {
+		"title": "Make it Colorful! 🎨",
+		"slug": "make-it-colorful",
+		"emoji": "🎨",
+		"age_range": { "min": 7, "max": 10 },
+		"prior_lesson_id": "lesson_001",
+		"next_lesson_id": "lesson_003",
+		"time_estimate_min": 15,
+		"total_xp": 100,
+		"_xp_note": "Steps define 80 XP (3 editors × 20 + challenge × 20). total_xp is 100 per PRD spec. The remaining 20 XP source is an open question — see PRD Section 11. The CI XP sum validator will flag this until resolved.",
+		"objective": "By the end — you will give your page colors.",
+		"concepts_introduced": [
+			"css",
+			"style_tag",
+			"color_property",
+			"background_color",
+			"semicolon"
+		],
+		"concepts_required": ["h1_tag", "p_tag", "tag_pairs"],
+		"tags": ["css", "colors", "beginner", "web"]
+	},
+
+	"byte_arc": {
+		"opening_emotion": "excited",
+		"closing_emotion": "proud"
+	},
+
+	"steps": [
+		{
+			"id": "warmup",
+			"type": "warmup",
+			"_type_note": "New step type — not yet in schema v1.0. Required fields beyond base: always_advance (bool), time_limit_ms (int). Hearts are never at risk on warmup steps. No XP animation on completion. Auto-advances when time_limit_ms elapses even if validation fails.",
+			"order": 0,
+			"xp": 0,
+			"bootstrap_median_ms": 35000,
+			"progress_label": null,
+			"always_advance": true,
+			"time_limit_ms": 60000,
+			"byte": {
+				"emotion": "neutral",
+				"lines": ["Warm-up time.", "Can you remember last time?"]
+			},
+			"prompt_lines": [
+				"Write an h1 with your name.",
+				"Write a p with one sentence."
+			],
+			"starter_code": "",
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "h1",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "h1",
+					"min": 2,
+					"error_type": "empty_content"
+				},
+				{
+					"rule": "tag_present",
+					"tag": "p",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "p",
+					"min": 2,
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Nice. Let's keep going.",
+					"emotion": "neutral"
+				},
+				"timeout": {
+					"byte_line": "No worries. Let's move on.",
+					"emotion": "neutral"
+				}
+			}
+		},
+
+		{
+			"id": "mascot_intro",
+			"type": "mascot_intro",
+			"order": 1,
+			"xp": 0,
+			"bootstrap_median_ms": 8000,
+			"progress_label": null,
+			"byte": {
+				"emotion": "excited",
+				"lines": ["Your page has words.", "Now let's give it a vibe."]
+			},
+			"cta": "Let's go! →",
+			"byte_story_moment": {
+				"lines": [
+					"My first CSS turned my whole page black.",
+					"I typed background-color: black to see what happened. Now I know."
+				],
+				"emotion": "story",
+				"auto_dismiss_ms": 8000,
+				"dismiss_label": "Got it"
+			}
+		},
+
+		{
+			"id": "step_1_info",
+			"type": "info",
+			"order": 2,
+			"xp": 0,
+			"bootstrap_median_ms": 12000,
+			"progress_label": "1 of 5",
+			"title": "What is CSS?",
+			"_update_note": "v2 — Kids now arrive from Lesson 1 knowing head, body, and html from the anatomy builder step. This step no longer needs to re-explain page structure. It goes straight to the CSS concept. The starter code in step_3_editor showing head/body/style will now be familiar — not foreign.",
+			"content_lines": [
+				"Remember the **brain**?",
+				"The `head` tag?",
+				"That's where CSS lives.",
+				"CSS tells the page how things **look**."
+			],
+			"byte": {
+				"emotion": "neutral",
+				"lines": ["HTML is the skeleton.", "CSS is the paint."]
+			},
+			"animation": "html_vs_css_comparison",
+			"code_animation": null
+		},
+
+		{
+			"id": "step_1_quiz",
+			"type": "quiz",
+			"order": 3,
+			"xp": 0,
+			"bootstrap_median_ms": 14000,
+			"progress_label": "1 of 5",
+			"prompt": "What does CSS do?",
+			"byte": {
+				"emotion": "curious",
+				"lines": ["What does CSS do?"]
+			},
+			"options": [
+				{ "id": "opt_a", "text": "It builds tags", "is_correct": false },
+				{
+					"id": "opt_b",
+					"text": "It makes things look a certain way",
+					"is_correct": true
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Exactly. HTML is WHAT. CSS is HOW.",
+					"emotion": "happy"
+				},
+				"incorrect": {
+					"byte_line": "CSS is about how things look. Try the second one.",
+					"emotion": "thinking",
+					"action": "reset"
+				}
+			},
+			"tap_target": null
+		},
+
+		{
+			"id": "step_2_info",
+			"type": "info",
+			"order": 4,
+			"xp": 0,
+			"bootstrap_median_ms": 18000,
+			"progress_label": "2 of 5",
+			"title": "A CSS Rule",
+			"content_lines": [
+				"CSS rules go in a **style** tag.",
+				"Every rule has two parts."
+			],
+			"byte": {
+				"emotion": "neutral",
+				"lines": ["`h1` is what we're styling.", "`color: red;` is how."]
+			},
+			"animation": "build_token_by_token",
+			"code_animation": {
+				"type": "build_token_by_token_labeled",
+				"tokens": ["h1 {", " color:", " red", ";", " }"],
+				"labels": ["WHAT", null, null, null, "done"],
+				"interval_ms": 1000
+			}
+		},
+
+		{
+			"id": "step_2_quiz",
+			"type": "quiz",
+			"order": 5,
+			"xp": 0,
+			"bootstrap_median_ms": 16000,
+			"progress_label": "2 of 5",
+			"prompt": "Tap the colon.",
+			"byte": {
+				"emotion": "curious",
+				"lines": ["Tap the colon."]
+			},
+			"options": [
+				{ "id": "opt_a", "text": "h1", "is_correct": false },
+				{ "id": "opt_b", "text": "color", "is_correct": false },
+				{ "id": "opt_c", "text": ":", "is_correct": true },
+				{ "id": "opt_d", "text": "red", "is_correct": false }
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "That's it. The colon splits WHAT from HOW.",
+					"emotion": "happy"
+				},
+				"incorrect": {
+					"byte_line": "The colon sits right between. Find it.",
+					"emotion": "thinking",
+					"action": "reset"
+				}
+			},
+			"tap_target": ":"
+		},
+
+		{
+			"id": "step_3_editor",
+			"type": "code_editor",
+			"order": 6,
+			"xp": 20,
+			"bootstrap_median_ms": 55000,
+			"progress_label": "3 of 5",
+			"title": "Color Your Heading",
+			"_update_note": "v2 — 'The style tag goes in head' was the intro line before the anatomy step existed. Kids now already know head from Lesson 1. Content lines updated to activate that prior knowledge instead of re-teaching it.",
+			"content_lines": [
+				"You know the **brain** — the `head` tag.",
+				"That's where the `style` tag lives.",
+				"Let's make h1 a color."
+			],
+			"prompt_code": "<head>\n  <style>\n    h1 { color: hotpink; }\n  </style>\n</head>",
+			"starter_code": "<head>\n  <style>\n\n  </style>\n</head>\n<body>\n  <h1>Hello!</h1>\n  <p>This is my page.</p>\n</body>",
+			"byte": {
+				"emotion": "neutral",
+				"lines": [
+					"Add one CSS rule inside the style tag.",
+					"Make h1 any color you want."
+				]
+			},
+			"hint_delay_ms": 30000,
+			"hint": "Type: h1 { color: red; } — change red to any color you like.",
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "style",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "css_property_set",
+					"_rule_note": "New rule type — not yet in schema v1.0. Checks getComputedStyle(doc.querySelector(selector))[property] !== defaultValue. Default for color is 'rgb(0, 0, 0)' but we should pass any value including black since the kid made a deliberate choice. Consider checking !== '' instead.",
+					"selector": "h1",
+					"property": "color",
+					"not_default": true,
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Color! Your h1 just got a vibe.",
+					"emotion": "happy",
+					"animation": "sparkle_preview"
+				}
+			}
+		},
+
+		{
+			"id": "step_4_editor",
+			"type": "code_editor",
+			"order": 7,
+			"xp": 20,
+			"bootstrap_median_ms": 50000,
+			"progress_label": "4 of 5",
+			"title": "Paint the Background",
+			"content_lines": [
+				"Good.",
+				"Now change the whole page.",
+				"**background-color** changes what's behind the words."
+			],
+			"prompt_code": null,
+			"starter_code": "<head>\n  <style>\n    h1 { color: hotpink; }\n\n  </style>\n</head>\n<body>\n  <h1>Hello!</h1>\n  <p>This is my page.</p>\n</body>",
+			"byte": {
+				"emotion": "neutral",
+				"lines": ["Add background-color to body.", "Pick any color you want."]
+			},
+			"hint_delay_ms": 30000,
+			"hint": "Add: body { background-color: yellow; } — pick your own color.",
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "style",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "css_property_set",
+					"selector": "body",
+					"property": "background-color",
+					"not_default": true,
+					"_default_note": "Default background-color is rgba(0, 0, 0, 0) — transparent. Any non-transparent value passes.",
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Your page has a background. You made a design choice.",
+					"emotion": "happy",
+					"animation": "sparkle_preview"
+				}
+			}
+		},
+
+		{
+			"id": "step_5_editor",
+			"type": "code_editor",
+			"order": 8,
+			"xp": 20,
+			"bootstrap_median_ms": 65000,
+			"progress_label": "5 of 5",
+			"title": "Find the Bug",
+			"content_lines": ["Byte made a mistake.", "Can you find it?"],
+			"prompt_code": null,
+			"starter_code": "<head>\n  <style>\n    h1 { color: purple }\n    p { color: blue; }\n  </style>\n</head>\n<body>\n  <h1>Byte's Page</h1>\n  <p>Something is wrong above.</p>\n</body>",
+			"_bug_note": "The bug is the missing semicolon after 'purple' in the h1 rule. h1 { color: purple } should be h1 { color: purple; }. Some browsers may still render this correctly (CSS is forgiving) — the lesson teaches the rule, not just the symptom. Validation checks for semicolon presence, not just computed style.",
+			"byte": {
+				"emotion": "thinking",
+				"lines": ["One rule is broken.", "Find the missing piece."]
+			},
+			"hint_delay_ms": 30000,
+			"hint": "Every CSS rule ends with a semicolon — the `;` — like a period. Check the h1 rule.",
+			"validation_rules": [
+				{
+					"rule": "css_property_set",
+					"selector": "h1",
+					"property": "color",
+					"not_default": true,
+					"error_type": "empty_content"
+				},
+				{
+					"rule": "css_has_semicolon",
+					"_rule_note": "New rule type. Checks that the text content of the style tag contains a semicolon after the h1 color value. Simple string check: style tag content must include 'purple;' or any color followed by semicolon for h1. Engineer discretion on exact implementation — DOM approach: parse style tag innerText and check each declaration ends with semicolon.",
+					"selector": "h1",
+					"property": "color",
+					"error_type": "missing_closing_tag"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Found it! The semicolon. Always the sneaky one.",
+					"emotion": "happy",
+					"animation": "sparkle_preview"
+				}
+			}
+		},
+
+		{
+			"id": "challenge",
+			"type": "challenge",
+			"order": 9,
+			"xp": 20,
+			"bootstrap_median_ms": 100000,
+			"progress_label": null,
+			"byte": {
+				"emotion": "proud",
+				"lines": ["Okay.", "No help this time.", "Make it yours."]
+			},
+			"tasks": [
+				{ "description": "Give h1 a **color you pick**" },
+				{ "description": "Give body a **background-color you pick**" },
+				{ "description": "Give p a **different color from h1**" }
+			],
+			"starter_code": "<head>\n  <style>\n    h1 { color: ; }\n    body { background-color: ; }\n    p { color: ; }\n  </style>\n</head>\n<body>\n  <h1>Your heading goes here</h1>\n  <p>Your sentence goes here.</p>\n</body>",
+			"hints_enabled": false,
+			"validation_rules": [
+				{
+					"rule": "css_property_set",
+					"selector": "h1",
+					"property": "color",
+					"not_default": true,
+					"error_type": "empty_content"
+				},
+				{
+					"rule": "css_property_set",
+					"selector": "body",
+					"property": "background-color",
+					"not_default": true,
+					"error_type": "empty_content"
+				},
+				{
+					"rule": "css_property_set",
+					"selector": "p",
+					"property": "color",
+					"not_default": true,
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_lines": [
+						"Your colors. Your choice.",
+						"That's called a color palette.",
+						"You designed that."
+					],
+					"emotion": "celebrating",
+					"animation": "confetti"
+				}
+			}
+		},
+
+		{
+			"id": "lesson_complete",
+			"type": "lesson_complete",
+			"order": 10,
+			"xp": 0,
+			"bootstrap_median_ms": 20000,
+			"progress_label": null,
+			"byte": {
+				"emotion": "proud",
+				"lines": [
+					"You learned CSS today.",
+					"Your page has a vibe now. You gave it that."
+				]
+			},
+			"summary": [
+				{ "concept": "Color text", "tag": "color: red;" },
+				{ "concept": "Color the background", "tag": "background-color: blue;" },
+				{ "concept": "CSS goes inside", "note": "style tag in head" },
+				{ "concept": "Every rule ends with", "note": "; the semicolon" }
+			],
+			"total_xp": 100,
+			"next_lesson_teaser": "Write Your Story"
+		}
+	]
+}

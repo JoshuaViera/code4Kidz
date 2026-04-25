@@ -1,0 +1,634 @@
+{
+	"id": "lesson_001",
+	"schema_version": "1.0.0",
+	"version": 2,
+	"_changelog": "v2 — Added step_2c_anatomy between tag-pairs quiz and first code editor. Byte builds the full page skeleton live. Kids drag-label head/body/html. DoE rationale: worked example effect + dual coding + transfer-appropriate processing. All subsequent step order values incremented by 1. concepts_introduced updated. time_estimate_min updated to 18.",
+	"meta": {
+		"title": "Say Hello to the Web! 🌐",
+		"slug": "say-hello-to-the-web",
+		"emoji": "🌐",
+		"age_range": {
+			"min": 7,
+			"max": 10
+		},
+		"prior_lesson_id": null,
+		"next_lesson_id": "lesson_002",
+		"time_estimate_min": 18,
+		"total_xp": 100,
+		"objective": "By the end — you will build your own webpage.",
+		"concepts_introduced": [
+			"html",
+			"h1_tag",
+			"p_tag",
+			"tag_pairs",
+			"page_skeleton",
+			"head_tag",
+			"body_tag"
+		],
+		"concepts_required": [],
+		"tags": [
+			"html",
+			"beginner",
+			"web"
+		]
+	},
+	"byte_arc": {
+		"opening_emotion": "excited",
+		"closing_emotion": "proud"
+	},
+	"steps": [
+		{
+			"id": "mascot_intro",
+			"type": "mascot_intro",
+			"order": 0,
+			"xp": 0,
+			"bootstrap_median_ms": 8000,
+			"progress_label": null,
+			"byte": {
+				"emotion": "excited",
+				"lines": [
+					"Hey! I'm Byte.",
+					"I have a secret to show you."
+				]
+			},
+			"cta": "What is it? →"
+		},
+		{
+			"id": "step_1_info",
+			"type": "info",
+			"order": 1,
+			"xp": 0,
+			"bootstrap_median_ms": 12000,
+			"progress_label": "1 of 6",
+			"title": "What is HTML?",
+			"content_lines": [
+				"Every website you see on a screen?",
+				"Someone built it.",
+				"They used a code called **HTML**.",
+				"Today — that's you."
+			],
+			"byte": {
+				"emotion": "neutral",
+				"lines": [
+					"HTML tells the screen what to show.",
+					"You type it. It happens."
+				]
+			},
+			"animation": "type_to_webpage",
+			"code_animation": null
+		},
+		{
+			"id": "step_1_quiz",
+			"type": "quiz",
+			"order": 2,
+			"xp": 0,
+			"bootstrap_median_ms": 14000,
+			"progress_label": "1 of 6",
+			"prompt": "What does HTML do?",
+			"byte": {
+				"emotion": "curious",
+				"lines": [
+					"What does HTML do?"
+				]
+			},
+			"options": [
+				{
+					"id": "opt_a",
+					"text": "It makes video games",
+					"is_correct": false
+				},
+				{
+					"id": "opt_b",
+					"text": "It tells the screen what to show",
+					"is_correct": true
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Exactly.",
+					"emotion": "happy"
+				},
+				"incorrect": {
+					"byte_line": "Not quite — look at the second one.",
+					"emotion": "thinking",
+					"action": "reset"
+				}
+			},
+			"tap_target": null
+		},
+		{
+			"id": "step_2a_info",
+			"type": "info",
+			"order": 3,
+			"xp": 0,
+			"bootstrap_median_ms": 18000,
+			"progress_label": "2 of 6",
+			"title": "What a Tag Looks Like",
+			"content_lines": [
+				"HTML uses things called **tags**.",
+				"Here's one:"
+			],
+			"byte": {
+				"emotion": "neutral",
+				"lines": [
+					"See the `< >` things?",
+					"When you see those — that's a tag."
+				]
+			},
+			"animation": "build_token_by_token",
+			"code_animation": {
+				"type": "build_token_by_token",
+				"tokens": [
+					"<h1>",
+					"Hello!",
+					"</h1>"
+				],
+				"interval_ms": 1000
+			}
+		},
+		{
+			"id": "step_2a_quiz",
+			"type": "quiz",
+			"order": 4,
+			"xp": 0,
+			"bootstrap_median_ms": 16000,
+			"progress_label": "2 of 6",
+			"prompt": "Tap the tag.",
+			"byte": {
+				"emotion": "curious",
+				"lines": [
+					"Tap the tag."
+				]
+			},
+			"options": [
+				{
+					"id": "opt_a",
+					"text": "Hello!",
+					"is_correct": false
+				},
+				{
+					"id": "opt_b",
+					"text": "<h1>",
+					"is_correct": true
+				},
+				{
+					"id": "opt_c",
+					"text": "42",
+					"is_correct": false
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "That's it. The `< >` make it a tag.",
+					"emotion": "happy"
+				},
+				"incorrect": {
+					"byte_line": "Look for the `< >` things. Those are the giveaway.",
+					"emotion": "thinking",
+					"action": "reset"
+				}
+			},
+			"tap_target": "<h1>"
+		},
+		{
+			"id": "step_2b_info",
+			"type": "info",
+			"order": 5,
+			"xp": 0,
+			"bootstrap_median_ms": 20000,
+			"progress_label": "3 of 6",
+			"title": "Tags Always Come in Pairs",
+			"content_lines": [
+				"Here's the rule:",
+				"Every tag needs a **buddy**."
+			],
+			"byte": {
+				"emotion": "neutral",
+				"lines": [
+					"See the little line in the STOP tag?",
+					"That line means — done."
+				]
+			},
+			"animation": "tag_pair_highlight",
+			"code_animation": {
+				"type": "tag_pair_label",
+				"tokens": [
+					"<h1>",
+					"Hello!",
+					"</h1>"
+				],
+				"labels": [
+					"START tag",
+					null,
+					"STOP tag"
+				],
+				"interval_ms": 800
+			}
+		},
+		{
+			"id": "step_2b_quiz",
+			"type": "quiz",
+			"order": 6,
+			"xp": 0,
+			"bootstrap_median_ms": 16000,
+			"progress_label": "3 of 6",
+			"prompt": "Tap the STOP tag.",
+			"byte": {
+				"emotion": "curious",
+				"lines": [
+					"Tap the STOP tag."
+				]
+			},
+			"options": [
+				{
+					"id": "opt_a",
+					"text": "<h1>",
+					"is_correct": false
+				},
+				{
+					"id": "opt_b",
+					"text": "I love dogs.",
+					"is_correct": false
+				},
+				{
+					"id": "opt_c",
+					"text": "</h1>",
+					"is_correct": true
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Yes. The little line is always the clue.",
+					"emotion": "happy"
+				},
+				"incorrect": {
+					"byte_line": "Find the one with the little line inside.",
+					"emotion": "thinking",
+					"action": "reset"
+				}
+			},
+			"tap_target": "</h1>"
+		},
+		{
+			"id": "step_2c_anatomy",
+			"type": "anatomy_builder",
+			"_type_note": "New step type — not yet in schema v1.0. Must be added to valid type enum before CI will pass. Two phases: (1) build_sequence — Byte constructs the skeleton token by token with narration. (2) drag_label — three sticky notes, three drop zones. No hearts at risk. No XP. Wrong drop bounces the note back — no error state, no mistake_log write. All three correct → snap animation → Byte celebrates → advances. See design notes in lesson MD for full implementation spec.",
+			"order": 7,
+			"xp": 0,
+			"bootstrap_median_ms": 55000,
+			"progress_label": null,
+			"_progress_note": "Null intentionally. This is orientation, not a scored step. Progress bar does not advance. DoE rationale: formative activity, not summative. Kids should not feel evaluated here.",
+			"byte": {
+				"emotion": "excited",
+				"lines": [
+					"A webpage is like a building.",
+					"Let me show you the blueprint."
+				]
+			},
+			"byte_costume": "hard_hat",
+			"_costume_note": "Byte renders with a hard hat SVG overlay on the idle pose. Signals 'construction mode.' Removed after build sequence completes.",
+			"build_sequence": [
+				{
+					"token": "<html>",
+					"delay_ms": 800,
+					"byte_line": "This is the whole thing.",
+					"highlight_color": "#5C3EBC",
+					"region_label": "the whole page"
+				},
+				{
+					"token": "<head>",
+					"delay_ms": 1200,
+					"byte_line": "This is the brain.",
+					"byte_line_2": "You can't see it. But it controls everything.",
+					"highlight_color": "#D4581A",
+					"region_label": "the brain"
+				},
+				{
+					"token": "</head>",
+					"delay_ms": 800,
+					"byte_line": null,
+					"highlight_color": "#D4581A",
+					"region_label": null
+				},
+				{
+					"token": "<body>",
+					"delay_ms": 1200,
+					"byte_line": "This is what people actually SEE.",
+					"byte_line_2": "Your h1 lives here. Your p lives here.",
+					"highlight_color": "#0D7C7B",
+					"region_label": "what you see"
+				},
+				{
+					"token": "  <h1>Hello!</h1>",
+					"delay_ms": 900,
+					"byte_line": null,
+					"highlight_color": "#0D7C7B",
+					"region_label": null
+				},
+				{
+					"token": "  <p>This is me.</p>",
+					"delay_ms": 900,
+					"byte_line": null,
+					"highlight_color": "#0D7C7B",
+					"region_label": null
+				},
+				{
+					"token": "</body>",
+					"delay_ms": 800,
+					"byte_line": null,
+					"highlight_color": "#0D7C7B",
+					"region_label": null
+				},
+				{
+					"token": "</html>",
+					"delay_ms": 800,
+					"byte_line": "There it is.",
+					"byte_line_2": "Every webpage on the internet looks like this.",
+					"highlight_color": "#5C3EBC",
+					"region_label": null
+				}
+			],
+			"drag_interaction": {
+				"instruction": "Help me label it.",
+				"byte_line": "Drag each note to where it belongs.",
+				"byte_emotion": "curious",
+				"labels": [
+					{
+						"id": "label_brain",
+						"text": "🧠 The brain",
+						"correct_target": "head",
+						"drop_feedback": "The brain! Hidden but in charge."
+					},
+					{
+						"id": "label_see",
+						"text": "👁️ What you see",
+						"correct_target": "body",
+						"drop_feedback": "Everything visible lives here."
+					},
+					{
+						"id": "label_whole",
+						"text": "📄 The whole page",
+						"correct_target": "html",
+						"drop_feedback": "The outer shell. Wraps everything."
+					}
+				],
+				"wrong_drop_behavior": "bounce_back",
+				"_wrong_drop_note": "Note bounces back to its origin. No error sound. No Byte reaction. No mistake_log write. No hearts lost. This is exploration, not evaluation.",
+				"all_correct_behavior": {
+					"animation": "snap_all_labels",
+					"byte_line": "That's it.",
+					"byte_line_2": "Now you know where everything lives.",
+					"byte_emotion": "happy",
+					"sound": "soft_success"
+				}
+			}
+		},
+		{
+			"id": "step_3_editor",
+			"type": "code_editor",
+			"order": 8,
+			"xp": 20,
+			"bootstrap_median_ms": 45000,
+			"progress_label": "4 of 6",
+			"title": "h1 Makes Big Text",
+			"content_lines": [
+				"The `h1` tag makes text **big**.",
+				"Really big."
+			],
+			"prompt_code": "<h1>Hello, I'm Byte!</h1>",
+			"starter_code": "",
+			"byte": {
+				"emotion": "neutral",
+				"lines": [
+					"Try it. Type this:"
+				]
+			},
+			"hint_delay_ms": 30000,
+			"hint": "Start with `<h1>` — then your words — then `</h1>`.",
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "h1",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "h1",
+					"min": 2,
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "You just wrote real code.",
+					"emotion": "happy",
+					"animation": "sparkle_preview"
+				}
+			}
+		},
+		{
+			"id": "step_4_editor",
+			"type": "code_editor",
+			"order": 9,
+			"xp": 20,
+			"bootstrap_median_ms": 35000,
+			"progress_label": "5 of 6",
+			"title": "Now Make it Yours",
+			"content_lines": [
+				"Good.",
+				"Now change it.",
+				"Put **your name** in there."
+			],
+			"prompt_code": null,
+			"starter_code": "<h1>Hello, I'm Byte!</h1>",
+			"byte": {
+				"emotion": "neutral",
+				"lines": [
+					"Delete 'Byte.' Write your name."
+				]
+			},
+			"hint_delay_ms": 30000,
+			"hint": "Click inside the box. Delete 'Byte.' Write your name.",
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "h1",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_changed",
+					"tag": "h1",
+					"not_equal": "Hello, I'm Byte!",
+					"error_type": "empty_content"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "h1",
+					"min": 2,
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Your name. On a webpage. Built by you.",
+					"emotion": "happy",
+					"animation": "sparkle_preview"
+				}
+			}
+		},
+		{
+			"id": "step_5_editor",
+			"type": "code_editor",
+			"order": 10,
+			"xp": 20,
+			"bootstrap_median_ms": 50000,
+			"progress_label": "6 of 6",
+			"title": "Meet the <p> Tag",
+			"content_lines": [
+				"`h1` makes text big.",
+				"But not everything should be big.",
+				"The `<p>` tag makes text **regular size**."
+			],
+			"prompt_code": "<p>I love pizza.</p>",
+			"starter_code": "<h1>Your Name</h1>\n",
+			"byte": {
+				"emotion": "neutral",
+				"lines": [
+					"Add a `<p>` tag under your name.",
+					"Write anything you want."
+				]
+			},
+			"hint_delay_ms": 30000,
+			"hint": "Type `<p>` then your words then `</p>` to close it.",
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "h1",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "tag_present",
+					"tag": "p",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "p",
+					"min": 2,
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Two tags. Two things on the page. You're building.",
+					"emotion": "happy",
+					"animation": "sparkle_preview"
+				}
+			}
+		},
+		{
+			"id": "challenge",
+			"type": "challenge",
+			"order": 11,
+			"xp": 20,
+			"bootstrap_median_ms": 90000,
+			"progress_label": null,
+			"byte": {
+				"emotion": "proud",
+				"lines": [
+					"Okay.",
+					"I'm not helping this time.",
+					"You've got this."
+				]
+			},
+			"tasks": [
+				{
+					"description": "A big heading with **your name**"
+				},
+				{
+					"description": "A `<p>` with **your favorite food**"
+				},
+				{
+					"description": "A `<p>` with **one thing you love to do**"
+				}
+			],
+			"starter_code": "<h1></h1>\n<p></p>\n<p></p>",
+			"hints_enabled": false,
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "h1",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "h1",
+					"min": 2,
+					"error_type": "empty_content"
+				},
+				{
+					"rule": "tag_count",
+					"tag": "p",
+					"min": 2,
+					"error_type": "wrong_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "p",
+					"min": 2,
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_lines": [
+						"Your name. Your food. Your thing.",
+						"That's a real webpage.",
+						"You built that."
+					],
+					"emotion": "celebrating",
+					"animation": "confetti"
+				}
+			}
+		},
+		{
+			"id": "lesson_complete",
+			"type": "lesson_complete",
+			"order": 12,
+			"xp": 0,
+			"bootstrap_median_ms": 20000,
+			"progress_label": null,
+			"byte": {
+				"emotion": "proud",
+				"lines": [
+					"You learned HTML today.",
+					"You just built something real."
+				]
+			},
+			"summary": [
+				{
+					"concept": "Big text",
+					"tag": "h1"
+				},
+				{
+					"concept": "Regular text",
+					"tag": "p"
+				},
+				{
+					"concept": "Every tag needs a buddy",
+					"note": "START + STOP"
+				},
+				{
+					"concept": "The brain (hidden)",
+					"note": "head"
+				},
+				{
+					"concept": "What you see",
+					"note": "body"
+				}
+			],
+			"total_xp": 100,
+			"next_lesson_teaser": "Make it Colorful"
+		}
+	]
+}

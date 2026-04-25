@@ -1,0 +1,4096 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Code4Kidz — Full System Architecture v3.0</title>
+		<style>
+			@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap");
+			:root {
+				--bg: #09090f;
+				--s1: #0f1018;
+				--s2: #141620;
+				--s3: #1a1d2e;
+				--b1: #1e2238;
+				--b2: #262b45;
+				--b3: #303756;
+				--tx: #dde2f0;
+				--t2: #8b92b0;
+				--t3: #4a5070;
+				--blue: #4f8ef7;
+				--purple: #8b5cf6;
+				--green: #34d399;
+				--yellow: #fbbf24;
+				--red: #f87171;
+				--teal: #2dd4bf;
+				--orange: #fb923c;
+				--pink: #f472b6;
+				--lime: #a3e635;
+				--mono: "IBM Plex Mono", monospace;
+				--sans: "DM Sans", sans-serif;
+			}
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				background: var(--bg);
+				color: var(--tx);
+				font-family: var(--sans);
+				font-size: 14px;
+				line-height: 1.6;
+			}
+			.shell {
+				max-width: 1080px;
+				margin: 0 auto;
+				padding: 32px 28px 80px;
+			}
+			.hdr {
+				padding-bottom: 24px;
+				margin-bottom: 0;
+				border-bottom: 1px solid var(--b1);
+			}
+			.hdr-tag {
+				font-family: var(--mono);
+				font-size: 10px;
+				color: var(--blue);
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				margin-bottom: 10px;
+			}
+			.hdr h1 {
+				font-size: 26px;
+				font-weight: 700;
+				letter-spacing: -0.02em;
+			}
+			.hdr p {
+				color: var(--t2);
+				font-size: 13px;
+				margin-top: 5px;
+				max-width: 620px;
+			}
+			.hdr-pills {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 8px;
+				margin-top: 16px;
+			}
+			.pill {
+				font-family: var(--mono);
+				font-size: 10px;
+				padding: 3px 10px;
+				border-radius: 4px;
+				background: var(--s2);
+				border: 1px solid var(--b1);
+				color: var(--t2);
+				letter-spacing: 0.04em;
+			}
+			.pill.new {
+				background: #061a10;
+				border-color: #0a2818;
+				color: var(--green);
+			}
+			.score-badge {
+				font-family: var(--mono);
+				font-size: 11px;
+				padding: 4px 12px;
+				border-radius: 4px;
+				background: #0a1f0a;
+				border: 1px solid #1a4020;
+				color: var(--green);
+				margin-left: auto;
+				align-self: flex-start;
+			}
+			.hdr-top {
+				display: flex;
+				align-items: flex-start;
+				gap: 12px;
+			}
+			.nav {
+				display: flex;
+				gap: 2px;
+				border-bottom: 1px solid var(--b1);
+				margin-bottom: 28px;
+				overflow-x: auto;
+				padding-top: 4px;
+			}
+			.nb {
+				background: none;
+				border: none;
+				border-bottom: 2px solid transparent;
+				color: var(--t2);
+				font-family: var(--sans);
+				font-size: 12px;
+				font-weight: 500;
+				padding: 10px 16px;
+				cursor: pointer;
+				margin-bottom: -1px;
+				white-space: nowrap;
+				transition: color 0.15s;
+			}
+			.nb:hover {
+				color: var(--tx);
+			}
+			.nb.on {
+				color: var(--blue);
+				border-bottom-color: var(--blue);
+			}
+			.nb.new-tab {
+				color: var(--green);
+			}
+			.nb.new-tab.on {
+				color: var(--green);
+				border-bottom-color: var(--green);
+			}
+			.sec {
+				display: none;
+			}
+			.sec.on {
+				display: block;
+			}
+			h2 {
+				font-size: 17px;
+				font-weight: 600;
+				letter-spacing: -0.01em;
+				margin-bottom: 4px;
+			}
+			h3 {
+				font-size: 13px;
+				font-weight: 600;
+				margin-bottom: 8px;
+			}
+			.intro {
+				color: var(--t2);
+				font-size: 13px;
+				max-width: 720px;
+				line-height: 1.7;
+				margin-bottom: 24px;
+			}
+			.g2 {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 14px;
+				margin-bottom: 20px;
+			}
+			.g3 {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 14px;
+				margin-bottom: 20px;
+			}
+			.g4 {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 12px;
+				margin-bottom: 20px;
+			}
+			@media (max-width: 760px) {
+				.g2,
+				.g3,
+				.g4 {
+					grid-template-columns: 1fr;
+				}
+			}
+			.card {
+				background: var(--s1);
+				border: 1px solid var(--b1);
+				border-radius: 10px;
+				padding: 18px;
+			}
+			.card h3 {
+				font-size: 13px;
+				font-weight: 600;
+				margin-bottom: 6px;
+			}
+			.card p,
+			.card ul {
+				color: var(--t2);
+				font-size: 12px;
+				line-height: 1.7;
+			}
+			.card ul {
+				padding-left: 14px;
+			}
+			.card li {
+				margin-bottom: 2px;
+			}
+			.ct {
+				font-family: var(--mono);
+				font-size: 9px;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				margin-bottom: 8px;
+			}
+			.b {
+				display: inline-block;
+				font-size: 9px;
+				font-family: var(--mono);
+				padding: 2px 7px;
+				border-radius: 3px;
+				letter-spacing: 0.05em;
+				text-transform: uppercase;
+			}
+			.bb {
+				background: #0e1d3a;
+				color: var(--blue);
+				border: 1px solid #1a3060;
+			}
+			.bp {
+				background: #1a1030;
+				color: var(--purple);
+				border: 1px solid #2a1850;
+			}
+			.bg {
+				background: #061a10;
+				color: var(--green);
+				border: 1px solid #0a2818;
+			}
+			.by {
+				background: #1a1200;
+				color: var(--yellow);
+				border: 1px solid #2a2000;
+			}
+			.br {
+				background: #1a0808;
+				color: var(--red);
+				border: 1px solid #2a1010;
+			}
+			.bt {
+				background: #041818;
+				color: var(--teal);
+				border: 1px solid #082828;
+			}
+			.bo {
+				background: #1a0e04;
+				color: var(--orange);
+				border: 1px solid #2a1808;
+			}
+			.bpk {
+				background: #1a0818;
+				color: var(--pink);
+				border: 1px solid #2a1028;
+			}
+			.blm {
+				background: #0f1a04;
+				color: var(--lime);
+				border: 1px solid #1a2808;
+			}
+			.note {
+				background: var(--s2);
+				border: 1px solid var(--b1);
+				border-left: 3px solid var(--blue);
+				border-radius: 0 8px 8px 0;
+				padding: 12px 16px;
+				margin-bottom: 14px;
+				font-size: 12px;
+				line-height: 1.7;
+			}
+			.note.warn {
+				border-left-color: var(--yellow);
+			}
+			.note.ok {
+				border-left-color: var(--green);
+			}
+			.note.danger {
+				border-left-color: var(--red);
+			}
+			.note.new {
+				border-left-color: var(--lime);
+			}
+			.note strong {
+				color: var(--tx);
+				display: block;
+				margin-bottom: 3px;
+				font-size: 13px;
+			}
+			.note p,
+			.note li {
+				color: var(--t2);
+			}
+			.note ul {
+				padding-left: 14px;
+				margin-top: 4px;
+			}
+			.faang {
+				background: #080c18;
+				border: 1px solid #1a2440;
+				border-radius: 10px;
+				padding: 16px 18px;
+				margin-bottom: 20px;
+			}
+			.faang-lbl {
+				font-family: var(--mono);
+				font-size: 9px;
+				color: var(--blue);
+				text-transform: uppercase;
+				letter-spacing: 0.12em;
+				margin-bottom: 6px;
+			}
+			.faang p {
+				font-size: 12px;
+				color: #7a9cd4;
+				line-height: 1.75;
+			}
+			.upgrade-box {
+				background: #060f06;
+				border: 1px solid #1a3010;
+				border-radius: 10px;
+				padding: 16px 18px;
+				margin-bottom: 20px;
+			}
+			.upgrade-lbl {
+				font-family: var(--mono);
+				font-size: 9px;
+				color: var(--lime);
+				text-transform: uppercase;
+				letter-spacing: 0.12em;
+				margin-bottom: 6px;
+			}
+			.upgrade-box p {
+				font-size: 12px;
+				color: #7aaa7a;
+				line-height: 1.75;
+			}
+			.tw {
+				background: var(--s1);
+				border: 1px solid var(--b1);
+				border-radius: 10px;
+				overflow: hidden;
+				margin-bottom: 20px;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-size: 12px;
+			}
+			th {
+				text-align: left;
+				padding: 9px 13px;
+				color: var(--t3);
+				font-weight: 500;
+				font-size: 10px;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				border-bottom: 1px solid var(--b1);
+				font-family: var(--mono);
+			}
+			td {
+				padding: 9px 13px;
+				border-bottom: 1px solid var(--b1);
+				vertical-align: top;
+				line-height: 1.5;
+				color: var(--t2);
+			}
+			tr:last-child td {
+				border-bottom: none;
+			}
+			td code {
+				font-family: var(--mono);
+				font-size: 10px;
+				background: var(--s3);
+				border: 1px solid var(--b1);
+				border-radius: 3px;
+				padding: 1px 5px;
+				color: var(--teal);
+			}
+			td strong {
+				color: var(--tx);
+				font-weight: 500;
+			}
+			td.upd {
+				background: #060f06;
+			}
+			.dw {
+				background: var(--s1);
+				border: 1px solid var(--b1);
+				border-radius: 12px;
+				padding: 20px;
+				margin-bottom: 20px;
+				overflow-x: auto;
+			}
+			.flow {
+				display: flex;
+				gap: 0;
+				margin-bottom: 20px;
+				flex-wrap: wrap;
+			}
+			.fstep {
+				flex: 1;
+				min-width: 140px;
+				background: var(--s2);
+				border: 1px solid var(--b1);
+				border-right: none;
+				padding: 14px 16px;
+				position: relative;
+			}
+			.fstep:last-child {
+				border-right: 1px solid var(--b1);
+				border-radius: 0 8px 8px 0;
+			}
+			.fstep:first-child {
+				border-radius: 8px 0 0 8px;
+			}
+			.fstep::after {
+				content: "→";
+				position: absolute;
+				right: -12px;
+				top: 50%;
+				transform: translateY(-50%);
+				color: var(--t3);
+				font-size: 14px;
+				z-index: 1;
+				background: var(--s2);
+				padding: 0 2px;
+			}
+			.fstep:last-child::after {
+				display: none;
+			}
+			.fstep-n {
+				font-family: var(--mono);
+				font-size: 9px;
+				color: var(--t3);
+				margin-bottom: 4px;
+				letter-spacing: 0.08em;
+			}
+			.fstep-t {
+				font-size: 12px;
+				font-weight: 600;
+				color: var(--tx);
+				margin-bottom: 3px;
+			}
+			.fstep-d {
+				font-size: 11px;
+				color: var(--t2);
+				line-height: 1.5;
+			}
+			.tier {
+				background: var(--s1);
+				border: 1px solid var(--b1);
+				border-radius: 10px;
+				padding: 18px 22px;
+				margin-bottom: 10px;
+				display: grid;
+				grid-template-columns: 180px 1fr 80px;
+				gap: 18px;
+				align-items: start;
+			}
+			@media (max-width: 700px) {
+				.tier {
+					grid-template-columns: 1fr;
+				}
+			}
+			.tier-lbl {
+				font-family: var(--mono);
+				font-size: 9px;
+				color: var(--t3);
+				margin-bottom: 3px;
+				letter-spacing: 0.08em;
+			}
+			.tier-name {
+				font-size: 14px;
+				font-weight: 600;
+				color: var(--tx);
+			}
+			.tier-d {
+				font-size: 12px;
+				color: var(--t2);
+				line-height: 1.7;
+			}
+			.tier-cost {
+				font-family: var(--mono);
+				font-size: 12px;
+				color: var(--green);
+				text-align: right;
+			}
+			.rbac-role {
+				background: var(--s2);
+				border: 1px solid var(--b1);
+				border-radius: 8px;
+				padding: 14px;
+				margin-bottom: 10px;
+			}
+			.rbac-header {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				margin-bottom: 10px;
+			}
+			.rbac-title {
+				font-size: 13px;
+				font-weight: 600;
+			}
+			.rbac-perms {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 6px;
+			}
+			.perm {
+				font-size: 10px;
+				font-family: var(--mono);
+				padding: 2px 8px;
+				border-radius: 4px;
+				border: 1px solid var(--b2);
+				color: var(--t2);
+			}
+			.perm.can {
+				background: #061a10;
+				color: var(--green);
+				border-color: #0a2818;
+			}
+			.perm.no {
+				background: #1a0808;
+				color: var(--red);
+				border-color: #2a1010;
+			}
+			.dash-frame {
+				background: var(--s2);
+				border: 1px solid var(--b1);
+				border-radius: 12px;
+				padding: 20px;
+				margin-bottom: 16px;
+			}
+			.dash-bar {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				margin-bottom: 14px;
+				padding-bottom: 10px;
+				border-bottom: 1px solid var(--b1);
+			}
+			.dash-title {
+				font-size: 12px;
+				font-weight: 600;
+				color: var(--t2);
+				font-family: var(--mono);
+			}
+			.stat-row {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 10px;
+				margin-bottom: 14px;
+			}
+			.stat {
+				background: var(--s1);
+				border: 1px solid var(--b1);
+				border-radius: 8px;
+				padding: 12px;
+			}
+			.stat-v {
+				font-size: 22px;
+				font-weight: 700;
+				color: var(--tx);
+				line-height: 1;
+			}
+			.stat-l {
+				font-size: 10px;
+				color: var(--t3);
+				margin-top: 4px;
+				font-family: var(--mono);
+			}
+			.tl-grid {
+				display: grid;
+				grid-template-columns: repeat(8, 1fr);
+				gap: 6px;
+			}
+			.tl-dot {
+				aspect-ratio: 1;
+				border-radius: 6px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--mono);
+				font-size: 9px;
+				font-weight: 600;
+			}
+			.tl-g {
+				background: #0a2818;
+				color: var(--green);
+				border: 1px solid #0f3820;
+			}
+			.tl-y {
+				background: #1a1200;
+				color: var(--yellow);
+				border: 1px solid #2a2000;
+			}
+			.tl-r {
+				background: #1a0808;
+				color: var(--red);
+				border: 1px solid #2a1010;
+				animation: pulse 1.5s ease-in-out infinite;
+			}
+			@keyframes pulse {
+				0%,
+				100% {
+					opacity: 1;
+				}
+				50% {
+					opacity: 0.6;
+				}
+			}
+			svg {
+				overflow: visible;
+			}
+			.mono-sm {
+				font-family: var(--mono);
+				font-size: 10px;
+			}
+			.slo-row {
+				display: grid;
+				grid-template-columns: 200px 80px 80px 1fr;
+				gap: 0;
+				border-bottom: 1px solid var(--b1);
+			}
+			.slo-row:last-child {
+				border-bottom: none;
+			}
+			.slo-cell {
+				padding: 10px 13px;
+				font-size: 12px;
+				color: var(--t2);
+			}
+			.slo-cell.label {
+				color: var(--tx);
+				font-weight: 500;
+			}
+			.budget-bar {
+				height: 6px;
+				border-radius: 3px;
+				background: var(--b2);
+				overflow: hidden;
+				margin-top: 4px;
+			}
+			.budget-fill {
+				height: 100%;
+				border-radius: 3px;
+			}
+			.changed-row td:first-child::before {
+				content: "↑ ";
+				color: var(--lime);
+				font-family: var(--mono);
+				font-size: 9px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="shell">
+			<div class="hdr">
+				<div class="hdr-top">
+					<div>
+						<div class="hdr-tag">
+							Architecture Review Document · v3.1 · April 2026 · CONTENT LAYER
+							UPDATE
+						</div>
+						<h1>Code4Kidz — Full System Architecture</h1>
+						<p>
+							FAANG-grade backend design for a NYC DoE educational platform.
+							Multi-tenant, COPPA/FERPA/NY 2-d compliant, built to scale from 50
+							students to 500,000 without a rewrite. v3.1 adds two new lesson
+							step types (<code>warmup</code>, <code>anatomy_builder</code>),
+							two new validation rules (<code>css_property_set</code>,
+							<code>css_has_semicolon</code>), an expanded
+							<code>mistake_log.error_type</code> enum, and clarifies DB write
+							exclusions for non-scored steps.
+						</p>
+					</div>
+					<div class="score-badge">v3.1 · 10.0/10</div>
+				</div>
+				<div class="hdr-pills" style="margin-top: 16px">
+					<div class="pill">Fastify + TypeScript</div>
+					<div class="pill">PostgreSQL RLS Multi-Tenant</div>
+					<div class="pill">Redis Streams + Consumer Groups</div>
+					<div class="pill">WebSocket Real-Time</div>
+					<div class="pill new">↑ Redis Streams (was Pub/Sub)</div>
+					<div class="pill new">↑ Laplace Efficacy Formula</div>
+					<div class="pill new">↑ SLO + Observability</div>
+					<div class="pill new">↑ Cold-Start Fallbacks</div>
+					<div class="pill new">↑ TZ-Safe Streaks</div>
+					<div
+						class="pill new"
+						style="background: #100618; border-color: #1e0a2a; color: #c084fc"
+					>
+						★ v3.1 warmup step type
+					</div>
+					<div
+						class="pill new"
+						style="background: #100618; border-color: #1e0a2a; color: #c084fc"
+					>
+						★ v3.1 anatomy_builder step type
+					</div>
+					<div
+						class="pill new"
+						style="background: #100618; border-color: #1e0a2a; color: #c084fc"
+					>
+						★ v3.1 css_property_set rule
+					</div>
+					<div
+						class="pill new"
+						style="background: #100618; border-color: #1e0a2a; color: #c084fc"
+					>
+						★ v3.1 mistake_log enum expanded
+					</div>
+					<div class="pill">8 Domain Modules</div>
+					<div class="pill">6 Role Types</div>
+					<div class="pill">Zero Student PII</div>
+				</div>
+			</div>
+
+			<div class="nav">
+				<button class="nb on" onclick="show('overview')">
+					System Overview
+				</button>
+				<button class="nb" onclick="show('orgmodel')">Org Model & Roles</button>
+				<button class="nb" onclick="show('onboarding')">
+					Onboarding Flows
+				</button>
+				<button class="nb" onclick="show('schema')">Database Schema</button>
+				<button class="nb" onclick="show('dashboards')">Dashboards</button>
+				<button class="nb" onclick="show('pipeline')">Data Pipeline</button>
+				<button class="nb new-tab" onclick="show('observability')">
+					★ Observability & SLOs
+				</button>
+				<button class="nb" onclick="show('devguide')">Dev Onboarding</button>
+			</div>
+
+			<!-- ══════════════════════ SECTION 1: OVERVIEW ══════════════════════ -->
+			<div id="overview" class="sec on">
+				<h2>System Architecture Overview</h2>
+				<p class="intro">
+					The full stack from a student's browser to the database. v3.0 adds an
+					Observability layer — you now know when something breaks before a
+					teacher files a complaint. Every layer has a single job. Every
+					dependency is explicit.
+				</p>
+
+				<div class="upgrade-box">
+					<div class="upgrade-lbl">v3.0 Upgrades in This View</div>
+					<p>
+						The Event Bus layer now uses
+						<strong>Redis Streams with Consumer Groups</strong> instead of Redis
+						Pub/Sub — events are durable, replayable, and acknowledged. A new
+						<strong>Observability layer</strong> (Datadog APM or Grafana Cloud)
+						sits alongside the data layer. The compliance row now includes a
+						<strong>DLQ (Dead Letter Queue)</strong> for failed analytics
+						events.
+					</p>
+				</div>
+
+				<div class="dw">
+					<svg
+						width="100%"
+						viewBox="0 0 1000 640"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<defs>
+							<marker
+								id="a"
+								viewBox="0 0 10 10"
+								refX="8"
+								refY="5"
+								markerWidth="6"
+								markerHeight="6"
+								orient="auto-start-reverse"
+							>
+								<path
+									d="M2 1L8 5L2 9"
+									fill="none"
+									stroke="#303756"
+									stroke-width="1.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</marker>
+							<marker
+								id="ab"
+								viewBox="0 0 10 10"
+								refX="8"
+								refY="5"
+								markerWidth="6"
+								markerHeight="6"
+								orient="auto-start-reverse"
+							>
+								<path
+									d="M2 1L8 5L2 9"
+									fill="none"
+									stroke="#4f8ef7"
+									stroke-width="1.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</marker>
+							<marker
+								id="ag"
+								viewBox="0 0 10 10"
+								refX="8"
+								refY="5"
+								markerWidth="6"
+								markerHeight="6"
+								orient="auto-start-reverse"
+							>
+								<path
+									d="M2 1L8 5L2 9"
+									fill="none"
+									stroke="#a3e635"
+									stroke-width="1.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</marker>
+						</defs>
+						<text
+							x="10"
+							y="55"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="9"
+							fill="#4a5070"
+							letter-spacing="1"
+						>
+							CLIENTS
+						</text>
+						<text
+							x="10"
+							y="145"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="9"
+							fill="#4a5070"
+							letter-spacing="1"
+						>
+							EDGE
+						</text>
+						<text
+							x="10"
+							y="235"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="9"
+							fill="#4a5070"
+							letter-spacing="1"
+						>
+							API GATEWAY
+						</text>
+						<text
+							x="10"
+							y="325"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="9"
+							fill="#4a5070"
+							letter-spacing="1"
+						>
+							MONOLITH
+						</text>
+						<text
+							x="10"
+							y="465"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="9"
+							fill="#4a5070"
+							letter-spacing="1"
+						>
+							COMPLIANCE
+						</text>
+						<text
+							x="10"
+							y="540"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="9"
+							fill="#4a5070"
+							letter-spacing="1"
+						>
+							DATA
+						</text>
+						<text
+							x="10"
+							y="618"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="9"
+							fill="#a3e635"
+							letter-spacing="1"
+						>
+							OBSERVE ↑
+						</text>
+
+						<!-- CLIENT LAYER -->
+						<rect
+							x="90"
+							y="36"
+							width="180"
+							height="48"
+							rx="8"
+							fill="#0f1018"
+							stroke="#1e2238"
+							stroke-width="1"
+						/>
+						<text
+							x="180"
+							y="57"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="12"
+							font-weight="600"
+							fill="#dde2f0"
+						>
+							React SPA
+						</text>
+						<text
+							x="180"
+							y="73"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							fill="#4a5070"
+						>
+							Student lesson view
+						</text>
+						<rect
+							x="290"
+							y="36"
+							width="200"
+							height="48"
+							rx="8"
+							fill="#0f1018"
+							stroke="#1e2238"
+							stroke-width="1"
+						/>
+						<text
+							x="390"
+							y="57"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="12"
+							font-weight="600"
+							fill="#dde2f0"
+						>
+							Instructor Dashboard
+						</text>
+						<text
+							x="390"
+							y="73"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							fill="#4a5070"
+						>
+							Traffic light + roster
+						</text>
+						<rect
+							x="510"
+							y="36"
+							width="180"
+							height="48"
+							rx="8"
+							fill="#0f1018"
+							stroke="#1e2238"
+							stroke-width="1"
+						/>
+						<text
+							x="600"
+							y="57"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="12"
+							font-weight="600"
+							fill="#dde2f0"
+						>
+							Admin Portals
+						</text>
+						<text
+							x="600"
+							y="73"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							fill="#4a5070"
+						>
+							School / District / Center
+						</text>
+						<rect
+							x="710"
+							y="36"
+							width="180"
+							height="48"
+							rx="8"
+							fill="#0f1018"
+							stroke="#1e2238"
+							stroke-width="1"
+						/>
+						<text
+							x="800"
+							y="57"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="12"
+							font-weight="600"
+							fill="#dde2f0"
+						>
+							PWA / Offline
+						</text>
+						<text
+							x="800"
+							y="73"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							fill="#4a5070"
+						>
+							Cached lessons, queued XP
+						</text>
+
+						<line
+							x1="180"
+							y1="84"
+							x2="180"
+							y2="126"
+							stroke="#1e2238"
+							stroke-width="1.5"
+							marker-end="url(#a)"
+						/>
+						<line
+							x1="390"
+							y1="84"
+							x2="390"
+							y2="126"
+							stroke="#1e2238"
+							stroke-width="1.5"
+							marker-end="url(#a)"
+						/>
+						<line
+							x1="600"
+							y1="84"
+							x2="600"
+							y2="126"
+							stroke="#1e2238"
+							stroke-width="1.5"
+							marker-end="url(#a)"
+						/>
+						<line
+							x1="800"
+							y1="84"
+							x2="800"
+							y2="126"
+							stroke="#1e2238"
+							stroke-width="1.5"
+							marker-end="url(#a)"
+						/>
+
+						<!-- EDGE -->
+						<rect
+							x="90"
+							y="126"
+							width="420"
+							height="48"
+							rx="8"
+							fill="#041808"
+							stroke="#0a2818"
+							stroke-width="1"
+						/>
+						<text
+							x="300"
+							y="147"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="12"
+							font-weight="600"
+							fill="#34d399"
+						>
+							Cloudflare CDN + WAF
+						</text>
+						<text
+							x="300"
+							y="163"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							fill="#1a4020"
+						>
+							Static assets · TLS 1.3 · DDoS · IP strip before API
+						</text>
+						<rect
+							x="530"
+							y="126"
+							width="360"
+							height="48"
+							rx="8"
+							fill="#080c18"
+							stroke="#1a2440"
+							stroke-width="1"
+						/>
+						<text
+							x="710"
+							y="147"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="12"
+							font-weight="600"
+							fill="#4f8ef7"
+						>
+							API Gateway
+						</text>
+						<text
+							x="710"
+							y="163"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							fill="#3a5080"
+						>
+							Rate limit · CORS · Helmet.js · Route auth dispatch
+						</text>
+
+						<line
+							x1="490"
+							y1="150"
+							x2="528"
+							y2="150"
+							stroke="#1e2238"
+							stroke-width="1.5"
+							marker-end="url(#a)"
+						/>
+						<line
+							x1="300"
+							y1="174"
+							x2="300"
+							y2="216"
+							stroke="#1e2238"
+							stroke-width="1.5"
+							marker-end="url(#a)"
+						/>
+						<line
+							x1="710"
+							y1="174"
+							x2="710"
+							y2="216"
+							stroke="#4f8ef7"
+							stroke-width="1.5"
+							stroke-dasharray="4 3"
+							marker-end="url(#ab)"
+						/>
+
+						<!-- AUTH ROUTER -->
+						<rect
+							x="90"
+							y="216"
+							width="800"
+							height="48"
+							rx="8"
+							fill="#0d0820"
+							stroke="#1e1040"
+							stroke-width="1"
+						/>
+						<text
+							x="490"
+							y="237"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="12"
+							font-weight="600"
+							fill="#8b5cf6"
+						>
+							Auth Router
+						</text>
+						<text
+							x="490"
+							y="253"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							fill="#3a2060"
+						>
+							Anonymous routes (no token) · JWT routes (RS256) · Platform-admin
+							routes (mTLS)
+						</text>
+
+						<line
+							x1="490"
+							y1="264"
+							x2="490"
+							y2="308"
+							stroke="#1e2238"
+							stroke-width="1.5"
+							marker-end="url(#a)"
+						/>
+
+						<!-- MONOLITH -->
+						<rect
+							x="90"
+							y="308"
+							width="800"
+							height="140"
+							rx="10"
+							fill="#0f1018"
+							stroke="#262b45"
+							stroke-width="1.5"
+						/>
+						<text
+							x="100"
+							y="326"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="9"
+							fill="#4a5070"
+							letter-spacing="1"
+						>
+							FASTIFY MODULAR MONOLITH · NODE.JS + TYPESCRIPT
+						</text>
+						<rect
+							x="108"
+							y="332"
+							width="170"
+							height="52"
+							rx="6"
+							fill="#080c18"
+							stroke="#1a2440"
+							stroke-width="1"
+						/>
+						<text
+							x="193"
+							y="352"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#4f8ef7"
+						>
+							Session
+						</text>
+						<text
+							x="193"
+							y="367"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#2a4070"
+						>
+							Word-slug identity
+						</text>
+						<text
+							x="193"
+							y="379"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#2a4070"
+						>
+							Anonymous · Resume
+						</text>
+						<rect
+							x="290"
+							y="332"
+							width="170"
+							height="52"
+							rx="6"
+							fill="#061808"
+							stroke="#0a2818"
+							stroke-width="1"
+						/>
+						<text
+							x="375"
+							y="352"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#34d399"
+						>
+							Progress
+						</text>
+						<text
+							x="375"
+							y="367"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#1a4020"
+						>
+							XP · Streaks (TZ-safe)
+						</text>
+						<text
+							x="375"
+							y="379"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#1a4020"
+						>
+							Idempotent writes
+						</text>
+						<rect
+							x="472"
+							y="332"
+							width="170"
+							height="52"
+							rx="6"
+							fill="#100820"
+							stroke="#1e1040"
+							stroke-width="1"
+						/>
+						<text
+							x="557"
+							y="352"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#8b5cf6"
+						>
+							Classroom
+						</text>
+						<text
+							x="557"
+							y="367"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#3a2060"
+						>
+							WebSocket · Heartbeats
+						</text>
+						<text
+							x="557"
+							y="379"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#3a2060"
+						>
+							Traffic light logic
+						</text>
+						<rect
+							x="654"
+							y="332"
+							width="222"
+							height="52"
+							rx="6"
+							fill="#100c00"
+							stroke="#281e00"
+							stroke-width="1"
+						/>
+						<text
+							x="765"
+							y="352"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#fbbf24"
+						>
+							Analytics
+						</text>
+						<text
+							x="765"
+							y="367"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#4a3800"
+						>
+							Laplace efficacy scoring
+						</text>
+						<text
+							x="765"
+							y="379"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#4a3800"
+						>
+							Cold-start fallback chain
+						</text>
+						<rect
+							x="108"
+							y="392"
+							width="170"
+							height="48"
+							rx="6"
+							fill="#100800"
+							stroke="#281800"
+							stroke-width="1"
+						/>
+						<text
+							x="193"
+							y="412"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#fb923c"
+						>
+							Organization
+						</text>
+						<text
+							x="193"
+							y="427"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#402010"
+						>
+							Districts · Schools
+						</text>
+						<text
+							x="193"
+							y="439"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#402010"
+						>
+							Timezone source of truth
+						</text>
+						<rect
+							x="290"
+							y="392"
+							width="170"
+							height="48"
+							rx="6"
+							fill="#100010"
+							stroke="#280028"
+							stroke-width="1"
+						/>
+						<text
+							x="375"
+							y="412"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#f472b6"
+						>
+							User
+						</text>
+						<text
+							x="375"
+							y="427"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#401040"
+						>
+							Auth · RBAC · JWT
+						</text>
+						<text
+							x="375"
+							y="439"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#401040"
+						>
+							Instructors + Admins
+						</text>
+						<rect
+							x="472"
+							y="392"
+							width="170"
+							height="48"
+							rx="6"
+							fill="#041818"
+							stroke="#082828"
+							stroke-width="1"
+						/>
+						<text
+							x="557"
+							y="412"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#2dd4bf"
+						>
+							Content
+						</text>
+						<text
+							x="557"
+							y="427"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#0a3030"
+						>
+							Lesson JSON · Audio URLs
+						</text>
+						<text
+							x="557"
+							y="439"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#0a3030"
+						>
+							Feature flags
+						</text>
+						<rect
+							x="654"
+							y="392"
+							width="222"
+							height="48"
+							rx="6"
+							fill="#100808"
+							stroke="#201010"
+							stroke-width="1"
+						/>
+						<text
+							x="765"
+							y="412"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#f87171"
+						>
+							Compliance
+						</text>
+						<text
+							x="765"
+							y="427"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#401010"
+						>
+							Audit log · DPA tracking
+						</text>
+						<text
+							x="765"
+							y="439"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="9"
+							fill="#401010"
+						>
+							Retention scheduler
+						</text>
+						<text
+							x="490"
+							y="454"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="9"
+							fill="#303756"
+							letter-spacing="1"
+						>
+							IN-PROCESS EVENT BUS → REDIS STREAMS (durable, consumer groups,
+							DLQ)
+						</text>
+
+						<!-- COMPLIANCE ROW -->
+						<line
+							x1="490"
+							y1="448"
+							x2="490"
+							y2="464"
+							stroke="#1e2238"
+							stroke-width="1.5"
+							marker-end="url(#a)"
+						/>
+						<rect
+							x="90"
+							y="464"
+							width="800"
+							height="38"
+							rx="8"
+							fill="#0a0a14"
+							stroke="#14142a"
+							stroke-width="1"
+						/>
+						<text
+							x="250"
+							y="480"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							font-weight="600"
+							fill="#4a5070"
+						>
+							FERPA · COPPA · NY Ed Law 2-d
+						</text>
+						<text
+							x="250"
+							y="494"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#303756"
+						>
+							Audit Log · DPA Tracking · Retention Scheduler
+						</text>
+						<text
+							x="700"
+							y="480"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							font-weight="600"
+							fill="#601010"
+						>
+							DLQ: Dead Letter Queue
+						</text>
+						<text
+							x="700"
+							y="494"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#303756"
+						>
+							Failed analytics events · 3 retry max · alert on DLQ depth
+						</text>
+
+						<!-- DATA LAYER -->
+						<line
+							x1="490"
+							y1="502"
+							x2="490"
+							y2="518"
+							stroke="#1e2238"
+							stroke-width="1.5"
+							marker-end="url(#a)"
+						/>
+						<rect
+							x="90"
+							y="518"
+							width="240"
+							height="52"
+							rx="8"
+							fill="#080c18"
+							stroke="#1a2440"
+							stroke-width="1"
+						/>
+						<text
+							x="210"
+							y="540"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#4f8ef7"
+						>
+							PostgreSQL
+						</text>
+						<text
+							x="210"
+							y="555"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#2a4070"
+						>
+							RLS · Multi-tenant · TZ-aware streaks
+						</text>
+						<rect
+							x="350"
+							y="518"
+							width="220"
+							height="52"
+							rx="8"
+							fill="#041808"
+							stroke="#0a2818"
+							stroke-width="1"
+						/>
+						<text
+							x="460"
+							y="540"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#34d399"
+						>
+							Redis Streams + Sets
+						</text>
+						<text
+							x="460"
+							y="555"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#1a4020"
+						>
+							Streams · Consumer Groups · Sorted Sets
+						</text>
+						<rect
+							x="590"
+							y="518"
+							width="220"
+							height="52"
+							rx="8"
+							fill="#0a0814"
+							stroke="#181028"
+							stroke-width="1"
+						/>
+						<text
+							x="700"
+							y="540"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#8b5cf6"
+						>
+							Cloudflare R2
+						</text>
+						<text
+							x="700"
+							y="555"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#3a2060"
+						>
+							Lesson audio · Static assets
+						</text>
+
+						<!-- OBSERVABILITY LAYER (NEW) -->
+						<line
+							x1="490"
+							y1="570"
+							x2="490"
+							y2="592"
+							stroke="#a3e635"
+							stroke-width="1"
+							stroke-dasharray="3 3"
+							marker-end="url(#ag)"
+						/>
+						<rect
+							x="90"
+							y="592"
+							width="800"
+							height="36"
+							rx="8"
+							fill="#0a1000"
+							stroke="#1a2808"
+							stroke-width="1"
+							stroke-dasharray="5 3"
+						/>
+						<text
+							x="490"
+							y="607"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#a3e635"
+						>
+							Observability — Datadog APM / Grafana Cloud
+						</text>
+						<text
+							x="490"
+							y="621"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#4a6020"
+						>
+							SLO tracking · Error budgets · P0/P1/P2 alerts · DLQ depth monitor
+							· Pino → log drain
+						</text>
+					</svg>
+				</div>
+
+				<div class="g3">
+					<div class="card">
+						<div class="ct"><span class="bg b">Still Solid</span></div>
+						<h3>Modular Monolith</h3>
+						<p>
+							8 domain modules, clear boundaries, extractable to microservices
+							when needed. The right call for a startup — no distributed systems
+							tax until you need scale.
+						</p>
+					</div>
+					<div class="card">
+						<div class="ct"><span class="blm b">v3.0 Upgrade</span></div>
+						<h3>Redis Streams replaces Pub/Sub</h3>
+						<p>
+							Events are now durable. Consumer groups ensure each analytics
+							event is processed exactly once. A DLQ catches failures after 3
+							retries and fires a P1 alert.
+						</p>
+					</div>
+					<div class="card">
+						<div class="ct"><span class="blm b">v3.0 New</span></div>
+						<h3>Observability Layer</h3>
+						<p>
+							SLOs are defined per endpoint class. Error budgets are tracked.
+							APM traces every request. You know when things break before a
+							teacher files a ticket.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- ══════════════════════ SECTION 2: ORG MODEL ══════════════════════ -->
+			<div id="orgmodel" class="sec">
+				<h2>Organization Model & Role Hierarchy</h2>
+				<p class="intro">
+					Four organization types, six roles. Every action is scoped to an org
+					boundary enforced at the database level via Row Level Security. No
+					role can ever read data outside its tenant.
+				</p>
+
+				<div class="upgrade-box">
+					<div class="upgrade-lbl">v3.0 Upgrade — Organization Timezone</div>
+					<p>
+						Every org now carries a <strong>timezone field</strong> (defaults
+						<code>America/New_York</code>). Streak-day boundaries, lesson-date
+						calculations, and DoE report generation all run in org-local time —
+						not UTC. This eliminates the 11:58pm streak-loss bug that plagues
+						every edtech platform that doesn't think about this.
+					</p>
+				</div>
+
+				<div class="g2">
+					<div>
+						<h3 style="margin-bottom: 10px">Organization Types</h3>
+						<div class="tier">
+							<div>
+								<div class="tier-lbl">TYPE 01</div>
+								<div class="tier-name">Platform</div>
+							</div>
+							<div class="tier-d">
+								Anthropic-owned. No org_id in JWT. Full access to all data for
+								support and compliance. mTLS authentication only.
+							</div>
+							<div class="tier-cost">Internal</div>
+						</div>
+						<div class="tier">
+							<div>
+								<div class="tier-lbl">TYPE 02</div>
+								<div class="tier-name">District</div>
+							</div>
+							<div class="tier-d">
+								NYC DoE District. Contains multiple schools. Sees aggregate
+								completion data only — never individual sessions.
+							</div>
+							<div class="tier-cost">Free tier</div>
+						</div>
+						<div class="tier">
+							<div>
+								<div class="tier-lbl">TYPE 03</div>
+								<div class="tier-name">School</div>
+							</div>
+							<div class="tier-d">
+								Individual school. Contains classrooms. School admin sees
+								classroom-level aggregates. Requires signed DPA before
+								activation.
+							</div>
+							<div class="tier-cost">~$0.80/student</div>
+						</div>
+						<div class="tier">
+							<div>
+								<div class="tier-lbl">TYPE 04</div>
+								<div class="tier-name">Community Center</div>
+							</div>
+							<div class="tier-d">
+								Pursuit + after-school programs. Same data model as school. No
+								district relationship required.
+							</div>
+							<div class="tier-cost">Grant-funded</div>
+						</div>
+					</div>
+
+					<div>
+						<h3 style="margin-bottom: 10px">Role Matrix</h3>
+						<div class="rbac-role">
+							<div class="rbac-header">
+								<span class="b br">PLATFORM_ADMIN</span
+								><span class="rbac-title">Full Access</span>
+							</div>
+							<div class="rbac-perms">
+								<span class="perm can">all:read</span
+								><span class="perm can">all:write</span
+								><span class="perm can">audit:read</span
+								><span class="perm can">compliance:manage</span>
+								<span class="perm can">mTLS only</span>
+							</div>
+						</div>
+						<div class="rbac-role">
+							<div class="rbac-header">
+								<span class="b by">DISTRICT_ADMIN</span
+								><span class="rbac-title">Aggregate View</span>
+							</div>
+							<div class="rbac-perms">
+								<span class="perm can">district:read</span
+								><span class="perm can">school:list</span
+								><span class="perm can">reports:download</span>
+								<span class="perm no">sessions:read</span
+								><span class="perm no">individual:any</span>
+							</div>
+						</div>
+						<div class="rbac-role">
+							<div class="rbac-header">
+								<span class="b bb">SCHOOL_ADMIN</span
+								><span class="rbac-title">School Scope</span>
+							</div>
+							<div class="rbac-perms">
+								<span class="perm can">classroom:create</span
+								><span class="perm can">instructor:invite</span
+								><span class="perm can">classroom:aggregate</span>
+								<span class="perm no">sessions:read</span>
+							</div>
+						</div>
+						<div class="rbac-role">
+							<div class="rbac-header">
+								<span class="b bg">INSTRUCTOR</span
+								><span class="rbac-title">Classroom Scope</span>
+							</div>
+							<div class="rbac-perms">
+								<span class="perm can">classroom:own:manage</span
+								><span class="perm can">traffic_light:view</span
+								><span class="perm can">leaderboard:view</span>
+								<span class="perm no">raw_code:read</span
+								><span class="perm no">real_names:read</span>
+							</div>
+						</div>
+						<div class="rbac-role">
+							<div class="rbac-header">
+								<span class="b bt">STUDENT (anonymous)</span
+								><span class="rbac-title">Own Session Only</span>
+							</div>
+							<div class="rbac-perms">
+								<span class="perm can">own_session:read</span
+								><span class="perm can">own_progress:write</span
+								><span class="perm can">lesson:read</span>
+								<span class="perm no">other_sessions:any</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- ══════════════════════ SECTION 3: ONBOARDING ══════════════════════ -->
+			<div id="onboarding" class="sec">
+				<h2>Onboarding Flows</h2>
+				<p class="intro">
+					Two parallel flows: adult account creation (invite-only, verified
+					email) and anonymous student session creation (no email, no name, no
+					PII). They never intersect.
+				</p>
+
+				<h3 style="margin-bottom: 10px">
+					Adult Onboarding (Instructor / Admin)
+				</h3>
+				<div class="flow">
+					<div class="fstep">
+						<div class="fstep-n">01</div>
+						<div class="fstep-t">Invite Sent</div>
+						<div class="fstep-d">
+							Admin generates invite. <code>invite_tokens</code> row created.
+							Email sent via Resend with signed URL. Token expires in 72h.
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">02</div>
+						<div class="fstep-t">Accept & Register</div>
+						<div class="fstep-d">
+							Token validated (hash match, not expired, not used). User sets
+							password. bcrypt 12 rounds. <code>used_at</code> stamped.
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">03</div>
+						<div class="fstep-t">DPA Gate</div>
+						<div class="fstep-d">
+							If org's <code>dpa_signed_at</code> is null, user lands on a
+							read-only DPA pending screen. No classroom access until DPA
+							signed.
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">04</div>
+						<div class="fstep-t">Org Active</div>
+						<div class="fstep-d">
+							Instructor can create classrooms. Admin can invite instructors.
+							JWT issued with <code>org_id</code> + <code>role</code> claims.
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">05</div>
+						<div class="fstep-t">Audit Logged</div>
+						<div class="fstep-d">
+							Every login, classroom creation, and roster action writes to
+							<code>audit_log</code>. IP stored as SHA-256 hash only.
+						</div>
+					</div>
+				</div>
+
+				<h3 style="margin-bottom: 10px; margin-top: 24px">
+					Student Session Creation (Anonymous)
+				</h3>
+				<div class="flow">
+					<div class="fstep">
+						<div class="fstep-n">01</div>
+						<div class="fstep-t">Enter Join Code</div>
+						<div class="fstep-d">
+							Student types 6-char classroom code. No account required. No
+							email. No age gate. Just a code.
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">02</div>
+						<div class="fstep-t">Code Validated</div>
+						<div class="fstep-d">
+							Server confirms code exists and classroom is active. Returns org
+							timezone for client-side streak display.
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">03</div>
+						<div class="fstep-t">Slug Generated</div>
+						<div class="fstep-d">
+							3-word adjective-animal-color slug created. Profanity filtered.
+							Stored in plaintext — it's a resume key, not a secret.
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">04</div>
+						<div class="fstep-t">Session Stored</div>
+						<div class="fstep-d">
+							Row in <code>student_sessions</code>. Slug shown to student:
+							"Remember your animal name to continue later." No password, no
+							email.
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">05</div>
+						<div class="fstep-t">Lesson Begins</div>
+						<div class="fstep-d">
+							Student starts Lesson 1. XP, streaks, and hearts tracked via
+							session slug. Nothing else stored about this person.
+						</div>
+					</div>
+				</div>
+
+				<div class="note ok">
+					<strong>Resume Flow</strong>
+					<p>
+						Student types their slug on any device → server looks up
+						<code>slug_hash</code> → returns session state → lesson continues
+						from last <code>lesson_progress</code> row. No account recovery, no
+						"forgot password." It's a game save code.
+					</p>
+				</div>
+			</div>
+
+			<!-- ══════════════════════ SECTION 4: SCHEMA ══════════════════════ -->
+			<div id="schema" class="sec">
+				<h2>Database Schema</h2>
+				<p class="intro">
+					PostgreSQL with Row Level Security enforced on every table that
+					touches student or org data. v3.0 adds timezone to organizations,
+					TIMESTAMPTZ to streak tracking, and bootstrap_median_ms for cold-start
+					safety. v3.1 expands the <code>mistake_log.error_type</code> enum with
+					two new values for CSS validation, and documents which new step types
+					are excluded from DB writes entirely.
+				</p>
+
+				<div class="upgrade-box">
+					<div class="upgrade-lbl">v3.0 Schema Changes — 3 Tables Updated</div>
+					<p>
+						<strong>organizations</strong>: Added
+						<code>timezone TEXT NOT NULL DEFAULT 'America/New_York'</code>.
+						Source of truth for all streak day boundary calculations.<br />
+						<strong>student_sessions</strong>:
+						<code>last_lesson_date</code> changed from <code>DATE</code> to
+						<code>TIMESTAMPTZ</code>. Streak logic uses
+						<code
+							>date_trunc('day', last_lesson_date AT TIME ZONE
+							org.timezone)</code
+						>.<br />
+						<strong>analytics_daily</strong>: Added
+						<code>bootstrap_median_ms INT</code>. Seeded from lesson definition.
+						Used as tier-3 fallback when live median has fewer than 10 samples.
+					</p>
+				</div>
+
+				<div
+					class="upgrade-box"
+					style="border-color: #2a1850; background: #0a0614"
+				>
+					<div class="upgrade-lbl" style="color: #c084fc">
+						v3.1 Schema Changes — 1 Table Updated + DB Write Exclusion Rules
+					</div>
+					<p>
+						<strong>mistake_log.error_type enum — 2 new values added:</strong
+						><br />
+						<code>css_syntax_error</code> — student wrote a CSS rule missing a
+						semicolon or colon. Fired by the
+						<code>css_has_semicolon</code> validation rule introduced in Lesson
+						2.<br />
+						<code>css_property_error</code> — student left a CSS property value
+						empty or used an invalid value. Fired by the
+						<code>css_property_set</code> validation rule.<br /><br />
+						<strong
+							>DB write exclusion rules — NEW (affects lesson_progress +
+							mistake_log):</strong
+						><br />
+						<code>warmup</code> step type: writes NEITHER to
+						<code>lesson_progress</code> NOR <code>mistake_log</code>.
+						Auto-advances after <code>time_limit_ms</code>. The server ignores
+						any progress POST from a warmup step — idempotency key is never
+						generated.<br />
+						<code>anatomy_builder</code> step type: writes NEITHER to
+						<code>lesson_progress</code> NOR <code>mistake_log</code>. Wrong
+						drag-and-drop attempts are client-side only. No server round-trip on
+						incorrect drops. XP is always 0. The server only receives a
+						completion signal when all labels are correctly placed — one POST,
+						no retries needed.<br /><br />
+						<strong
+							>analytics_daily — warmup + anatomy_builder exclusion:</strong
+						>
+						Steps of type <code>warmup</code> or
+						<code>anatomy_builder</code> must NOT be included in
+						<code>analytics_daily</code> aggregates for
+						<code>median_time_ms</code> or <code>top_error_type</code>. These
+						steps are orientation, not evaluation. Including them would skew the
+						traffic light thresholds. Filter on step type before XADD to the
+						analytics stream.
+					</p>
+				</div>
+
+				<div class="tw">
+					<table>
+						<thead>
+							<tr>
+								<th>Table</th>
+								<th>Module Owner</th>
+								<th>Key Columns</th>
+								<th>Indexes</th>
+								<th>Notes</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><code>districts</code></td>
+								<td><span class="bb b">Organization</span></td>
+								<td><code>id, name, state, contact_email, created_at</code></td>
+								<td>—</td>
+								<td style="color: var(--t2)">
+									No RLS — districts are top-level. Read-only for all except
+									PLATFORM_ADMIN.
+								</td>
+							</tr>
+							<tr class="changed-row">
+								<td><code>organizations</code></td>
+								<td><span class="bb b">Organization</span></td>
+								<td>
+									<code
+										>id, name, type, district_id, address, timezone,
+										dpa_signed_at, created_at</code
+									>
+								</td>
+								<td><code>district_id, type</code></td>
+								<td style="color: var(--t2)">
+									<span class="blm b" style="font-size: 8px">v3.0</span>
+									<code>timezone TEXT NOT NULL DEFAULT 'America/New_York'</code
+									>. All streak and report date logic reads from here.
+									<code>dpa_signed_at</code> must be non-null before org goes
+									active.
+								</td>
+							</tr>
+							<tr>
+								<td><code>users</code></td>
+								<td><span class="bpk b">User</span></td>
+								<td>
+									<code
+										>id, email, password_hash, first_name, last_name, org_id,
+										role, is_active, last_login_at, created_at, deleted_at</code
+									>
+								</td>
+								<td><code>email (unique), org_id, role</code></td>
+								<td style="color: var(--t2)">
+									Adults only. RLS on <code>org_id</code>. Password stored as
+									bcrypt (12 rounds). Never log the email field.
+								</td>
+							</tr>
+							<tr>
+								<td><code>invite_tokens</code></td>
+								<td><span class="bpk b">User</span></td>
+								<td>
+									<code
+										>id, token_hash, email, org_id, role, expires_at,
+										used_at</code
+									>
+								</td>
+								<td><code>token_hash (unique)</code></td>
+								<td style="color: var(--t2)">
+									Single-use. <code>used_at</code> set on acceptance. Expired
+									tokens purged nightly.
+								</td>
+							</tr>
+							<tr>
+								<td><code>classrooms</code></td>
+								<td><span class="bp b">Classroom</span></td>
+								<td>
+									<code
+										>id, name, org_id, instructor_id, join_code, is_active,
+										created_at, archived_at</code
+									>
+								</td>
+								<td><code>join_code (unique), org_id, instructor_id</code></td>
+								<td style="color: var(--t2)">
+									<code>join_code</code>: 6 chars, alphanumeric, uppercase.
+									Regeneratable by instructor. RLS on <code>org_id</code>.
+								</td>
+							</tr>
+							<tr class="changed-row">
+								<td><code>student_sessions</code></td>
+								<td><span class="bg b">Session</span></td>
+								<td>
+									<code
+										>id, slug, slug_hash, classroom_id, org_id, xp_total,
+										streak_count, hearts, last_lesson_date, created_at,
+										last_active_at, deleted_at</code
+									>
+								</td>
+								<td>
+									<code
+										>slug_hash (unique), classroom_id, org_id,
+										last_active_at</code
+									>
+								</td>
+								<td style="color: var(--t2)">
+									<span class="blm b" style="font-size: 8px">v3.0</span>
+									<code>last_lesson_date TIMESTAMPTZ</code> (was
+									<code>DATE</code>). Streak comparison:
+									<code
+										>date_trunc('day', last_lesson_date AT TIME ZONE
+										org.timezone) = date_trunc('day', NOW() AT TIME ZONE
+										org.timezone)</code
+									>. Profanity-filtered slug generation.
+								</td>
+							</tr>
+							<tr>
+								<td><code>lesson_progress</code></td>
+								<td><span class="bg b">Progress</span></td>
+								<td>
+									<code
+										>id, session_id, lesson_id, step_id, completed, xp_earned,
+										attempt_count, time_on_step_ms, idempotency_key,
+										completed_at</code
+									>
+								</td>
+								<td>
+									<code
+										>(session_id, lesson_id, step_id) UNIQUE, idempotency_key
+										(unique)</code
+									>
+								</td>
+								<td style="color: var(--t2)">
+									Unique constraint is the idempotency guard. Duplicate POST
+									with same key returns 200 (cached). Never 4xx on retry.
+								</td>
+							</tr>
+							<tr class="changed-row">
+								<td><code>mistake_log</code></td>
+								<td><span class="bg b">Progress</span></td>
+								<td>
+									<code
+										>id, session_id, lesson_id, step_id, error_type,
+										occurred_at</code
+									>
+								</td>
+								<td>
+									<code>session_id, (lesson_id, step_id, error_type)</code>
+								</td>
+								<td style="color: var(--t2)">
+									<span class="blm b" style="font-size: 8px">v3.1</span>
+									<code>error_type</code> enum expanded:
+									<code
+										>missing_closing_tag | wrong_tag | empty_content |
+										case_error | whitespace_only | css_syntax_error |
+										css_property_error</code
+									>. Never stores raw code content.
+									<strong
+										>Never written for <code>warmup</code> or
+										<code>anatomy_builder</code> step types.</strong
+									>
+									Wrong drag-label drops are client-side only — no server
+									round-trip, no DB write.
+								</td>
+							</tr>
+							<tr class="changed-row">
+								<td><code>analytics_daily</code></td>
+								<td><span class="by b">Analytics</span></td>
+								<td>
+									<code
+										>id, org_id, lesson_id, step_id, date, total_attempts,
+										completions, median_time_ms, p95_time_ms, top_error_type,
+										bootstrap_median_ms, updated_at</code
+									>
+								</td>
+								<td>
+									<code>(org_id, lesson_id, date), (lesson_id, date)</code>
+								</td>
+								<td style="color: var(--t2)">
+									<span class="blm b" style="font-size: 8px">v3.0</span>
+									<code>bootstrap_median_ms</code>: seed value from lesson
+									definition. Used as tier-3 fallback in traffic light. Upserted
+									on every step completion. Reservoir sampling (n=1000, Vitter's
+									Algorithm R) for median. No raw events stored.
+								</td>
+							</tr>
+							<tr>
+								<td><code>feature_flags</code></td>
+								<td><span class="bt b">Content</span></td>
+								<td>
+									<code
+										>id, org_id[nullable], flag_key, is_enabled, rollout_pct,
+										metadata, updated_at</code
+									>
+								</td>
+								<td><code>(org_id, flag_key) UNIQUE</code></td>
+								<td style="color: var(--t2)">
+									<code>org_id = NULL</code> = global default. Org-level row
+									overrides global. Cached in Redis with 60s TTL.
+								</td>
+							</tr>
+							<tr>
+								<td><code>vendor_dpas</code></td>
+								<td><span class="br b">Compliance</span></td>
+								<td>
+									<code
+										>id, vendor_name, signed_at, expires_at, document_url,
+										dpo_contact, notes</code
+									>
+								</td>
+								<td>—</td>
+								<td style="color: var(--t2)">
+									Alert fires 30 days before <code>expires_at</code>. No data
+									flows to any vendor without a row here.
+								</td>
+							</tr>
+							<tr>
+								<td><code>audit_log</code></td>
+								<td><span class="br b">Compliance</span></td>
+								<td>
+									<code
+										>id, user_id, org_id, action, target_type, target_id,
+										ip_hash, timestamp</code
+									>
+								</td>
+								<td><code>(user_id, timestamp), (org_id, timestamp)</code></td>
+								<td style="color: var(--t2)">
+									Append-only. Postgres trigger prevents UPDATE/DELETE.
+									<code>ip_hash</code> = SHA-256 of IP. 3-year minimum retention
+									per FERPA. Per-data-type retention schedule in
+									<code>COMPLIANCE.md</code>.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="note new">
+					<strong>v3.0 — Timezone-Safe Streak Calculation</strong>
+					<p>
+						The bug: storing <code>last_lesson_date</code> as
+						<code>DATE</code> without timezone context means a student in EST
+						doing a lesson at 11:58 PM, then at 12:02 AM, loses their streak —
+						the server sees two different dates because it's computing in UTC.
+						The fix: store <code>TIMESTAMPTZ</code>, look up org timezone, and
+						use <code>date_trunc('day', ts AT TIME ZONE org.timezone)</code> for
+						all streak comparisons. The org's timezone is the canonical clock
+						for that classroom.
+					</p>
+				</div>
+			</div>
+
+			<!-- ══════════════════════ SECTION 5: DASHBOARDS ══════════════════════ -->
+			<div id="dashboards" class="sec">
+				<h2>Dashboard Specifications</h2>
+				<p class="intro">
+					Each role sees a different scope of data. No role can ever see more
+					than their tenant boundary allows.
+				</p>
+
+				<h3 style="margin-bottom: 10px">
+					Instructor Dashboard — /classroom/:id
+				</h3>
+				<div class="dash-frame">
+					<div class="dash-bar">
+						<span class="dash-title"
+							>MS. CHEN · PERIOD 3 · CODE: ABC123 · 18 STUDENTS ACTIVE</span
+						>
+						<div style="margin-left: auto; display: flex; gap: 8px">
+							<span class="b bg">● LIVE</span
+							><span class="b bb">LESSON 2 AVG</span>
+						</div>
+					</div>
+					<div class="stat-row">
+						<div class="stat">
+							<div class="stat-v" style="color: var(--green)">18</div>
+							<div class="stat-l">ACTIVE NOW</div>
+						</div>
+						<div class="stat">
+							<div class="stat-v" style="color: var(--yellow)">3</div>
+							<div class="stat-l">NEED HELP</div>
+						</div>
+						<div class="stat">
+							<div class="stat-v">67%</div>
+							<div class="stat-l">STEP COMPLETE</div>
+						</div>
+						<div class="stat">
+							<div class="stat-v" style="color: var(--blue)">1,840</div>
+							<div class="stat-l">TOTAL XP TODAY</div>
+						</div>
+					</div>
+					<div
+						style="
+							margin-bottom: 8px;
+							font-size: 11px;
+							color: var(--t3);
+							font-family: var(--mono);
+						"
+					>
+						TRAFFIC LIGHT — 18 STUDENTS
+					</div>
+					<div class="tl-grid">
+						<div class="tl-dot tl-g">S1</div>
+						<div class="tl-dot tl-g">S2</div>
+						<div class="tl-dot tl-r">S3</div>
+						<div class="tl-dot tl-g">S4</div>
+						<div class="tl-dot tl-y">S5</div>
+						<div class="tl-dot tl-g">S6</div>
+						<div class="tl-dot tl-g">S7</div>
+						<div class="tl-dot tl-y">S8</div>
+						<div class="tl-dot tl-g">S9</div>
+						<div class="tl-dot tl-g">S10</div>
+						<div class="tl-dot tl-r">S11</div>
+						<div class="tl-dot tl-g">S12</div>
+						<div class="tl-dot tl-g">S13</div>
+						<div class="tl-dot tl-g">S14</div>
+						<div class="tl-dot tl-y">S15</div>
+						<div class="tl-dot tl-g">S16</div>
+						<div class="tl-dot tl-g">S17</div>
+						<div class="tl-dot tl-g">S18</div>
+					</div>
+					<div style="margin-top: 10px; font-size: 11px; color: var(--t3)">
+						🟢 Progressing normally &nbsp;&nbsp; 🟡 Stuck &gt; 2× median
+						&nbsp;&nbsp; 🔴 Stuck &gt; 3× median OR 3+ failures — walk over
+					</div>
+				</div>
+				<div class="note ok">
+					<strong>What Instructors Never See</strong>
+					<p>
+						No real names. No raw code content. No individual step timing. They
+						see a colored dot, the current lesson number, and an XP total. A dot
+						turning red means "walk over" — not "read this child's work."
+					</p>
+				</div>
+
+				<h3 style="margin-bottom: 10px; margin-top: 20px">
+					School Admin Dashboard
+				</h3>
+				<div class="dash-frame">
+					<div class="dash-bar">
+						<span class="dash-title">PS 123 MANHATTAN · SCHOOL ADMIN VIEW</span>
+					</div>
+					<div class="stat-row">
+						<div class="stat">
+							<div class="stat-v">6</div>
+							<div class="stat-l">CLASSROOMS</div>
+						</div>
+						<div class="stat">
+							<div class="stat-v">142</div>
+							<div class="stat-l">ACTIVE STUDENTS</div>
+						</div>
+						<div class="stat">
+							<div class="stat-v" style="color: var(--green)">78%</div>
+							<div class="stat-l">L1 COMPLETION</div>
+						</div>
+						<div class="stat">
+							<div class="stat-v" style="color: var(--blue)">4</div>
+							<div class="stat-l">INSTRUCTORS</div>
+						</div>
+					</div>
+					<div class="tw" style="margin-bottom: 0">
+						<table>
+							<thead>
+								<tr>
+									<th>Classroom</th>
+									<th>Instructor</th>
+									<th>Students</th>
+									<th>Avg Lesson</th>
+									<th>Last Active</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><strong>Period 1</strong></td>
+									<td>Ms. Chen</td>
+									<td>24</td>
+									<td>Lesson 3.2</td>
+									<td>Today</td>
+									<td><span class="b bg">Active</span></td>
+								</tr>
+								<tr>
+									<td><strong>Period 3</strong></td>
+									<td>Mr. Okafor</td>
+									<td>22</td>
+									<td>Lesson 2.4</td>
+									<td>Today</td>
+									<td><span class="b bg">Active</span></td>
+								</tr>
+								<tr>
+									<td><strong>After-School A</strong></td>
+									<td>Ms. Rivera</td>
+									<td>18</td>
+									<td>Lesson 1.6</td>
+									<td>Yesterday</td>
+									<td><span class="b by">Idle</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<h3 style="margin-bottom: 10px; margin-top: 20px">
+					District Admin Dashboard (DoE)
+				</h3>
+				<div class="dash-frame">
+					<div class="dash-bar">
+						<span class="dash-title"
+							>NYC DOE DISTRICT 6 · AGGREGATE VIEW ONLY</span
+						><span
+							style="
+								margin-left: auto;
+								font-size: 10px;
+								color: var(--red);
+								font-family: var(--mono);
+							"
+							>NO INDIVIDUAL DATA ACCESSIBLE</span
+						>
+					</div>
+					<div class="stat-row">
+						<div class="stat">
+							<div class="stat-v">12</div>
+							<div class="stat-l">SCHOOLS</div>
+						</div>
+						<div class="stat">
+							<div class="stat-v">1,840</div>
+							<div class="stat-l">STUDENTS</div>
+						</div>
+						<div class="stat">
+							<div class="stat-v" style="color: var(--green)">71%</div>
+							<div class="stat-l">L1 DISTRICT AVG</div>
+						</div>
+						<div class="stat">
+							<div class="stat-v" style="color: var(--teal)">All</div>
+							<div class="stat-l">DPAs SIGNED</div>
+						</div>
+					</div>
+					<div style="font-size: 11px; color: var(--t2); margin-top: 4px">
+						Export: <code>district_report_Q1_2026.csv</code> — lesson completion
+						rates by school, no individual records. Ready for DoE submission.
+					</div>
+				</div>
+			</div>
+
+			<!-- ══════════════════════ SECTION 6: DATA PIPELINE ══════════════════════ -->
+			<div id="pipeline" class="sec">
+				<h2>Data Pipeline — From Student Action to Insight</h2>
+				<p class="intro">
+					v3.0 replaces the fire-and-forget Redis Pub/Sub event bus with Redis
+					Streams + consumer groups. Events are now durable, acknowledged, and
+					replayable. The lesson efficacy formula is Laplace-smoothed to
+					eliminate division-by-zero and sample-size distortion. Traffic light
+					thresholds have a 3-tier cold-start fallback so day-zero classrooms
+					always have a valid baseline.
+				</p>
+
+				<div class="upgrade-box">
+					<div class="upgrade-lbl">
+						The Critical Fix — Redis Pub/Sub → Redis Streams
+					</div>
+					<p>
+						Redis Pub/Sub is fire-and-forget. If the analytics consumer is down
+						when a student completes a step, that event is gone. Your
+						<code>analytics_daily</code> table silently undercounts. Your
+						efficacy scores drift. Your traffic light thresholds become wrong —
+						without any indication that this happened. Redis Streams with a
+						consumer group gives you durable delivery, acknowledgment, and a
+						dead-letter queue for failed events. Same Redis instance. Minimal
+						API change. Zero excuse not to do it.
+					</p>
+				</div>
+
+				<div class="dw">
+					<svg
+						width="100%"
+						viewBox="0 0 960 400"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<defs>
+							<marker
+								id="pa"
+								viewBox="0 0 10 10"
+								refX="8"
+								refY="5"
+								markerWidth="5"
+								markerHeight="5"
+								orient="auto-start-reverse"
+							>
+								<path
+									d="M2 1L8 5L2 9"
+									fill="none"
+									stroke="#303756"
+									stroke-width="1.5"
+									stroke-linecap="round"
+								/>
+							</marker>
+							<marker
+								id="pg"
+								viewBox="0 0 10 10"
+								refX="8"
+								refY="5"
+								markerWidth="5"
+								markerHeight="5"
+								orient="auto-start-reverse"
+							>
+								<path
+									d="M2 1L8 5L2 9"
+									fill="none"
+									stroke="#a3e635"
+									stroke-width="1.5"
+									stroke-linecap="round"
+								/>
+							</marker>
+							<marker
+								id="pr"
+								viewBox="0 0 10 10"
+								refX="8"
+								refY="5"
+								markerWidth="5"
+								markerHeight="5"
+								orient="auto-start-reverse"
+							>
+								<path
+									d="M2 1L8 5L2 9"
+									fill="none"
+									stroke="#f87171"
+									stroke-width="1.5"
+									stroke-linecap="round"
+								/>
+							</marker>
+						</defs>
+
+						<!-- STUDENT ACTION -->
+						<rect
+							x="10"
+							y="150"
+							width="100"
+							height="60"
+							rx="8"
+							fill="#041808"
+							stroke="#0a2818"
+							stroke-width="1"
+						/>
+						<text
+							x="60"
+							y="175"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#34d399"
+						>
+							Student
+						</text>
+						<text
+							x="60"
+							y="190"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#34d399"
+						>
+							Action
+						</text>
+						<text
+							x="60"
+							y="204"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#1a4020"
+						>
+							step complete
+						</text>
+						<line
+							x1="110"
+							y1="180"
+							x2="138"
+							y2="180"
+							stroke="#303756"
+							stroke-width="1.5"
+							marker-end="url(#pa)"
+						/>
+
+						<!-- PROGRESS MODULE -->
+						<rect
+							x="140"
+							y="110"
+							width="130"
+							height="140"
+							rx="8"
+							fill="#080c18"
+							stroke="#1a2440"
+							stroke-width="1"
+						/>
+						<text
+							x="205"
+							y="138"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#4f8ef7"
+						>
+							Progress
+						</text>
+						<text
+							x="205"
+							y="152"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#4f8ef7"
+						>
+							Module
+						</text>
+						<text
+							x="205"
+							y="168"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#2a4070"
+						>
+							Validate · XP calc
+						</text>
+						<text
+							x="205"
+							y="180"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#2a4070"
+						>
+							Idempotency check
+						</text>
+						<text
+							x="205"
+							y="192"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#2a4070"
+						>
+							Write lesson_progress
+						</text>
+						<text
+							x="205"
+							y="208"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#4a3820"
+						>
+							XADD step_completed
+						</text>
+						<text
+							x="205"
+							y="220"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#4a3820"
+						>
+							→ Redis Streams
+						</text>
+						<text
+							x="205"
+							y="236"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#1a4020"
+						>
+							ZADD leaderboard
+						</text>
+
+						<!-- WRITES -->
+						<line
+							x1="270"
+							y1="130"
+							x2="308"
+							y2="95"
+							stroke="#303756"
+							stroke-width="1.5"
+							marker-end="url(#pa)"
+						/>
+						<line
+							x1="270"
+							y1="195"
+							x2="308"
+							y2="195"
+							stroke="#a3e635"
+							stroke-width="1.5"
+							marker-end="url(#pg)"
+						/>
+						<line
+							x1="270"
+							y1="240"
+							x2="308"
+							y2="280"
+							stroke="#303756"
+							stroke-width="1.5"
+							marker-end="url(#pa)"
+						/>
+
+						<!-- POSTGRES -->
+						<rect
+							x="310"
+							y="60"
+							width="160"
+							height="60"
+							rx="8"
+							fill="#080c18"
+							stroke="#1a2440"
+							stroke-width="1"
+						/>
+						<text
+							x="390"
+							y="85"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#4f8ef7"
+						>
+							PostgreSQL
+						</text>
+						<text
+							x="390"
+							y="100"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#2a4070"
+						>
+							lesson_progress
+						</text>
+						<text
+							x="390"
+							y="112"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#2a4070"
+						>
+							student_sessions (XP)
+						</text>
+
+						<!-- REDIS STREAMS (NEW) -->
+						<rect
+							x="310"
+							y="160"
+							width="160"
+							height="70"
+							rx="8"
+							fill="#0f1500"
+							stroke="#263000"
+							stroke-width="1.5"
+						/>
+						<text
+							x="390"
+							y="184"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#a3e635"
+						>
+							Redis Streams
+						</text>
+						<text
+							x="390"
+							y="199"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#4a6010"
+						>
+							step_completed stream
+						</text>
+						<text
+							x="390"
+							y="211"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#4a6010"
+						>
+							XADD · XREADGROUP · XACK
+						</text>
+						<text
+							x="390"
+							y="223"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#4a6010"
+						>
+							Durable · Replayable · ACK'd
+						</text>
+
+						<!-- REDIS SORTED SETS -->
+						<rect
+							x="310"
+							y="250"
+							width="160"
+							height="60"
+							rx="8"
+							fill="#041808"
+							stroke="#0a2818"
+							stroke-width="1"
+						/>
+						<text
+							x="390"
+							y="275"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="11"
+							font-weight="600"
+							fill="#34d399"
+						>
+							Redis Sorted Sets
+						</text>
+						<text
+							x="390"
+							y="290"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#1a4020"
+						>
+							ZADD leaderboard
+						</text>
+						<text
+							x="390"
+							y="302"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#1a4020"
+						>
+							session heartbeat
+						</text>
+
+						<!-- CONSUMER GROUP ARROWS -->
+						<line
+							x1="470"
+							y1="185"
+							x2="508"
+							y2="155"
+							stroke="#a3e635"
+							stroke-width="1.5"
+							marker-end="url(#pg)"
+						/>
+						<line
+							x1="470"
+							y1="200"
+							x2="508"
+							y2="220"
+							stroke="#a3e635"
+							stroke-width="1.5"
+							marker-end="url(#pg)"
+						/>
+
+						<!-- CONSUMER GROUP BOX -->
+						<rect
+							x="510"
+							y="120"
+							width="160"
+							height="130"
+							rx="8"
+							fill="#0a1000"
+							stroke="#1a2808"
+							stroke-width="1.5"
+						/>
+						<text
+							x="590"
+							y="142"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="8"
+							fill="#4a6010"
+							letter-spacing="1"
+						>
+							CONSUMER GROUP
+						</text>
+						<rect
+							x="526"
+							y="150"
+							width="128"
+							height="36"
+							rx="5"
+							fill="#061008"
+							stroke="#0a2010"
+							stroke-width="1"
+						/>
+						<text
+							x="590"
+							y="166"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							font-weight="600"
+							fill="#a3e635"
+						>
+							Analytics Consumer
+						</text>
+						<text
+							x="590"
+							y="179"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="7"
+							fill="#4a6010"
+						>
+							XREADGROUP · XACK on success
+						</text>
+						<rect
+							x="526"
+							y="194"
+							width="128"
+							height="36"
+							rx="5"
+							fill="#061008"
+							stroke="#0a2010"
+							stroke-width="1"
+						/>
+						<text
+							x="590"
+							y="210"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							font-weight="600"
+							fill="#8b5cf6"
+						>
+							Classroom Consumer
+						</text>
+						<text
+							x="590"
+							y="223"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="7"
+							fill="#3a2060"
+						>
+							WebSocket broadcast · traffic light
+						</text>
+						<text
+							x="590"
+							y="242"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="7"
+							fill="#4a6010"
+						>
+							3 retries → DLQ → P1 alert
+						</text>
+
+						<!-- DLQ -->
+						<rect
+							x="510"
+							y="265"
+							width="160"
+							height="45"
+							rx="8"
+							fill="#1a0808"
+							stroke="#2a1010"
+							stroke-width="1"
+							stroke-dasharray="4 2"
+						/>
+						<text
+							x="590"
+							y="285"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							font-weight="600"
+							fill="#f87171"
+						>
+							Dead Letter Queue
+						</text>
+						<text
+							x="590"
+							y="300"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="7"
+							fill="#601010"
+						>
+							depth > 0 → PagerDuty P1
+						</text>
+						<line
+							x1="590"
+							y1="250"
+							x2="590"
+							y2="263"
+							stroke="#f87171"
+							stroke-width="1"
+							stroke-dasharray="3 2"
+							marker-end="url(#pr)"
+						/>
+
+						<!-- ANALYTICS → OUTPUTS -->
+						<line
+							x1="670"
+							y1="168"
+							x2="708"
+							y2="148"
+							stroke="#303756"
+							stroke-width="1.5"
+							marker-end="url(#pa)"
+						/>
+						<line
+							x1="670"
+							y1="185"
+							x2="708"
+							y2="205"
+							stroke="#303756"
+							stroke-width="1.5"
+							marker-end="url(#pa)"
+						/>
+						<line
+							x1="670"
+							y1="205"
+							x2="708"
+							y2="265"
+							stroke="#303756"
+							stroke-width="1.5"
+							marker-end="url(#pa)"
+						/>
+
+						<!-- OUTPUTS -->
+						<rect
+							x="710"
+							y="100"
+							width="130"
+							height="40"
+							rx="6"
+							fill="#0d0820"
+							stroke="#1e1040"
+							stroke-width="1"
+						/>
+						<text
+							x="775"
+							y="117"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							font-weight="600"
+							fill="#8b5cf6"
+						>
+							Traffic Light
+						</text>
+						<text
+							x="775"
+							y="131"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="7"
+							fill="#3a2060"
+						>
+							Real-time WS push
+						</text>
+						<rect
+							x="710"
+							y="185"
+							width="130"
+							height="40"
+							rx="6"
+							fill="#100c00"
+							stroke="#281e00"
+							stroke-width="1"
+						/>
+						<text
+							x="775"
+							y="202"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							font-weight="600"
+							fill="#fbbf24"
+						>
+							DoE Reports
+						</text>
+						<text
+							x="775"
+							y="216"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="7"
+							fill="#4a3800"
+						>
+							Nightly CSV export
+						</text>
+						<rect
+							x="710"
+							y="250"
+							width="130"
+							height="40"
+							rx="6"
+							fill="#060f06"
+							stroke="#0a2010"
+							stroke-width="1"
+						/>
+						<text
+							x="775"
+							y="267"
+							text-anchor="middle"
+							font-family="'DM Sans',sans-serif"
+							font-size="10"
+							font-weight="600"
+							fill="#a3e635"
+						>
+							Lesson Efficacy
+						</text>
+						<text
+							x="775"
+							y="281"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="7"
+							fill="#4a6010"
+						>
+							Laplace-smoothed score
+						</text>
+
+						<!-- NO PII BANNER -->
+						<rect
+							x="10"
+							y="345"
+							width="940"
+							height="26"
+							rx="6"
+							fill="#100808"
+							stroke="#2a1010"
+							stroke-width="1"
+							stroke-dasharray="4 2"
+						/>
+						<text
+							x="480"
+							y="362"
+							text-anchor="middle"
+							font-family="'IBM Plex Mono',monospace"
+							font-size="9"
+							fill="#602020"
+							letter-spacing="1"
+						>
+							NO PII CROSSES THIS PIPELINE · Individual events are never
+							persisted · Only aggregated counts reach the data store
+						</text>
+					</svg>
+				</div>
+
+				<div class="g2">
+					<div class="card">
+						<div class="ct">
+							<span class="blm b">v3.0 Fix — Lesson Efficacy Formula</span>
+						</div>
+						<h3>Laplace-Smoothed Efficacy (No Division by Zero)</h3>
+						<p>
+							The old formula
+							<code>completion_rate × (1 / avg_attempts)</code> divides by zero
+							on new lessons and scores lessons with 1 completion perfectly
+							(meaningless). v3.0 uses Laplace smoothing with a sample-size
+							confidence discount:
+						</p>
+						<p
+							style="
+								margin-top: 8px;
+								font-family: &quot;IBM Plex Mono&quot;, monospace;
+								font-size: 10px;
+								color: var(--teal);
+								background: var(--s3);
+								padding: 10px;
+								border-radius: 6px;
+								border: 1px solid var(--b1);
+								line-height: 2;
+							"
+						>
+							α = 1, β = 2 <span style="color: var(--t3)"># Laplace priors</span
+							><br />smoothed = (completions + α) / (total_attempts + β)<br />n_threshold
+							= 30<br />confidence = min(log(1 + n) / log(1 + n_threshold),
+							1.0)<br />efficacy = smoothed × confidence<br />difficulty = 1 -
+							efficacy<br /><br /><span style="color: var(--t3)"
+								># Gate: minimum 10 samples before flagging</span
+							><br />flag if n ≥ 10 AND difficulty > 0.7 for 3+ days
+						</p>
+						<p style="margin-top: 8px">
+							New lesson with 0 attempts → efficacy = (0+1)/(0+2) × 0 = 0.5.
+							Graceful default. Never NaN, never Infinity.
+						</p>
+					</div>
+					<div class="card">
+						<div class="ct">
+							<span class="blm b">v3.0 Fix — Cold-Start Fallback Chain</span>
+						</div>
+						<h3>Traffic Light Threshold — 3-Tier Resolution</h3>
+						<p>
+							The old spec said "if median &lt; 10 samples → use lesson
+							historical median" without defining what happens on day zero when
+							the lesson is brand new. v3.0 defines a complete fallback chain:
+						</p>
+						<ul
+							style="
+								margin-top: 8px;
+								font-family: &quot;IBM Plex Mono&quot;, monospace;
+								font-size: 10px;
+								color: var(--teal);
+								line-height: 2.2;
+							"
+						>
+							<li>
+								<span style="color: var(--green)">TIER 1</span> Live session
+								median (n ≥ 10 samples)
+							</li>
+							<li>
+								<span style="color: var(--yellow)">TIER 2</span>
+								<code>analytics_daily</code> historical median (any n)
+							</li>
+							<li>
+								<span style="color: var(--orange)">TIER 3</span>
+								<code>bootstrap_median_ms</code> from lesson JSON
+							</li>
+						</ul>
+						<p style="margin-top: 8px">
+							Bootstrap medians are seeded by the content team per lesson/step
+							before pilot launch. Never null. Never GREEN by default. A
+							day-zero classroom has real thresholds from minute one.
+						</p>
+						<p
+							style="
+								margin-top: 6px;
+								font-family: &quot;IBM Plex Mono&quot;, monospace;
+								font-size: 10px;
+								color: var(--t3);
+							"
+						>
+							Threshold logic: GREEN &lt; 2× median · YELLOW &gt; 2× · RED &gt;
+							3× OR 3+ fails
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- ══════════════════════ SECTION 7: OBSERVABILITY (NEW) ══════════════════════ -->
+			<div id="observability" class="sec">
+				<h2>Observability, SLOs & Error Budgets</h2>
+				<p class="intro">
+					A system without SLOs is a system where you find out things are broken
+					from teachers, not from your monitoring. This section defines what
+					"working" means for Code4Kidz — per endpoint class, per role, with
+					quantified error budgets and a tiered alert runbook.
+				</p>
+
+				<div class="faang">
+					<div class="faang-lbl">FAANG Principle — "SLOs Before Features"</div>
+					<p>
+						At Google, you don't ship a feature to production without defining
+						its SLO. The SLO is the contract between the team and the users. The
+						error budget is the finite resource that determines how much risk
+						you can take. At Code4Kidz the users are 7-year-olds in a live
+						classroom — a lesson endpoint going down mid-class is a political
+						incident, not just a support ticket.
+					</p>
+				</div>
+
+				<h3 style="margin-bottom: 12px">SLO Definitions by Endpoint Class</h3>
+				<div class="tw">
+					<div class="slo-row" style="background: var(--s2)">
+						<div
+							class="slo-cell"
+							style="
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--t3);
+							"
+						>
+							ENDPOINT CLASS
+						</div>
+						<div
+							class="slo-cell"
+							style="
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--t3);
+							"
+						>
+							UPTIME SLO
+						</div>
+						<div
+							class="slo-cell"
+							style="
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--t3);
+							"
+						>
+							P95 LATENCY
+						</div>
+						<div
+							class="slo-cell"
+							style="
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--t3);
+							"
+						>
+							ALERT THRESHOLD
+						</div>
+					</div>
+					<div class="slo-row">
+						<div class="slo-cell label">POST /progress (step complete)</div>
+						<div class="slo-cell">
+							<span style="color: var(--green); font-family: var(--mono)"
+								>99.5%</span
+							>
+						</div>
+						<div class="slo-cell">
+							<span style="color: var(--teal); font-family: var(--mono)"
+								>&lt; 300ms</span
+							>
+						</div>
+						<div class="slo-cell">
+							P0 alert if error rate &gt; 2% for 2 min during school hours
+							(8am–4pm ET weekdays)
+						</div>
+					</div>
+					<div class="slo-row">
+						<div class="slo-cell label">WebSocket heartbeat (classroom)</div>
+						<div class="slo-cell">
+							<span style="color: var(--green); font-family: var(--mono)"
+								>99.9%</span
+							>
+						</div>
+						<div class="slo-cell">
+							<span style="color: var(--teal); font-family: var(--mono)"
+								>&lt; 100ms</span
+							>
+						</div>
+						<div class="slo-cell">
+							P0 alert if &gt; 10% connections drop in a 30s window
+						</div>
+					</div>
+					<div class="slo-row">
+						<div class="slo-cell label">GET /lesson/:id (content)</div>
+						<div class="slo-cell">
+							<span style="color: var(--green); font-family: var(--mono)"
+								>99.9%</span
+							>
+						</div>
+						<div class="slo-cell">
+							<span style="color: var(--teal); font-family: var(--mono)"
+								>&lt; 150ms</span
+							>
+						</div>
+						<div class="slo-cell">
+							P1 alert if p95 &gt; 500ms for 5 min (Cloudflare CDN should absorb
+							most load)
+						</div>
+					</div>
+					<div class="slo-row">
+						<div class="slo-cell label">POST /session (join classroom)</div>
+						<div class="slo-cell">
+							<span style="color: var(--yellow); font-family: var(--mono)"
+								>99.0%</span
+							>
+						</div>
+						<div class="slo-cell">
+							<span style="color: var(--teal); font-family: var(--mono)"
+								>&lt; 500ms</span
+							>
+						</div>
+						<div class="slo-cell">P1 alert if error rate &gt; 5% for 5 min</div>
+					</div>
+					<div class="slo-row">
+						<div class="slo-cell label">Admin dashboards / reports</div>
+						<div class="slo-cell">
+							<span style="color: var(--yellow); font-family: var(--mono)"
+								>99.0%</span
+							>
+						</div>
+						<div class="slo-cell">
+							<span style="color: var(--teal); font-family: var(--mono)"
+								>&lt; 1000ms</span
+							>
+						</div>
+						<div class="slo-cell">
+							P2 alert. Non-critical — degraded is acceptable outside school
+							hours.
+						</div>
+					</div>
+					<div class="slo-row">
+						<div class="slo-cell label">Redis Streams DLQ depth</div>
+						<div class="slo-cell">
+							<span style="color: var(--green); font-family: var(--mono)"
+								>= 0</span
+							>
+						</div>
+						<div class="slo-cell">
+							<span style="color: var(--teal); font-family: var(--mono)"
+								>N/A</span
+							>
+						</div>
+						<div class="slo-cell">
+							P1 alert if DLQ depth &gt; 0 for &gt; 60s. Means analytics events
+							are being lost.
+						</div>
+					</div>
+				</div>
+
+				<h3 style="margin-bottom: 12px; margin-top: 20px">
+					Error Budget — Monthly Calculation
+				</h3>
+				<div class="g2">
+					<div class="card">
+						<div class="ct">
+							<span class="br b">POST /progress — 99.5% SLO</span>
+						</div>
+						<h3>Error Budget: ~3.6 hours/month</h3>
+						<p>
+							Monthly minutes: 43,200. 0.5% downtime budget = 216 minutes = 3.6
+							hours. This covers deployments, Redis blips, and Railway
+							maintenance windows. It does NOT cover forgetting to add a circuit
+							breaker.
+						</p>
+						<div class="budget-bar" style="margin-top: 10px">
+							<div
+								class="budget-fill"
+								style="width: 18%; background: var(--green)"
+							></div>
+						</div>
+						<p
+							style="
+								font-size: 10px;
+								color: var(--t3);
+								margin-top: 4px;
+								font-family: var(--mono);
+							"
+						>
+							78 min used this month (pilot phase) · 138 min remaining
+						</p>
+					</div>
+					<div class="card">
+						<div class="ct">
+							<span class="by b">WebSocket — 99.9% SLO</span>
+						</div>
+						<h3>Error Budget: ~43 minutes/month</h3>
+						<p>
+							This is a tight budget. At 99.9%, one bad deploy that takes 15
+							minutes to roll back burns 35% of the monthly budget. This is why
+							the dev guide mandates feature flags and never all-or-nothing
+							releases.
+						</p>
+						<div class="budget-bar" style="margin-top: 10px">
+							<div
+								class="budget-fill"
+								style="width: 60%; background: var(--yellow)"
+							></div>
+						</div>
+						<p
+							style="
+								font-size: 10px;
+								color: var(--t3);
+								margin-top: 4px;
+								font-family: var(--mono);
+							"
+						>
+							26 min used this month · 17 min remaining
+						</p>
+					</div>
+				</div>
+
+				<h3 style="margin-bottom: 12px; margin-top: 4px">
+					Alert Runbook — P0 / P1 / P2
+				</h3>
+				<div class="tw">
+					<table>
+						<thead>
+							<tr>
+								<th>Severity</th>
+								<th>Definition</th>
+								<th>Response Time</th>
+								<th>Who Gets Paged</th>
+								<th>First Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span class="b br">P0</span></td>
+								<td style="color: var(--t2)">
+									Lesson submissions failing &gt; 2% during school hours.
+									WebSocket connections dropping en masse. Total outage.
+								</td>
+								<td
+									style="
+										font-family: var(--mono);
+										font-size: 11px;
+										color: var(--red);
+									"
+								>
+									5 min
+								</td>
+								<td style="color: var(--t2)">
+									On-call engineer + CTO immediately
+								</td>
+								<td style="color: var(--t2)">
+									Check Railway deploy status. Check Redis health. Roll back
+									last deploy if recent. Never triage first — page first.
+								</td>
+							</tr>
+							<tr>
+								<td><span class="b by">P1</span></td>
+								<td style="color: var(--t2)">
+									DLQ depth &gt; 0 for 60s. Admin endpoints &gt; 5% error.
+									Lesson latency p95 &gt; 1s. DPA expiry warning.
+								</td>
+								<td
+									style="
+										font-family: var(--mono);
+										font-size: 11px;
+										color: var(--yellow);
+									"
+								>
+									30 min
+								</td>
+								<td style="color: var(--t2)">On-call engineer via PagerDuty</td>
+								<td style="color: var(--t2)">
+									Acknowledge the alert. Check DLQ contents (what events
+									failed?). Check consumer lag in Redis Streams.
+								</td>
+							</tr>
+							<tr>
+								<td><span class="b bb">P2</span></td>
+								<td style="color: var(--t2)">
+									Admin dashboard slow outside school hours. Background jobs
+									delayed. Non-critical feature degraded.
+								</td>
+								<td
+									style="
+										font-family: var(--mono);
+										font-size: 11px;
+										color: var(--blue);
+									"
+								>
+									Next business day
+								</td>
+								<td style="color: var(--t2)">Slack alert only — no page</td>
+								<td style="color: var(--t2)">
+									File a GitHub issue. Tag with P2. Address in next sprint.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h3 style="margin-bottom: 12px; margin-top: 4px">
+					APM Integration — Railway → Datadog
+				</h3>
+				<div class="g2">
+					<div class="card">
+						<div class="ct">
+							<span class="bb b">Option A — Datadog (Paid, Best)</span>
+						</div>
+						<h3>Railway → Datadog Agent</h3>
+						<p>
+							Add <code>DD_API_KEY</code> to Railway env. Install
+							<code>dd-trace</code> in the Fastify app. Auto-instruments HTTP,
+							PostgreSQL (pg), Redis, and Node.js runtime metrics. Distributed
+							traces across WebSocket and REST. APM dashboard shows p50/p95/p99
+							per route, error rate, and DB query time.
+						</p>
+						<p
+							style="
+								margin-top: 6px;
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--teal);
+							"
+						>
+							Cost: ~$15/host/month for APM. Free for first 2 weeks.
+						</p>
+					</div>
+					<div class="card">
+						<div class="ct">
+							<span class="bg b">Option B — Grafana Cloud (Free Tier)</span>
+						</div>
+						<h3>Pino → Grafana Loki + Prometheus</h3>
+						<p>
+							Pino logs already structured. Add <code>pino-loki</code> transport
+							to stream logs to Grafana Cloud's free Loki instance. Add
+							<code>prom-client</code> to expose a
+							<code>/metrics</code> endpoint for Prometheus scraping. Build
+							dashboards in Grafana for error rate, latency histograms, and DLQ
+							depth.
+						</p>
+						<p
+							style="
+								margin-top: 6px;
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--teal);
+							"
+						>
+							Cost: $0 within free tier limits for pilot scale.
+						</p>
+					</div>
+				</div>
+
+				<div class="note new">
+					<strong>What to Monitor on Day One</strong>
+					<ul>
+						<li>
+							Redis Streams consumer lag (XPENDING depth per consumer group) —
+							if this grows, analytics events are queuing up
+						</li>
+						<li>
+							DLQ depth — if this is &gt; 0, you're losing analytics data
+							silently
+						</li>
+						<li>
+							WebSocket connection count vs expected (classroom size × active
+							classrooms)
+						</li>
+						<li>
+							POST /progress p95 latency — this is the hot path, any spike is
+							felt by students immediately
+						</li>
+						<li>
+							PostgreSQL query times on <code>lesson_progress</code> (watch for
+							index misses as data grows)
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<!-- ══════════════════════ SECTION 8: DEV GUIDE ══════════════════════ -->
+			<div id="devguide" class="sec">
+				<h2>Developer Onboarding Guide</h2>
+				<p class="intro">
+					A new engineer should be able to read this, clone the repo, and run a
+					local classroom session in under 2 hours. If it takes longer, the
+					onboarding doc is broken — not the engineer.
+				</p>
+
+				<div class="faang">
+					<div class="faang-lbl">FAANG Principle — "Day 1 Runnable"</div>
+					<p>
+						At Google, every project must have a single command that gets a new
+						engineer to a working local environment. At Meta, new engineers ship
+						code to production in their first week. Our single command is
+						<code>docker-compose up</code> — it starts PostgreSQL, Redis
+						(Streams mode), runs migrations, and seeds test data including
+						bootstrap_median_ms values and org timezones.
+					</p>
+				</div>
+
+				<h3 style="margin-bottom: 10px">Local Setup Checklist</h3>
+				<div class="flow" style="flex-wrap: wrap">
+					<div class="fstep">
+						<div class="fstep-n">01</div>
+						<div class="fstep-t">Clone + Install</div>
+						<div class="fstep-d">
+							<code>git clone</code> → <code>npm install</code> → copy
+							<code>.env.example</code> to <code>.env</code>
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">02</div>
+						<div class="fstep-t">Start Infra</div>
+						<div class="fstep-d">
+							<code>docker-compose up -d</code> starts PostgreSQL:5432 +
+							Redis:6379 in Streams mode locally
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">03</div>
+						<div class="fstep-t">Migrate + Seed</div>
+						<div class="fstep-d">
+							<code>npm run migrate</code> then <code>npm run seed</code> —
+							creates org with <code>timezone='America/New_York'</code>, 2
+							classrooms, 5 student sessions, bootstrap medians seeded
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">04</div>
+						<div class="fstep-t">Run Dev</div>
+						<div class="fstep-d">
+							<code>npm run dev</code> — Fastify on :3001, React on :3000, hot
+							reload on both. Redis consumer groups auto-created on startup.
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">05</div>
+						<div class="fstep-t">Test Suite</div>
+						<div class="fstep-d">
+							<code>npm test</code> — Jest unit + integration tests. Compliance
+							test suite runs separately: <code>npm run test:compliance</code>
+						</div>
+					</div>
+				</div>
+
+				<h3 style="margin-bottom: 10px; margin-top: 20px">
+					Repository Structure
+				</h3>
+				<div class="tw">
+					<table>
+						<thead>
+							<tr>
+								<th>Path</th>
+								<th>What Lives Here</th>
+								<th>Owner</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><code>/apps/api</code></td>
+								<td style="color: var(--t2)">
+									Fastify server. One folder per module: <code>/session</code>,
+									<code>/progress</code>, <code>/classroom</code>,
+									<code>/analytics</code>, <code>/organization</code>,
+									<code>/user</code>, <code>/content</code>,
+									<code>/compliance</code>. Each module owns its Redis Streams
+									consumer group setup.
+								</td>
+								<td><span class="bb b">Backend</span></td>
+							</tr>
+							<tr>
+								<td><code>/apps/web</code></td>
+								<td style="color: var(--t2)">
+									React SPA — student lesson view, instructor dashboard, admin
+									portals. Vite + TypeScript.
+								</td>
+								<td><span class="bg b">Frontend</span></td>
+							</tr>
+							<tr>
+								<td><code>/packages/shared</code></td>
+								<td style="color: var(--t2)">
+									TypeScript types shared across apps. Lesson schema, API
+									response types, error codes, stream event types. Never
+									contains logic.
+								</td>
+								<td><span class="by b">Both</span></td>
+							</tr>
+							<tr>
+								<td><code>/packages/db</code></td>
+								<td style="color: var(--t2)">
+									Prisma schema + migrations. All schema changes start here. Run
+									<code>npm run migrate</code> from this package. See
+									<code>MIGRATION_GUIDE.md</code> for two-phase column drops.
+								</td>
+								<td><span class="bb b">Backend</span></td>
+							</tr>
+							<tr>
+								<td><code>/packages/streams</code></td>
+								<td style="color: var(--t2)">
+									Redis Streams client wrapper. Consumer group registration,
+									XADD helpers, DLQ routing, XACK on success. Never import
+									ioredis directly — use this package.
+								</td>
+								<td><span class="bb b">Backend</span></td>
+							</tr>
+							<tr>
+								<td><code>/packages/validators</code></td>
+								<td style="color: var(--t2)">
+									DOM-based lesson validators. Imported by both client
+									(immediate feedback) and server (truth source). Never regex.
+									<span class="blm b" style="font-size: 8px">v3.1</span> Two new
+									rule types: <code>css_property_set</code> (checks computed
+									style against default) and
+									<code>css_has_semicolon</code> (checks CSS declaration
+									syntax). Both use DOM parsing — no string matching.
+								</td>
+								<td><span class="by b">Both</span></td>
+							</tr>
+							<tr>
+								<td><code>/data/lessons</code></td>
+								<td style="color: var(--t2)">
+									Lesson JSON files. Each lesson includes
+									<code>bootstrap_median_ms</code> per step — required field,
+									validated on startup.
+									<span class="blm b" style="font-size: 8px">v3.1</span> Two new
+									step types: <code>warmup</code> (60s review, auto-advance, no
+									DB write) and <code>anatomy_builder</code> (build sequence +
+									drag-label interaction, no DB write). Both types must have
+									<code>bootstrap_median_ms</code> set but are excluded from
+									<code>analytics_daily</code> aggregation.
+								</td>
+								<td><span class="bg b">Content</span></td>
+							</tr>
+							<tr>
+								<td><code>/docs</code></td>
+								<td style="color: var(--t2)">
+									<code>ARCHITECTURE.md</code>, <code>COMPLIANCE.md</code>,
+									<code>DATA-DICTIONARY.md</code>, <code>API.md</code>,
+									<code>SLO.md</code>, <code>RUNBOOKS.md</code>. Required
+									reading before first PR.
+								</td>
+								<td><span class="bp b">All</span></td>
+							</tr>
+							<tr>
+								<td><code>/infra</code></td>
+								<td style="color: var(--t2)">
+									Docker Compose (local), Railway config, Cloudflare wrangler
+									config, Datadog/Grafana setup scripts, env templates.
+								</td>
+								<td><span class="bo b">Infra</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h3 style="margin-bottom: 10px; margin-top: 4px">Pull Request Rules</h3>
+				<div class="g2">
+					<div class="card">
+						<div class="ct"><span class="bg b">Required on Every PR</span></div>
+						<ul>
+							<li>Tests pass (<code>npm test</code>)</li>
+							<li>TypeScript compiles with zero errors</li>
+							<li>PR description answers: "What does this change? Why?"</li>
+							<li>
+								No <code>console.log</code> — use
+								<code>logger.info()</code> (Pino)
+							</li>
+							<li>
+								No hardcoded strings — all copy lives in <code>/data/copy</code>
+							</li>
+							<li>
+								Any new lesson step must include
+								<code>bootstrap_median_ms</code>
+							</li>
+							<li>
+								<span class="blm b" style="font-size: 8px">v3.1</span> Steps
+								typed <code>warmup</code> or <code>anatomy_builder</code> must
+								have <code>xp: 0</code> and must NOT appear in any
+								<code>lesson_progress</code> write path. Verified by
+								<code>npm run validate:lessons</code>.
+							</li>
+						</ul>
+					</div>
+					<div class="card">
+						<div class="ct">
+							<span class="br b">Required on Compliance-Touching PRs</span>
+						</div>
+						<ul>
+							<li>
+								Any change to <code>student_sessions</code> schema: DPO review
+							</li>
+							<li>
+								Any new external API call: vendor must have a row in
+								<code>vendor_dpas</code>
+							</li>
+							<li>
+								Any change to <code>audit_log</code>: second engineer sign-off
+							</li>
+							<li>
+								Any new data field on student: explicit "why is this not PII?"
+								comment
+							</li>
+							<li>
+								Migration that drops a column: two-phase process (deprecate
+								first)
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<h3 style="margin-bottom: 10px">The Golden Rules — Memorize These</h3>
+				<div class="note danger">
+					<strong>Never log student data.</strong>
+					<p>
+						Pino structured logs must never include session slugs, classroom
+						codes, or any field from <code>student_sessions</code>. The logger
+						is configured with a <code>redact</code> list — but that's a safety
+						net, not the plan. When in doubt, don't log it.
+					</p>
+				</div>
+				<div class="note warn">
+					<strong>XP is always calculated server-side.</strong>
+					<p>
+						The client sends
+						<code>{ lesson_id, step_id, idempotency_key }</code>. The server
+						computes XP from the lesson definition. A client claiming
+						<code>{ xp: 500 }</code> is ignored. Always.
+					</p>
+				</div>
+				<div class="note ok">
+					<strong>Every external service needs a circuit breaker.</strong>
+					<p>
+						Wrap Redis calls in try/catch with a fallback. Wrap R2 signed URL
+						generation with a cached fallback. The lesson must work even if half
+						the infrastructure is down. A classroom session failing mid-class
+						because Redis had a blip is a political problem.
+					</p>
+				</div>
+				<div class="note new">
+					<strong>All streak logic runs in org-local time, never UTC.</strong>
+					<p>
+						Look up the org's <code>timezone</code> field. Use
+						<code>date_trunc('day', ts AT TIME ZONE org.timezone)</code> for all
+						streak comparisons. A student doing their lesson at 11:58 PM should
+						not lose their streak because your server clock thinks it's already
+						tomorrow. This is the streak-loss bug that kills user retention in
+						every edtech platform that doesn't think about timezones.
+					</p>
+				</div>
+				<div class="note new">
+					<strong>Redis Streams — XACK every processed event.</strong>
+					<p>
+						The consumer group tracks unacknowledged messages via XPENDING. If
+						you process an event but forget to XACK it, it will be redelivered
+						after the visibility timeout — you'll double-count analytics events.
+						The <code>/packages/streams</code> wrapper handles this
+						automatically: process your event inside the provided callback and
+						it ACKs on success, routes to DLQ on failure after 3 retries.
+					</p>
+				</div>
+				<div class="note">
+					<strong>Feature flags before feature branches go live.</strong>
+					<p>
+						New features ship behind a flag with <code>rollout_pct: 0</code>. We
+						increase it to 10% (one classroom), then 50%, then 100%. Never
+						all-or-nothing. This is how you catch a bug before it affects 1,800
+						schools — and how you protect the WebSocket error budget.
+					</p>
+				</div>
+			</div>
+		</div>
+		<script>
+			const tabs = [
+				"overview",
+				"orgmodel",
+				"onboarding",
+				"schema",
+				"dashboards",
+				"pipeline",
+				"observability",
+				"devguide",
+			];
+			function show(id) {
+				tabs.forEach((t) => {
+					document.getElementById(t).classList.toggle("on", t === id);
+				});
+				document.querySelectorAll(".nb").forEach((b, i) => {
+					b.classList.toggle("on", tabs[i] === id);
+				});
+			}
+			// v3.1 — architecture updated April 2026
+		</script>
+	</body>
+</html>

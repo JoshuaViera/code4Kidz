@@ -1,0 +1,2587 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Code4Kidz — Lesson JSON Schema v1.2</title>
+		<style>
+			@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap");
+			:root {
+				--bg: #09090f;
+				--s1: #0f1018;
+				--s2: #141620;
+				--s3: #1a1d2e;
+				--b1: #1e2238;
+				--b2: #262b45;
+				--b3: #303756;
+				--tx: #dde2f0;
+				--t2: #8b92b0;
+				--t3: #4a5070;
+				--blue: #4f8ef7;
+				--purple: #8b5cf6;
+				--green: #34d399;
+				--yellow: #fbbf24;
+				--red: #f87171;
+				--teal: #2dd4bf;
+				--orange: #fb923c;
+				--pink: #f472b6;
+				--lime: #a3e635;
+				--mono: "IBM Plex Mono", monospace;
+				--sans: "DM Sans", sans-serif;
+			}
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				background: var(--bg);
+				color: var(--tx);
+				font-family: var(--sans);
+				font-size: 14px;
+				line-height: 1.6;
+			}
+			.shell {
+				max-width: 1080px;
+				margin: 0 auto;
+				padding: 32px 28px 80px;
+			}
+			.hdr {
+				padding-bottom: 24px;
+				margin-bottom: 0;
+				border-bottom: 1px solid var(--b1);
+			}
+			.hdr-tag {
+				font-family: var(--mono);
+				font-size: 10px;
+				color: var(--blue);
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				margin-bottom: 10px;
+			}
+			.hdr h1 {
+				font-size: 26px;
+				font-weight: 700;
+				letter-spacing: -0.02em;
+			}
+			.hdr p {
+				color: var(--t2);
+				font-size: 13px;
+				margin-top: 5px;
+				max-width: 680px;
+			}
+			.hdr-top {
+				display: flex;
+				align-items: flex-start;
+				gap: 12px;
+			}
+			.score-badge {
+				font-family: var(--mono);
+				font-size: 11px;
+				padding: 4px 12px;
+				border-radius: 4px;
+				background: #0a1f0a;
+				border: 1px solid #1a4020;
+				color: var(--green);
+				margin-left: auto;
+				align-self: flex-start;
+				white-space: nowrap;
+			}
+			.hdr-pills {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 8px;
+				margin-top: 16px;
+			}
+			.pill {
+				font-family: var(--mono);
+				font-size: 10px;
+				padding: 3px 10px;
+				border-radius: 4px;
+				background: var(--s2);
+				border: 1px solid var(--b1);
+				color: var(--t2);
+				letter-spacing: 0.04em;
+			}
+			.pill.new {
+				background: #061a10;
+				border-color: #0a2818;
+				color: var(--green);
+			}
+			.nav {
+				display: flex;
+				gap: 2px;
+				border-bottom: 1px solid var(--b1);
+				margin-bottom: 28px;
+				overflow-x: auto;
+				padding-top: 4px;
+			}
+			.nb {
+				background: none;
+				border: none;
+				border-bottom: 2px solid transparent;
+				color: var(--t2);
+				font-family: var(--sans);
+				font-size: 12px;
+				font-weight: 500;
+				padding: 10px 16px;
+				cursor: pointer;
+				margin-bottom: -1px;
+				white-space: nowrap;
+				transition: color 0.15s;
+			}
+			.nb:hover {
+				color: var(--tx);
+			}
+			.nb.on {
+				color: var(--blue);
+				border-bottom-color: var(--blue);
+			}
+			.sec {
+				display: none;
+			}
+			.sec.on {
+				display: block;
+			}
+			h2 {
+				font-size: 17px;
+				font-weight: 600;
+				letter-spacing: -0.01em;
+				margin-bottom: 4px;
+			}
+			h3 {
+				font-size: 13px;
+				font-weight: 600;
+				margin-bottom: 8px;
+			}
+			.intro {
+				color: var(--t2);
+				font-size: 13px;
+				max-width: 720px;
+				line-height: 1.7;
+				margin-bottom: 24px;
+			}
+			.g2 {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 14px;
+				margin-bottom: 20px;
+			}
+			.g3 {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 14px;
+				margin-bottom: 20px;
+			}
+			@media (max-width: 760px) {
+				.g2,
+				.g3 {
+					grid-template-columns: 1fr;
+				}
+			}
+			.card {
+				background: var(--s1);
+				border: 1px solid var(--b1);
+				border-radius: 10px;
+				padding: 18px;
+			}
+			.card h3 {
+				font-size: 13px;
+				font-weight: 600;
+				margin-bottom: 6px;
+			}
+			.card p,
+			.card ul {
+				color: var(--t2);
+				font-size: 12px;
+				line-height: 1.7;
+			}
+			.card ul {
+				padding-left: 14px;
+			}
+			.card li {
+				margin-bottom: 3px;
+			}
+			.ct {
+				font-family: var(--mono);
+				font-size: 9px;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				margin-bottom: 8px;
+			}
+			.b {
+				display: inline-block;
+				font-size: 9px;
+				font-family: var(--mono);
+				padding: 2px 7px;
+				border-radius: 3px;
+				letter-spacing: 0.05em;
+				text-transform: uppercase;
+			}
+			.bb {
+				background: #0e1d3a;
+				color: var(--blue);
+				border: 1px solid #1a3060;
+			}
+			.bp {
+				background: #1a1030;
+				color: var(--purple);
+				border: 1px solid #2a1850;
+			}
+			.bg {
+				background: #061a10;
+				color: var(--green);
+				border: 1px solid #0a2818;
+			}
+			.by {
+				background: #1a1200;
+				color: var(--yellow);
+				border: 1px solid #2a2000;
+			}
+			.br {
+				background: #1a0808;
+				color: var(--red);
+				border: 1px solid #2a1010;
+			}
+			.bt {
+				background: #041818;
+				color: var(--teal);
+				border: 1px solid #082828;
+			}
+			.bo {
+				background: #1a0e04;
+				color: var(--orange);
+				border: 1px solid #2a1808;
+			}
+			.bpk {
+				background: #1a0818;
+				color: var(--pink);
+				border: 1px solid #2a1028;
+			}
+			.blm {
+				background: #0f1a04;
+				color: var(--lime);
+				border: 1px solid #1a2808;
+			}
+			.note {
+				background: var(--s2);
+				border: 1px solid var(--b1);
+				border-left: 3px solid var(--blue);
+				border-radius: 0 8px 8px 0;
+				padding: 12px 16px;
+				margin-bottom: 14px;
+				font-size: 12px;
+				line-height: 1.7;
+			}
+			.note.warn {
+				border-left-color: var(--yellow);
+			}
+			.note.ok {
+				border-left-color: var(--green);
+			}
+			.note.danger {
+				border-left-color: var(--red);
+			}
+			.note.new {
+				border-left-color: var(--lime);
+			}
+			.note strong {
+				color: var(--tx);
+				display: block;
+				margin-bottom: 3px;
+				font-size: 13px;
+			}
+			.note p,
+			.note li {
+				color: var(--t2);
+			}
+			.note ul {
+				padding-left: 14px;
+				margin-top: 4px;
+			}
+			.faang {
+				background: #080c18;
+				border: 1px solid #1a2440;
+				border-radius: 10px;
+				padding: 16px 18px;
+				margin-bottom: 20px;
+			}
+			.faang-lbl {
+				font-family: var(--mono);
+				font-size: 9px;
+				color: var(--blue);
+				text-transform: uppercase;
+				letter-spacing: 0.12em;
+				margin-bottom: 6px;
+			}
+			.faang p {
+				font-size: 12px;
+				color: #7a9cd4;
+				line-height: 1.75;
+			}
+			.tw {
+				background: var(--s1);
+				border: 1px solid var(--b1);
+				border-radius: 10px;
+				overflow: hidden;
+				margin-bottom: 20px;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-size: 12px;
+			}
+			th {
+				text-align: left;
+				padding: 9px 13px;
+				color: var(--t3);
+				font-weight: 500;
+				font-size: 10px;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				border-bottom: 1px solid var(--b1);
+				font-family: var(--mono);
+			}
+			td {
+				padding: 9px 13px;
+				border-bottom: 1px solid var(--b1);
+				vertical-align: top;
+				line-height: 1.5;
+				color: var(--t2);
+			}
+			tr:last-child td {
+				border-bottom: none;
+			}
+			td code {
+				font-family: var(--mono);
+				font-size: 10px;
+				background: var(--s3);
+				border: 1px solid var(--b1);
+				border-radius: 3px;
+				padding: 1px 5px;
+				color: var(--teal);
+			}
+			td strong {
+				color: var(--tx);
+				font-weight: 500;
+			}
+			.flow {
+				display: flex;
+				gap: 0;
+				margin-bottom: 20px;
+				flex-wrap: wrap;
+			}
+			.fstep {
+				flex: 1;
+				min-width: 140px;
+				background: var(--s2);
+				border: 1px solid var(--b1);
+				border-right: none;
+				padding: 14px 16px;
+				position: relative;
+			}
+			.fstep:last-child {
+				border-right: 1px solid var(--b1);
+				border-radius: 0 8px 8px 0;
+			}
+			.fstep:first-child {
+				border-radius: 8px 0 0 8px;
+			}
+			.fstep::after {
+				content: "→";
+				position: absolute;
+				right: -12px;
+				top: 50%;
+				transform: translateY(-50%);
+				color: var(--t3);
+				font-size: 14px;
+				z-index: 1;
+				background: var(--s2);
+				padding: 0 2px;
+			}
+			.fstep:last-child::after {
+				display: none;
+			}
+			.fstep-n {
+				font-family: var(--mono);
+				font-size: 9px;
+				color: var(--t3);
+				margin-bottom: 4px;
+				letter-spacing: 0.08em;
+			}
+			.fstep-t {
+				font-size: 12px;
+				font-weight: 600;
+				color: var(--tx);
+				margin-bottom: 3px;
+			}
+			.fstep-d {
+				font-size: 11px;
+				color: var(--t2);
+				line-height: 1.5;
+			}
+			pre {
+				background: var(--s2);
+				border: 1px solid var(--b1);
+				border-radius: 8px;
+				padding: 16px;
+				font-family: var(--mono);
+				font-size: 11px;
+				line-height: 1.7;
+				overflow-x: auto;
+				margin-bottom: 16px;
+				color: var(--t2);
+			}
+			pre .k {
+				color: var(--blue);
+			}
+			pre .s {
+				color: var(--green);
+			}
+			pre .n {
+				color: var(--yellow);
+			}
+			pre .c {
+				color: var(--t3);
+				font-style: italic;
+			}
+			pre .t {
+				color: var(--teal);
+			}
+			pre .p {
+				color: var(--purple);
+			}
+			.req {
+				color: var(--red);
+				font-family: var(--mono);
+				font-size: 9px;
+			}
+			.opt {
+				color: var(--t3);
+				font-family: var(--mono);
+				font-size: 9px;
+			}
+			.field-table td:first-child {
+				font-family: var(--mono);
+				font-size: 11px;
+				color: var(--teal);
+				width: 200px;
+			}
+			.field-table td:nth-child(2) {
+				width: 100px;
+			}
+			.step-card {
+				background: var(--s1);
+				border: 1px solid var(--b1);
+				border-radius: 10px;
+				padding: 18px;
+				margin-bottom: 14px;
+			}
+			.step-card-header {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				margin-bottom: 12px;
+				padding-bottom: 10px;
+				border-bottom: 1px solid var(--b1);
+			}
+			.step-card-title {
+				font-size: 14px;
+				font-weight: 600;
+			}
+			.step-card-desc {
+				font-size: 12px;
+				color: var(--t2);
+				margin-bottom: 12px;
+				line-height: 1.6;
+			}
+			.storage-tier {
+				background: var(--s2);
+				border: 1px solid var(--b1);
+				border-radius: 10px;
+				padding: 18px;
+				margin-bottom: 12px;
+				display: grid;
+				grid-template-columns: 160px 1fr;
+				gap: 16px;
+				align-items: start;
+			}
+			@media (max-width: 640px) {
+				.storage-tier {
+					grid-template-columns: 1fr;
+				}
+			}
+			.storage-label {
+				font-family: var(--mono);
+				font-size: 9px;
+				color: var(--t3);
+				margin-bottom: 4px;
+				letter-spacing: 0.08em;
+			}
+			.storage-name {
+				font-size: 14px;
+				font-weight: 700;
+			}
+			.storage-cost {
+				font-family: var(--mono);
+				font-size: 10px;
+				color: var(--green);
+				margin-top: 4px;
+			}
+			.checklist {
+				list-style: none;
+				padding: 0;
+				margin-bottom: 20px;
+			}
+			.checklist li {
+				display: flex;
+				gap: 10px;
+				padding: 8px 0;
+				border-bottom: 1px solid var(--b1);
+				font-size: 12px;
+				color: var(--t2);
+				align-items: flex-start;
+			}
+			.checklist li:last-child {
+				border-bottom: none;
+			}
+			.check {
+				width: 16px;
+				height: 16px;
+				border: 1px solid var(--b2);
+				border-radius: 3px;
+				flex-shrink: 0;
+				margin-top: 1px;
+			}
+			.checklist li strong {
+				color: var(--tx);
+			}
+			.v12-box {
+				background: #020d0d;
+				border: 1px solid #082828;
+				border-radius: 10px;
+				padding: 16px 18px;
+				margin-bottom: 20px;
+			}
+			.v12-lbl {
+				font-family: var(--mono);
+				font-size: 9px;
+				color: var(--teal);
+				text-transform: uppercase;
+				letter-spacing: 0.12em;
+				margin-bottom: 6px;
+			}
+			.v12-box p {
+				font-size: 12px;
+				color: #5ab8b0;
+				line-height: 1.75;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="shell">
+			<div class="hdr">
+				<div class="hdr-top">
+					<div>
+						<div class="hdr-tag">
+							Content Schema · v1.2 · April 2026 · Paired with Architecture v3.1
+						</div>
+						<h1>Code4Kidz — Lesson JSON Schema</h1>
+						<p>
+							The canonical format for all lesson content. Every lesson in
+							<code>/data/lessons/</code> must conform to this schema. v1.2 adds
+							<code>all_instances_min_chars</code> — a new validation rule that
+							checks every instance of a tag has minimum content, not just the
+							first. Required for any challenge step with multiple required
+							content tags (Lesson 3+). No new step types, no DB schema changes,
+							no new error types.
+						</p>
+					</div>
+					<div class="score-badge">v1.2 · Content Layer</div>
+				</div>
+				<div class="hdr-pills" style="margin-top: 16px">
+					<div class="pill">JSON Schema Draft-07</div>
+					<div class="pill">8 Step Types</div>
+					<div class="pill">8 Validation Rules</div>
+					<div class="pill">7 Error Types → mistake_log</div>
+					<div class="pill new">Bridges lesson files → DB schema</div>
+					<div class="pill new">bootstrap_median_ms required</div>
+					<div class="pill new">DOM validators, never regex</div>
+					<div class="pill">Byte emotion arc</div>
+					<div class="pill">Storage guide included</div>
+					<div
+						class="pill new"
+						style="background: #100618; border-color: #1e0a2a; color: #c084fc"
+					>
+						★ v1.1 warmup step type
+					</div>
+					<div
+						class="pill new"
+						style="background: #100618; border-color: #1e0a2a; color: #c084fc"
+					>
+						★ v1.1 anatomy_builder step type
+					</div>
+					<div
+						class="pill new"
+						style="background: #100618; border-color: #1e0a2a; color: #c084fc"
+					>
+						★ v1.1 css_property_set rule
+					</div>
+					<div
+						class="pill new"
+						style="background: #100618; border-color: #1e0a2a; color: #c084fc"
+					>
+						★ v1.1 css_has_semicolon rule
+					</div>
+					<div
+						class="pill new"
+						style="background: #041818; border-color: #082828; color: #2dd4bf"
+					>
+						★ v1.2 all_instances_min_chars rule
+					</div>
+				</div>
+			</div>
+
+			<div class="nav">
+				<button class="nb on" onclick="show('philosophy')">
+					Why This Exists
+				</button>
+				<button class="nb" onclick="show('schema')">Schema Reference</button>
+				<button class="nb" onclick="show('steptypes')">Step Types</button>
+				<button class="nb" onclick="show('validation')">
+					Validation System
+				</button>
+				<button class="nb" onclick="show('storage')">Storage Guide</button>
+				<button class="nb" onclick="show('checklist')">Adding a Lesson</button>
+			</div>
+
+			<!-- ══════════════════ TAB 1: PHILOSOPHY ══════════════════ -->
+			<div id="philosophy" class="sec on">
+				<h2>Why This Schema Exists</h2>
+				<p class="intro">
+					The architecture doc defines how the system runs. The lesson doc
+					defines what kids experience. This schema is the bridge. Without it,
+					there's no contract between content authors and engineers — and the
+					first time someone adds a lesson wrong, a classroom breaks
+					mid-session.
+				</p>
+
+				<div class="v12-box">
+					<div class="v12-lbl">v1.2 Changelog — April 2026</div>
+					<p>
+						<strong style="color: var(--tx)"
+							>One new validation rule:
+							<code>all_instances_min_chars</code></strong
+						><br />
+						Added for Lesson 3+ challenge steps where multiple required tags
+						must all have meaningful content.
+						<code>content_min_chars</code> only checks the first matching
+						element — a student who writes one real paragraph and leaves the
+						others empty would pass. <code>all_instances_min_chars</code> closes
+						this gap by running <code>querySelectorAll(tag)</code> and checking
+						every instance.<br /><br />
+						No new step types. No DB schema changes. No new error types. The new
+						rule uses the existing <code>empty_content</code> error type.<br /><br />
+						<strong style="color: var(--tx)"
+							>One engineering task before CI will pass for
+							lesson_003.json:</strong
+						>
+						Implement <code>all_instances_min_chars</code> in
+						<code>/packages/validators</code>. Implementation:
+						<code
+							>Array.from(doc.querySelectorAll(tag)).every(el =>
+							el.textContent.trim().replace(/\s+/g, '').length >= min)</code
+						>.
+					</p>
+				</div>
+
+				<div class="faang">
+					<div class="faang-lbl">FAANG Principle — "Content as Code"</div>
+					<p>
+						At Duolingo, every exercise is a structured JSON object authored by
+						linguists and validated by CI before it touches production. At Khan
+						Academy, lesson content ships through a content pipeline with schema
+						validation, not manual DB inserts. The pattern:
+						<strong
+							>content is data, data has a schema, schema is enforced at build
+							time.</strong
+						>
+						A PR that adds a lesson with a missing
+						<code>bootstrap_median_ms</code> fails the build. No exceptions.
+					</p>
+				</div>
+
+				<div class="g2">
+					<div class="card">
+						<div class="ct">
+							<span class="bg b">Why JSON files — not a DB table?</span>
+						</div>
+						<p>
+							Lessons are <strong>static, versioned artifacts</strong>. They
+							don't change at runtime — they change through deliberate
+							authoring. Storing them in the DB adds a CRUD API, a migration
+							risk, and a content management UI you don't have time to build.
+							JSON files in <code>/data/lessons/</code> give you Git history, PR
+							review, rollback, and diff for free. The DB tracks
+							<em>progress through lessons</em> — not the lessons themselves.
+						</p>
+					</div>
+					<div class="card">
+						<div class="ct">
+							<span class="by b"
+								>Why is lesson_id a string like "lesson_001"?</span
+							>
+						</div>
+						<p>
+							Two reasons. First: <strong>human-readable and sortable</strong>.
+							A PR titled "add lesson_006" is immediately obvious to every
+							reviewer. Second:
+							<strong>zero-padded integers sort correctly</strong> in both
+							filesystems and API responses without a secondary
+							<code>order</code> column. The number <em>is</em> the canonical
+							curriculum order.
+						</p>
+					</div>
+					<div class="card">
+						<div class="ct">
+							<span class="bt b">How does lesson_id connect to the DB?</span>
+						</div>
+						<p>
+							The <code>lesson_progress</code> and
+							<code>mistake_log</code> tables store <code>lesson_id</code> and
+							<code>step_id</code> as plain strings — not foreign keys to a
+							lessons table. The application validates that a submitted
+							<code>lesson_id</code> matches a file in
+							<code>/data/lessons/</code> at startup. If the file doesn't exist,
+							the server won't start. This is the contract.
+						</p>
+					</div>
+					<div class="card">
+						<div class="ct">
+							<span class="bp b"
+								>Why is bootstrap_median_ms required on every step?</span
+							>
+						</div>
+						<p>
+							On Day 1 of a classroom session, <code>analytics_daily</code> has
+							zero rows. Without a seed value, the traffic light system defaults
+							to "unknown," which is useless.
+							<code>bootstrap_median_ms</code> forces the content author to
+							estimate how long a step takes. This is a
+							<strong>pedagogical forcing function</strong>, not just a
+							technical requirement.
+						</p>
+					</div>
+				</div>
+
+				<div class="note warn">
+					<strong>The gap this closes in the architecture doc.</strong>
+					<p>
+						The architecture v3.1 references <code>lesson_id</code> and
+						<code>step_id</code> in four tables: <code>lesson_progress</code>,
+						<code>mistake_log</code>, <code>analytics_daily</code>, and
+						<code>feature_flags</code>. It also requires
+						<code>bootstrap_median_ms</code> as a required field in lesson JSON.
+						But the architecture never defines what that JSON looks like.
+						<strong>This document is that definition.</strong> Without it, every
+						engineer who adds lesson 2 will invent their own format — and the
+						validators will break.
+					</p>
+				</div>
+
+				<h3 style="margin-bottom: 10px; margin-top: 4px">
+					How a lesson flows through the system
+				</h3>
+				<div class="flow">
+					<div class="fstep">
+						<div class="fstep-n">01</div>
+						<div class="fstep-t">Author writes spec</div>
+						<div class="fstep-d">
+							Narrative lesson spec in Notion. Content team owns this.
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">02</div>
+						<div class="fstep-t">Translate to JSON</div>
+						<div class="fstep-d">
+							Spec → <code>lesson_00N.json</code> following this schema. PR
+							opened against <code>main</code>.
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">03</div>
+						<div class="fstep-t">CI validates</div>
+						<div class="fstep-d">
+							Build runs <code>npm run validate:lessons</code>. Fails if any
+							JSON doesn't match this schema.
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">04</div>
+						<div class="fstep-t">Startup check</div>
+						<div class="fstep-d">
+							Server scans <code>/data/lessons/</code>. Any referenced
+							<code>lesson_id</code> not on disk → crash with clear error.
+						</div>
+					</div>
+					<div class="fstep">
+						<div class="fstep-n">05</div>
+						<div class="fstep-t">Student learns</div>
+						<div class="fstep-d">
+							Frontend fetches lesson JSON via API. Progress, XP, and mistakes
+							write to the DB using IDs from the JSON.
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- ══════════════════ TAB 2: SCHEMA REFERENCE ══════════════════ -->
+			<div id="schema" class="sec">
+				<h2>Schema Reference</h2>
+				<p class="intro">
+					Every lesson JSON file must include these top-level fields. Required
+					fields are marked <span class="req">REQUIRED</span>. Optional fields
+					are marked <span class="opt">OPTIONAL</span>.
+				</p>
+
+				<h3 style="margin-bottom: 10px">Top-Level Structure</h3>
+				<div class="tw">
+					<table class="field-table">
+						<thead>
+							<tr>
+								<th>Field</th>
+								<th>Type</th>
+								<th>Status</th>
+								<th>Description & Why</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><code>id</code></td>
+								<td>string</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									Format: <code>lesson_001</code>. Must match the filename.
+									<strong>This is the primary key</strong> used in
+									<code>lesson_progress</code>, <code>mistake_log</code>, and
+									<code>analytics_daily</code>. Pattern:
+									<code>^lesson_[0-9]{3}$</code>. Start at 001, zero-padded to
+									three digits.
+								</td>
+							</tr>
+							<tr>
+								<td><code>schema_version</code></td>
+								<td>string</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									Semver string, e.g. <code>"1.2.0"</code>. The validator checks
+									this first. If you change the schema in a breaking way, bump
+									the major version and update the validator. This prevents
+									silent format drift.
+								</td>
+							</tr>
+							<tr>
+								<td><code>version</code></td>
+								<td>integer</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									Content version of this specific lesson. Starts at 1.
+									Increment when you edit lesson content after it has shipped to
+									students. Used to detect stale cached content in Redis (TTL:
+									60s). Never reset to 1.
+								</td>
+							</tr>
+							<tr>
+								<td><code>meta</code></td>
+								<td>object</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>Lesson-level metadata. See the Meta Object table below.</td>
+							</tr>
+							<tr>
+								<td><code>byte_arc</code></td>
+								<td>object</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									Byte's emotional journey across the lesson.
+									<code>opening_emotion</code> and <code>closing_emotion</code>.
+									Valid values:
+									<code
+										>excited | neutral | curious | thinking | happy | proud |
+										celebrating</code
+									>. The opening emotion sets Byte's state for the mascot intro
+									step.
+								</td>
+							</tr>
+							<tr>
+								<td><code>steps</code></td>
+								<td>array</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									Ordered array of step objects. Minimum 3 steps. Must include
+									exactly one <code>mascot_intro</code> (order: 0 or 1 if warmup
+									present) and exactly one <code>lesson_complete</code> (last).
+									Steps are rendered in <code>order</code> field sequence, not
+									array index.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h3 style="margin-bottom: 10px; margin-top: 4px">The Meta Object</h3>
+				<div class="tw">
+					<table class="field-table">
+						<thead>
+							<tr>
+								<th>Field</th>
+								<th>Type</th>
+								<th>Status</th>
+								<th>Description & Why</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><code>title</code></td>
+								<td>string</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>Display title shown to students. Max 40 chars.</td>
+							</tr>
+							<tr>
+								<td><code>slug</code></td>
+								<td>string</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									URL-safe string, e.g. <code>say-hello-to-the-web</code>. Used
+									in API routes: <code>GET /lessons/:slug</code>. Pattern:
+									<code>^[a-z0-9-]+$</code>. Must be unique across all lessons.
+								</td>
+							</tr>
+							<tr>
+								<td><code>emoji</code></td>
+								<td>string</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>Single emoji. Shown on the lesson card in the UI.</td>
+							</tr>
+							<tr>
+								<td><code>age_range</code></td>
+								<td>object</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									<code>{ "min": 7, "max": 10 }</code>. All C4K lessons are 7–10
+									for now. This field exists so future curriculum tracks can be
+									added without a schema change.
+								</td>
+							</tr>
+							<tr>
+								<td><code>prior_lesson_id</code></td>
+								<td>string|null</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									<code>null</code> for lesson 1. Otherwise the
+									<code>id</code> of the prerequisite lesson. The server checks
+									<code>lesson_progress</code> to confirm completion before
+									unlocking.
+								</td>
+							</tr>
+							<tr>
+								<td><code>next_lesson_id</code></td>
+								<td>string|null</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									<code>null</code> for the last lesson. Otherwise the next
+									lesson's <code>id</code>. Shown greyed out on the lesson
+									complete screen as a teaser.
+								</td>
+							</tr>
+							<tr>
+								<td><code>time_estimate_min</code></td>
+								<td>integer</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									Estimated lesson duration in minutes. Shown to facilitators.
+									Must be honest — facilitators plan sessions around this.
+								</td>
+							</tr>
+							<tr>
+								<td><code>total_xp</code></td>
+								<td>integer</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									Sum of all step XP values. Validated at build time: if the sum
+									of <code>steps[].xp</code> doesn't equal this value, the build
+									fails.
+								</td>
+							</tr>
+							<tr>
+								<td><code>objective</code></td>
+								<td>string</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									One sentence. Pinned at the top of the screen. Max 60 chars.
+									Written for a child. Not "Students will demonstrate..." —
+									that's DoE spec language, not kid language.
+								</td>
+							</tr>
+							<tr>
+								<td><code>concepts_introduced</code></td>
+								<td>string[]</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									Array of concept tags this lesson teaches. Used by analytics
+									to track concept mastery across the cohort. Must come from the
+									approved concept taxonomy.
+								</td>
+							</tr>
+							<tr>
+								<td><code>concepts_required</code></td>
+								<td>string[]</td>
+								<td><span class="opt">OPTIONAL</span></td>
+								<td>
+									Concepts a student must have mastered from prior lessons. If a
+									student has a high error rate on a required concept, the
+									system surfaces a review prompt. Empty array for lesson 1.
+								</td>
+							</tr>
+							<tr>
+								<td><code>tags</code></td>
+								<td>string[]</td>
+								<td><span class="opt">OPTIONAL</span></td>
+								<td>Free-form tags for filtering in the teacher dashboard.</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h3 style="margin-bottom: 10px; margin-top: 4px">
+					Fields Every Step Must Have
+				</h3>
+				<div class="note">
+					<strong
+						>These fields are required on every step, regardless of
+						type.</strong
+					>
+					<p>
+						The step type then adds its own additional fields. See the Step
+						Types tab for type-specific fields.
+					</p>
+				</div>
+				<div class="tw">
+					<table class="field-table">
+						<thead>
+							<tr>
+								<th>Field</th>
+								<th>Type</th>
+								<th>Status</th>
+								<th>Description & Why</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><code>id</code></td>
+								<td>string</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									String ID for this step within the lesson. Pattern:
+									<code>^[a-z0-9_]+$</code>. Stored verbatim in
+									<code>lesson_progress.step_id</code> and
+									<code>mistake_log.step_id</code>.
+									<strong>Never change a shipped step ID</strong> — it will
+									orphan analytics data.
+								</td>
+							</tr>
+							<tr>
+								<td><code>type</code></td>
+								<td>string</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									One of:
+									<code
+										>warmup | mascot_intro | info | quiz | code_editor |
+										challenge | lesson_complete | anatomy_builder</code
+									>. Determines which React component renders and which
+									validation path runs.
+								</td>
+							</tr>
+							<tr>
+								<td><code>order</code></td>
+								<td>integer</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									Zero-indexed render order. <code>warmup</code> is always 0 if
+									present. <code>mascot_intro</code> is 0 (Lesson 1) or 1
+									(Lessons 2+). <code>lesson_complete</code> is always last.
+									Frontend sorts by this field, not array index.
+								</td>
+							</tr>
+							<tr>
+								<td><code>xp</code></td>
+								<td>integer</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									XP awarded when this step is completed. 0 for non-interactive
+									steps. The server calculates XP from this field — the client
+									never sends an XP amount, only a completion signal.
+								</td>
+							</tr>
+							<tr>
+								<td><code>bootstrap_median_ms</code></td>
+								<td>integer</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									Estimated median time for this step in milliseconds. Required
+									on every step including warmup and anatomy_builder. Used as
+									tier-3 fallback when <code>analytics_daily</code> has fewer
+									than 10 real samples. Time yourself doing it slowly, multiply
+									by 1.5.
+								</td>
+							</tr>
+							<tr>
+								<td><code>progress_label</code></td>
+								<td>string|null</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									String shown in the progress bar, e.g. <code>"2 of 5"</code>.
+									<code>null</code> for <code>warmup</code>,
+									<code>mascot_intro</code>, <code>challenge</code>,
+									<code>anatomy_builder</code>, and
+									<code>lesson_complete</code>.
+								</td>
+							</tr>
+							<tr>
+								<td><code>byte</code></td>
+								<td>object</td>
+								<td><span class="req">REQUIRED</span></td>
+								<td>
+									<code
+										>{ "emotion": "neutral", "lines": ["line 1", "line 2"]
+										}</code
+									>. Max 2 lines. Valid emotions:
+									<code
+										>excited | neutral | curious | thinking | happy | proud |
+										celebrating</code
+									>.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<!-- ══════════════════ TAB 3: STEP TYPES ══════════════════ -->
+			<div id="steptypes" class="sec">
+				<h2>Step Types</h2>
+				<p class="intro">
+					There are exactly 8 step types as of v1.2. Every lesson is composed of
+					these building blocks. The type determines what fields are required
+					beyond the base set, which React component renders, and whether the
+					step writes to the DB.
+				</p>
+
+				<div class="note warn">
+					<strong>DB write rules by step type.</strong>
+					<ul>
+						<li>
+							<code>warmup</code> — NO writes to lesson_progress or mistake_log.
+							Auto-advances. No server round-trip on failure.
+						</li>
+						<li>
+							<code>anatomy_builder</code> — NO writes to lesson_progress or
+							mistake_log. Wrong drops are client-side only. Single completion
+							signal when all labels correct.
+						</li>
+						<li>
+							<code>mascot_intro</code>, <code>info</code> — NO writes.
+							Non-interactive.
+						</li>
+						<li>
+							<code>quiz</code> — Writes to mistake_log on wrong answer only.
+						</li>
+						<li>
+							<code>code_editor</code> — Writes to lesson_progress on
+							completion. Writes to mistake_log on validation failure.
+						</li>
+						<li>
+							<code>challenge</code> — Writes to lesson_progress on completion.
+						</li>
+						<li>
+							<code>lesson_complete</code> — Writes streak + XP total to
+							student_sessions. This is the only step that triggers the rollup.
+						</li>
+					</ul>
+				</div>
+
+				<!-- warmup -->
+				<div class="step-card" style="border-color: #2a1850">
+					<div class="step-card-header">
+						<span class="b bp">warmup</span
+						><span class="step-card-title">Warm-Up Review</span
+						><span
+							style="
+								margin-left: auto;
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--t3);
+							"
+							>★ v1.1 · xp: 0 · order: 0 · NO DB write · Auto-advances at
+							60s</span
+						>
+					</div>
+					<div class="step-card-desc">
+						A 60-second review of the previous lesson's concept. No hearts at
+						risk. No XP. No mistake_log write. Auto-advances when
+						<code>time_limit_ms</code> elapses even if validation fails. First
+						step of every lesson from Lesson 2 onward. Lesson 1 has no warm-up.
+					</div>
+					<div class="note warn" style="margin-bottom: 12px">
+						<strong>No server round-trip on failure.</strong>
+						<p>
+							The client handles the timeout locally and advances. The only
+							server call is a completion signal if the student passes within
+							the time limit — and even that is optional. Warm-up completion is
+							NOT required to proceed.
+						</p>
+					</div>
+					<div class="tw">
+						<table class="field-table">
+							<thead>
+								<tr>
+									<th>Additional Field</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>always_advance</code></td>
+									<td>boolean</td>
+									<td>
+										Always <code>true</code>. Advances when validation passes OR
+										time_limit_ms elapses.
+									</td>
+								</tr>
+								<tr>
+									<td><code>time_limit_ms</code></td>
+									<td>integer</td>
+									<td>
+										Always <code>60000</code>. A visible countdown timer shows
+										on screen.
+									</td>
+								</tr>
+								<tr>
+									<td><code>prompt_lines</code></td>
+									<td>string[]</td>
+									<td>
+										Instruction lines shown to the student. Max 8 words per
+										line.
+									</td>
+								</tr>
+								<tr>
+									<td><code>starter_code</code></td>
+									<td>string</td>
+									<td>
+										Always empty string <code>""</code>. This is a recall
+										exercise, not a guided one.
+									</td>
+								</tr>
+								<tr>
+									<td><code>validation_rules</code></td>
+									<td>array</td>
+									<td>
+										Same structure as code_editor. Used to determine pass vs
+										timeout. Same rules as prior lesson's core concepts.
+									</td>
+								</tr>
+								<tr>
+									<td><code>feedback.correct</code></td>
+									<td>object</td>
+									<td>
+										<code
+											>{ "byte_line": "Nice. Let's keep going.", "emotion":
+											"neutral" }</code
+										>. No big celebration.
+									</td>
+								</tr>
+								<tr>
+									<td><code>feedback.timeout</code></td>
+									<td>object</td>
+									<td>
+										<code
+											>{ "byte_line": "No worries. Let's move on.", "emotion":
+											"neutral" }</code
+										>. Never shame. Just a quiet transition.
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<!-- mascot_intro -->
+				<div class="step-card">
+					<div class="step-card-header">
+						<span class="b bp">mascot_intro</span
+						><span class="step-card-title">Mascot Introduction</span
+						><span
+							style="
+								margin-left: auto;
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--t3);
+							"
+							>xp: 0 · No DB write · One CTA button</span
+						>
+					</div>
+					<div class="step-card-desc">
+						Byte appears and delivers the hook. Non-interactive — the kid taps a
+						single CTA button to advance. No validation, no XP. Sets the
+						emotional tone for the lesson. Optionally includes a
+						<code>byte_story_moment</code> object (pink bubble, auto-dismisses
+						at 8s, never tested on).
+					</div>
+					<div class="tw">
+						<table class="field-table">
+							<thead>
+								<tr>
+									<th>Additional Field</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>cta</code></td>
+									<td>string</td>
+									<td>
+										Label on the advance button. Keep it curious — never "Next"
+										or "Continue."
+									</td>
+								</tr>
+								<tr>
+									<td><code>byte_story_moment</code></td>
+									<td>object|null</td>
+									<td>
+										Optional:
+										<code
+											>{ "lines": [...], "emotion": "story", "auto_dismiss_ms":
+											8000, "dismiss_label": "Got it" }</code
+										>. Character arc moment. Never quizzed.
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<!-- info -->
+				<div class="step-card">
+					<div class="step-card-header">
+						<span class="b bb">info</span
+						><span class="step-card-title"
+							>Information / Concept Introduction</span
+						><span
+							style="
+								margin-left: auto;
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--t3);
+							"
+							>xp: 0 · No DB write · May have animation</span
+						>
+					</div>
+					<div class="step-card-desc">
+						Teaches exactly one concept. Screen text appears line by line. Byte
+						speaks. No interaction beyond advancing. An info step should never
+						teach two things — split it into two info steps instead.
+					</div>
+					<div class="tw">
+						<table class="field-table">
+							<thead>
+								<tr>
+									<th>Additional Field</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>title</code></td>
+									<td>string</td>
+									<td>Step title shown at the top. Max 30 chars.</td>
+								</tr>
+								<tr>
+									<td><code>content_lines</code></td>
+									<td>string[]</td>
+									<td>
+										Lines that appear one at a time. Max 8 words per line.
+										Supports <code>**bold**</code> and backtick
+										<code>code</code> formatting.
+									</td>
+								</tr>
+								<tr>
+									<td><code>animation</code></td>
+									<td>string|null</td>
+									<td>
+										Animation key. Supported:
+										<code
+											>type_to_webpage | build_token_by_token |
+											tag_pair_highlight | size_comparison |
+											story_build_sequence | h1_p_relationship |
+											html_vs_css_comparison | heading_size_comparison</code
+										>. Null if none.
+									</td>
+								</tr>
+								<tr>
+									<td><code>code_animation</code></td>
+									<td>object|null</td>
+									<td>
+										Animation data object. Structure depends on animation type.
+										Null if no animation.
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<!-- quiz -->
+				<div class="step-card">
+					<div class="step-card-header">
+						<span class="b by">quiz</span
+						><span class="step-card-title">Multiple Choice Check</span
+						><span
+							style="
+								margin-left: auto;
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--t3);
+							"
+							>xp: 0 · Writes to mistake_log on wrong answer</span
+						>
+					</div>
+					<div class="step-card-desc">
+						Always follows an info step. Checks that the kid understood exactly
+						one concept. 2–3 options maximum. Wrong answers reset — they don't
+						advance. XP is 0 — comprehension checks are not rewarded, only doing
+						is.
+					</div>
+					<div class="tw">
+						<table class="field-table">
+							<thead>
+								<tr>
+									<th>Additional Field</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>prompt</code></td>
+									<td>string</td>
+									<td>
+										The question. Max 10 words. Never "Which of the
+										following..."
+									</td>
+								</tr>
+								<tr>
+									<td><code>options</code></td>
+									<td>array</td>
+									<td>
+										<code
+											>{ "id": "opt_a", "text": "...", "is_correct": false
+											}</code
+										>. 2–3 options. Exactly one is correct. Wrong options are
+										plausible — never obviously silly.
+									</td>
+								</tr>
+								<tr>
+									<td><code>feedback.correct</code></td>
+									<td>object</td>
+									<td>
+										<code>{ "byte_line": "Exactly.", "emotion": "happy" }</code
+										>. Max 1 line.
+									</td>
+								</tr>
+								<tr>
+									<td><code>feedback.incorrect</code></td>
+									<td>object</td>
+									<td>
+										<code
+											>{ "byte_line": "...", "emotion": "thinking", "action":
+											"reset" }</code
+										>. Redirects — never punishes.
+									</td>
+								</tr>
+								<tr>
+									<td><code>tap_target</code></td>
+									<td>string|null</td>
+									<td>
+										If the quiz asks the student to tap a code element, set this
+										to the expected tap target text. Null for standard multiple
+										choice.
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<!-- code_editor -->
+				<div class="step-card">
+					<div class="step-card-header">
+						<span class="b bg">code_editor</span
+						><span class="step-card-title">Guided Code Input</span
+						><span
+							style="
+								margin-left: auto;
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--t3);
+							"
+							>xp: 20 · Writes to lesson_progress + mistake_log</span
+						>
+					</div>
+					<div class="step-card-desc">
+						The student types real code. A live preview panel shows the result.
+						Byte watches and gives a hint after <code>hint_delay_ms</code>.
+						Validation runs on DOM-based validators — never regex. XP is awarded
+						on first valid completion only (idempotency_key enforced
+						server-side).
+					</div>
+					<div class="tw">
+						<table class="field-table">
+							<thead>
+								<tr>
+									<th>Additional Field</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>title</code></td>
+									<td>string</td>
+									<td>Step title shown above the editor.</td>
+								</tr>
+								<tr>
+									<td><code>content_lines</code></td>
+									<td>string[]</td>
+									<td>
+										Instruction lines shown above the editor. Same writing rules
+										as info steps.
+									</td>
+								</tr>
+								<tr>
+									<td><code>prompt_code</code></td>
+									<td>string|null</td>
+									<td>
+										A visible code example shown above the editor (not in it).
+										Null if no example.
+									</td>
+								</tr>
+								<tr>
+									<td><code>starter_code</code></td>
+									<td>string</td>
+									<td>
+										What's pre-loaded in the editor. Empty string
+										<code>""</code> for blank.
+									</td>
+								</tr>
+								<tr>
+									<td><code>hint_delay_ms</code></td>
+									<td>integer</td>
+									<td>
+										Milliseconds of inactivity before Byte offers the hint.
+										Default: 30000. The hint shows once only.
+									</td>
+								</tr>
+								<tr>
+									<td><code>hint</code></td>
+									<td>string</td>
+									<td>
+										Byte's hint line. Max 12 words. Never gives the answer —
+										redirects to the structure.
+									</td>
+								</tr>
+								<tr>
+									<td><code>validation_rules</code></td>
+									<td>array</td>
+									<td>
+										Array of validation rule objects. See the Validation System
+										tab. All rules must pass for the step to complete.
+									</td>
+								</tr>
+								<tr>
+									<td><code>feedback.correct</code></td>
+									<td>object</td>
+									<td>
+										<code
+											>{ "byte_line": "...", "emotion": "happy", "animation":
+											"sparkle_preview" }</code
+										>. Animation options:
+										<code>sparkle_preview | confetti | xp_float</code>.
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<!-- challenge -->
+				<div class="step-card">
+					<div class="step-card-header">
+						<span class="b bo">challenge</span
+						><span class="step-card-title">The Challenge (No Help Mode)</span
+						><span
+							style="
+								margin-left: auto;
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--t3);
+							"
+							>xp: 20 · Writes to lesson_progress · Byte steps back</span
+						>
+					</div>
+					<div class="step-card-desc">
+						The culminating moment. Byte explicitly steps back. No hints, no
+						help. Always the second-to-last step. The skeleton code is given to
+						prevent blank-page panic — the student fills in the content, not the
+						structure.
+					</div>
+					<div class="tw">
+						<table class="field-table">
+							<thead>
+								<tr>
+									<th>Additional Field</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>tasks</code></td>
+									<td>array</td>
+									<td>
+										<code
+											>{ "description": "A big heading with **your name**"
+											}</code
+										>. 2–4 tasks. Each maps to one or more validation rules.
+									</td>
+								</tr>
+								<tr>
+									<td><code>starter_code</code></td>
+									<td>string</td>
+									<td>
+										The skeleton structure. Tags in place — students fill the
+										content. Never blank.
+									</td>
+								</tr>
+								<tr>
+									<td><code>hints_enabled</code></td>
+									<td>boolean</td>
+									<td>
+										Always <code>false</code>. Byte watches but does not speak.
+									</td>
+								</tr>
+								<tr>
+									<td><code>validation_rules</code></td>
+									<td>array</td>
+									<td>
+										Same structure as code_editor. Usually more rules — each
+										task maps to at least one rule.
+									</td>
+								</tr>
+								<tr>
+									<td><code>feedback.correct</code></td>
+									<td>object</td>
+									<td>
+										Up to 3 byte lines (only step allowed more than 2).
+										<code>emotion: "celebrating"</code>.
+										<code>animation: "confetti"</code>.
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<!-- lesson_complete -->
+				<div class="step-card">
+					<div class="step-card-header">
+						<span class="b bt">lesson_complete</span
+						><span class="step-card-title">Lesson Complete</span
+						><span
+							style="
+								margin-left: auto;
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--t3);
+							"
+							>xp: 0 · Writes streak + XP total to student_sessions</span
+						>
+					</div>
+					<div class="step-card-desc">
+						The summary screen. The only step that triggers the streak update
+						and XP rollup on the server — completing the lesson up to the
+						challenge isn't enough.
+					</div>
+					<div class="tw">
+						<table class="field-table">
+							<thead>
+								<tr>
+									<th>Additional Field</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>summary</code></td>
+									<td>array</td>
+									<td>
+										Concept rows:
+										<code>{ "concept": "Big text", "tag": "h1" }</code> or
+										<code>{ "concept": "...", "note": "..." }</code>. 2–5 rows.
+									</td>
+								</tr>
+								<tr>
+									<td><code>total_xp</code></td>
+									<td>integer</td>
+									<td>
+										Must match <code>meta.total_xp</code>. The validator checks
+										this.
+									</td>
+								</tr>
+								<tr>
+									<td><code>next_lesson_teaser</code></td>
+									<td>string|null</td>
+									<td>
+										Short teaser for the next lesson. Shown greyed out.
+										<code>null</code> if last lesson.
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<!-- anatomy_builder -->
+				<div class="step-card" style="border-color: #2a1850">
+					<div class="step-card-header">
+						<span class="b bpk">anatomy_builder</span
+						><span class="step-card-title"
+							>Anatomy Builder (Worked Example + Drag-Label)</span
+						><span
+							style="
+								margin-left: auto;
+								font-family: var(--mono);
+								font-size: 10px;
+								color: var(--t3);
+							"
+							>★ v1.1 · xp: 0 · NO DB write · Client-side on wrong drops</span
+						>
+					</div>
+					<div class="step-card-desc">
+						Two-phase step. Phase 1: Byte constructs a code structure token by
+						token with narration and color-coded highlights. Phase 2: student
+						drags sticky-note labels to the correct regions. Wrong drops bounce
+						back client-side only. All labels correct → single server completion
+						signal → advances.
+					</div>
+					<div class="note ok" style="margin-bottom: 12px">
+						<strong>DoE alignment: Worked Example Effect + Dual Coding.</strong>
+						<p>
+							Sweller (1988) — novice learners benefit from watching an expert
+							complete a task before attempting it. Paivio (1991) — simultaneous
+							verbal + visual encoding produces stronger retention. This is why
+							the step has zero XP and zero wrong-answer penalty — it is
+							orientation, not evaluation.
+						</p>
+					</div>
+					<div class="tw">
+						<table class="field-table">
+							<thead>
+								<tr>
+									<th>Additional Field</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>byte_costume</code></td>
+									<td>string|null</td>
+									<td>
+										SVG overlay key applied to byte-idle.svg during Phase 1.
+										E.g. <code>"hard_hat"</code>. Removed after Phase 1.
+									</td>
+								</tr>
+								<tr>
+									<td><code>build_sequence</code></td>
+									<td>array</td>
+									<td>
+										Each token:
+										<code
+											>{ "token": "&lt;head&gt;", "delay_ms": 1200, "byte_line":
+											"This is the brain.", "highlight_color": "#D4581A",
+											"region_label": "the brain" }</code
+										>.
+									</td>
+								</tr>
+								<tr>
+									<td><code>drag_interaction</code></td>
+									<td>object</td>
+									<td>
+										Phase 2 config: <code>instruction</code>,
+										<code>byte_line</code>, <code>byte_emotion</code>,
+										<code>labels</code> array, <code>wrong_drop_behavior</code>,
+										<code>all_correct_behavior</code>.
+									</td>
+								</tr>
+								<tr>
+									<td><code>drag_interaction.labels</code></td>
+									<td>array</td>
+									<td>
+										<code
+											>{ "id": "label_brain", "text": "🧠 The brain",
+											"correct_target": "head", "drop_feedback": "..." }</code
+										>.
+									</td>
+								</tr>
+								<tr>
+									<td><code>drag_interaction.wrong_drop_behavior</code></td>
+									<td>string</td>
+									<td>
+										Always <code>"bounce_back"</code>. Spring animation. No
+										sound, no Byte reaction, no error state, no mistake_log
+										write.
+									</td>
+								</tr>
+								<tr>
+									<td><code>drag_interaction.all_correct_behavior</code></td>
+									<td>object</td>
+									<td>
+										<code
+											>{ "animation": "snap_all_labels", "byte_line": "That's
+											it.", "byte_emotion": "happy", "sound": "soft_success"
+											}</code
+										>.
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<!-- ══════════════════ TAB 4: VALIDATION ══════════════════ -->
+			<div id="validation" class="sec">
+				<h2>Validation System</h2>
+				<p class="intro">
+					Validation is the contract between what the lesson asks for and what
+					the student submits. It runs in two places: on the client (immediate
+					feedback) and on the server (source of truth). Both use the same
+					validator package from <code>/packages/validators</code>. Never use
+					regex.
+				</p>
+
+				<div class="faang">
+					<div class="faang-lbl">
+						FAANG Principle — "Why DOM validation, never regex?"
+					</div>
+					<p>
+						Regex-based HTML validation fails constantly in child-authored code.
+						<code>&lt;H1&gt;</code> vs <code>&lt;h1&gt;</code>, trailing spaces,
+						self-closing tags — children don't type predictably. A DOM parser
+						handles all of these correctly. The validator parses the student's
+						code into a real DOM, then queries it:
+						<code>doc.querySelectorAll('h1')</code>. If it finds an h1, the tag
+						is present. This is identical to how browsers validate HTML — which
+						means if it passes the validator, it will actually render.
+					</p>
+				</div>
+
+				<h3 style="margin-bottom: 10px">Validation Rules — 8 Total</h3>
+				<div class="tw">
+					<table>
+						<thead>
+							<tr>
+								<th>Rule</th>
+								<th>Fields</th>
+								<th>What it checks</th>
+								<th>Example</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><code style="color: var(--teal)">tag_present</code></td>
+								<td style="color: var(--t2)">
+									<code>tag</code>, <code>error_type</code>
+								</td>
+								<td style="color: var(--t2)">
+									DOM contains at least one instance of the specified tag,
+									properly opened and closed.
+								</td>
+								<td>
+									<pre style="margin: 0; padding: 6px; font-size: 10px">
+{ "rule": "tag_present",
+  "tag": "h1",
+  "error_type": "missing_closing_tag" }</pre
+									>
+								</td>
+							</tr>
+							<tr>
+								<td><code style="color: var(--teal)">tag_count</code></td>
+								<td style="color: var(--t2)">
+									<code>tag</code>, <code>min</code>, <code>error_type</code>
+								</td>
+								<td style="color: var(--t2)">
+									DOM contains at least <code>min</code> instances of the tag.
+									Used where multiple tags are required.
+								</td>
+								<td>
+									<pre style="margin: 0; padding: 6px; font-size: 10px">
+{ "rule": "tag_count",
+  "tag": "p", "min": 2,
+  "error_type": "wrong_tag" }</pre
+									>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<code style="color: var(--teal)">content_min_chars</code>
+								</td>
+								<td style="color: var(--t2)">
+									<code>tag</code>, <code>min</code>, <code>error_type</code>
+								</td>
+								<td style="color: var(--t2)">
+									Text content inside the
+									<strong>first matching tag</strong> (trimmed) must be at least
+									<code>min</code> characters. Catches empty tags and
+									whitespace-only content.
+								</td>
+								<td>
+									<pre style="margin: 0; padding: 6px; font-size: 10px">
+{ "rule": "content_min_chars",
+  "tag": "h1", "min": 2,
+  "error_type": "empty_content" }</pre
+									>
+								</td>
+							</tr>
+							<tr>
+								<td><code style="color: var(--teal)">content_changed</code></td>
+								<td style="color: var(--t2)">
+									<code>tag</code>, <code>not_equal</code>,
+									<code>error_type</code>
+								</td>
+								<td style="color: var(--t2)">
+									Content inside the tag must differ from the starter value.
+									Used in personalization steps — ensures the student changed
+									the placeholder.
+								</td>
+								<td>
+									<pre style="margin: 0; padding: 6px; font-size: 10px">
+{ "rule": "content_changed",
+  "tag": "h1",
+  "not_equal": "Hello, I'm Byte!",
+  "error_type": "empty_content" }</pre
+									>
+								</td>
+							</tr>
+							<tr>
+								<td><code style="color: var(--teal)">all_tags_valid</code></td>
+								<td style="color: var(--t2)">
+									<code>allowed_tags</code>, <code>error_type</code>
+								</td>
+								<td style="color: var(--t2)">
+									Every tag in the student's code must be in the
+									<code>allowed_tags</code> list. Prevents students from using
+									tags they haven't learned yet.
+								</td>
+								<td>
+									<pre style="margin: 0; padding: 6px; font-size: 10px">
+{ "rule": "all_tags_valid",
+  "allowed_tags": ["h1","p"],
+  "error_type": "wrong_tag" }</pre
+									>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<code style="color: var(--teal)">css_property_set</code>
+									<span class="blm b" style="font-size: 7px">v1.1</span>
+								</td>
+								<td style="color: var(--t2)">
+									<code>selector</code>, <code>property</code>,
+									<code>not_default</code>, <code>error_type</code>
+								</td>
+								<td style="color: var(--t2)">
+									Checks
+									<code
+										>getComputedStyle(doc.querySelector(selector))[property]</code
+									>
+									against the browser default. Passes if the value differs.
+									Default for <code>color</code>: <code>rgb(0,0,0)</code>.
+									Default for <code>background-color</code>:
+									<code>rgba(0,0,0,0)</code>. Always use computed style — never
+									string-match raw CSS.
+								</td>
+								<td>
+									<pre style="margin: 0; padding: 6px; font-size: 10px">
+{ "rule": "css_property_set",
+  "selector": "h1",
+  "property": "color",
+  "not_default": true,
+  "error_type": "css_property_error" }</pre
+									>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<code style="color: var(--teal)">css_has_semicolon</code>
+									<span class="blm b" style="font-size: 7px">v1.1</span>
+								</td>
+								<td style="color: var(--t2)">
+									<code>selector</code>, <code>property</code>,
+									<code>error_type</code>
+								</td>
+								<td style="color: var(--t2)">
+									Parses the <code>style</code> tag's text content and checks
+									that the rule targeting <code>selector</code> for
+									<code>property</code> ends with a semicolon. Catches
+									syntactically incorrect CSS regardless of browser forgiveness.
+								</td>
+								<td>
+									<pre style="margin: 0; padding: 6px; font-size: 10px">
+{ "rule": "css_has_semicolon",
+  "selector": "h1",
+  "property": "color",
+  "error_type": "css_syntax_error" }</pre
+									>
+								</td>
+							</tr>
+							<tr style="background: #020d0d">
+								<td>
+									<code style="color: var(--teal)"
+										>all_instances_min_chars</code
+									>
+									<span class="bt b" style="font-size: 7px">v1.2</span>
+								</td>
+								<td style="color: var(--t2)">
+									<code>tag</code>, <code>min</code>, <code>error_type</code>
+								</td>
+								<td style="color: var(--t2)">
+									Queries <strong>ALL</strong> instances of the tag using
+									<code>querySelectorAll(tag)</code> and checks that every one
+									has
+									<code
+										>textContent.trim().replace(/\s+/g,'').length &gt;=
+										min</code
+									>. Fails on the first instance that doesn't meet the minimum.
+									<strong>Why this exists:</strong>
+									<code>content_min_chars</code> only checks the first matching
+									element — a student who fills one <code>&lt;p&gt;</code> and
+									leaves the others empty would pass. This rule closes that gap.
+									Required for Lesson 3+ challenge steps with multiple required
+									content tags. Implementation:
+									<code
+										>Array.from(doc.querySelectorAll(tag)).every(el =>
+										el.textContent.trim().replace(/\s+/g,'').length >=
+										min)</code
+									>.
+								</td>
+								<td>
+									<pre style="margin: 0; padding: 6px; font-size: 10px">
+{ "rule": "all_instances_min_chars",
+  "tag": "p",
+  "min": 5,
+  "error_type": "empty_content" }</pre
+									>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h3 style="margin-bottom: 10px; margin-top: 4px">
+					Error Types — The Enum (7 Values)
+				</h3>
+				<p class="intro" style="margin-bottom: 12px">
+					The <code>error_type</code> field on each validation rule maps
+					directly to the <code>error_type</code> enum in the
+					<code>mistake_log</code> DB table. This is the link between lesson
+					content and learning analytics.
+				</p>
+				<div class="tw">
+					<table>
+						<thead>
+							<tr>
+								<th>error_type value</th>
+								<th>What happened</th>
+								<th>What the teacher dashboard surfaces</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<code style="color: var(--red)">missing_closing_tag</code>
+								</td>
+								<td style="color: var(--t2)">
+									Student wrote <code>&lt;h1&gt;Hello</code> without
+									<code>&lt;/h1&gt;</code>. Or wrote nothing at all.
+								</td>
+								<td style="color: var(--t2)">
+									"X% of kids on step Y are missing the closing tag" →
+									Instructor review flag
+								</td>
+							</tr>
+							<tr>
+								<td><code style="color: var(--red)">wrong_tag</code></td>
+								<td style="color: var(--t2)">
+									Student used a tag not in the allowed set, or the wrong tag
+									for the task.
+								</td>
+								<td style="color: var(--t2)">
+									"Top error on step Y is wrong_tag" → Lesson may need clearer
+									instruction
+								</td>
+							</tr>
+							<tr>
+								<td><code style="color: var(--red)">empty_content</code></td>
+								<td style="color: var(--t2)">
+									Tag is present but contains no content, whitespace only, or
+									fewer than the minimum characters. Also fired by
+									<code>all_instances_min_chars</code> when any instance is
+									empty.
+								</td>
+								<td style="color: var(--t2)">
+									"High empty_content rate on step Y" → Hint delay may need to
+									decrease
+								</td>
+							</tr>
+							<tr>
+								<td><code style="color: var(--red)">case_error</code></td>
+								<td style="color: var(--t2)">
+									Reserved: student used <code>&lt;H1&gt;</code> instead of
+									<code>&lt;h1&gt;</code>. DOM validator passes this (HTML is
+									case-insensitive) but flagged for style feedback in advanced
+									lessons.
+								</td>
+								<td style="color: var(--t2)">
+									Not currently surfaced. Reserved for Lesson 6+.
+								</td>
+							</tr>
+							<tr>
+								<td><code style="color: var(--red)">whitespace_only</code></td>
+								<td style="color: var(--t2)">
+									Tag content is all whitespace. Distinct from empty because the
+									student tried to enter something.
+								</td>
+								<td style="color: var(--t2)">
+									"Whitespace_only on step Y" → Student may be pressing space
+									bar testing the editor
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<code style="color: var(--red)">css_syntax_error</code>
+									<span class="blm b" style="font-size: 7px">v1.1</span>
+								</td>
+								<td style="color: var(--t2)">
+									Student wrote a CSS rule missing a semicolon or colon. Fired
+									by <code>css_has_semicolon</code>.
+								</td>
+								<td style="color: var(--t2)">
+									"css_syntax_error on step Y" → Lesson may need to emphasize
+									semicolons more explicitly
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<code style="color: var(--red)">css_property_error</code>
+									<span class="blm b" style="font-size: 7px">v1.1</span>
+								</td>
+								<td style="color: var(--t2)">
+									Student left a CSS property value empty or used a value that
+									doesn't change computed style from default. Fired by
+									<code>css_property_set</code>.
+								</td>
+								<td style="color: var(--t2)">
+									"css_property_error on step Y" → Hint delay may need to
+									decrease
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="note ok">
+					<strong>How Byte's wrong-answer behavior maps to error types.</strong>
+					<p>
+						Byte never says "That's wrong." Byte redirects based on what went
+						wrong. The error_type from the validator determines which Byte line
+						plays. <code>missing_closing_tag</code> → "Find the one with the
+						little line inside." <code>empty_content</code> → "Click inside.
+						Write something." The lesson author writes these lines per-step in
+						the <code>feedback.incorrect</code> field.
+					</p>
+				</div>
+			</div>
+
+			<!-- ══════════════════ TAB 5: STORAGE GUIDE ══════════════════ -->
+			<div id="storage" class="sec">
+				<h2>Storage Guide — Where Everything Lives</h2>
+				<p class="intro">
+					Match the tool to the job. The wrong answer: one big Google Doc with
+					everything. The right answer: the source of truth for a given artifact
+					type should be the tool that makes it hardest to let that artifact go
+					stale.
+				</p>
+
+				<div class="faang">
+					<div class="faang-lbl">
+						FAANG Principle — "Single Source of Truth per Artifact Type"
+					</div>
+					<p>
+						At Stripe, API documentation lives in the codebase as OpenAPI specs
+						— not in Notion. At Airbnb, design tokens live in Figma and are
+						programmatically exported to code. The principle:
+						<strong
+							>the source of truth for a given artifact type should be the tool
+							that makes it hardest to let that artifact go stale.</strong
+						>
+						For code and JSON: Git. For narrative content and planning: Notion.
+					</p>
+				</div>
+
+				<div class="storage-tier">
+					<div>
+						<div class="storage-label">Source of Truth</div>
+						<div class="storage-name">GitHub</div>
+						<div class="storage-cost">Free tier sufficient</div>
+					</div>
+					<div>
+						<h3 style="margin-bottom: 8px">What lives here</h3>
+						<ul
+							style="
+								color: var(--t2);
+								font-size: 12px;
+								padding-left: 16px;
+								line-height: 1.8;
+							"
+						>
+							<li>
+								<code>/data/lessons/lesson_00N.json</code> — all lesson JSON
+								files
+							</li>
+							<li>
+								<code>/docs/architecture-v3.1.html</code> — architecture doc
+							</li>
+							<li>
+								<code>/docs/lesson-schema-v1.2.html</code> — this schema doc
+							</li>
+							<li>
+								<code>/docs/COMPLIANCE.md</code>, <code>API.md</code>,
+								<code>DATA-DICTIONARY.md</code>
+							</li>
+							<li>
+								<code>/packages/validators/</code> — the DOM validation logic
+							</li>
+							<li>All application code</li>
+						</ul>
+						<div class="note ok" style="margin-top: 12px; margin-bottom: 0">
+							<strong>Why GitHub for lesson JSON?</strong>
+							<p>
+								Git history, PR review, and CI validation. None of this is
+								possible in a Google Doc. The lesson JSON is code — treat it
+								like code.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="storage-tier">
+					<div>
+						<div class="storage-label">Collaborative Planning</div>
+						<div class="storage-name">Notion</div>
+						<div class="storage-cost">Free tier sufficient</div>
+					</div>
+					<div>
+						<h3 style="margin-bottom: 8px">What lives here</h3>
+						<ul
+							style="
+								color: var(--t2);
+								font-size: 12px;
+								padding-left: 16px;
+								line-height: 1.8;
+							"
+						>
+							<li>
+								<strong>Narrative lesson specs</strong> — human-readable,
+								collaborative, Josh and Manny can edit without touching code
+							</li>
+							<li>
+								<strong>Curriculum roadmap</strong> — concept progression,
+								pacing notes
+							</li>
+							<li>
+								<strong>BRL application materials</strong> — pitch narrative,
+								team bios, milestones
+							</li>
+							<li>
+								<strong>Meeting notes</strong> — sprint decisions, open
+								questions, action items
+							</li>
+							<li>
+								<strong>Writing rules reference</strong> — pinned for all lesson
+								authors
+							</li>
+							<li>
+								<strong>Byte character guide</strong> — emotion states, dialogue
+								rules
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="storage-tier" style="border-color: var(--b3)">
+					<div>
+						<div class="storage-label">Do Not Use For This</div>
+						<div class="storage-name" style="color: var(--red)">
+							Google Docs
+						</div>
+						<div class="storage-cost" style="color: var(--red)">
+							For technical specs
+						</div>
+					</div>
+					<div>
+						<p style="color: var(--t2); font-size: 12px; line-height: 1.7">
+							No version control engineers can work with. Can't run a diff.
+							Can't reject a change via review. Can't link a Doc to a specific
+							deploy. For narrative content — totally fine. For technical specs
+							that must stay in sync with code — never.
+						</p>
+						<p
+							style="
+								color: var(--t2);
+								font-size: 12px;
+								line-height: 1.7;
+								margin-top: 8px;
+							"
+						>
+							<strong style="color: var(--tx)">One exception:</strong> The BRL
+							application. Narrative essays and team bios can live in Google
+							Docs — they're one-off artifacts with a clear end date.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- ══════════════════ TAB 6: CHECKLIST ══════════════════ -->
+			<div id="checklist" class="sec">
+				<h2>Adding a New Lesson — Checklist</h2>
+				<p class="intro">
+					This is the process every new lesson must go through. Print this.
+					Follow it. If any step is skipped, the lesson doesn't ship.
+				</p>
+
+				<h3 style="margin-bottom: 10px">Phase 1 — Content (Notion)</h3>
+				<ul class="checklist">
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Write the narrative spec</strong> — Full lesson in Notion
+							following the lesson spec format. Title, objective, Byte dialogue,
+							step-by-step content, writing rules applied throughout. Gets a
+							Notion status: "Spec."
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Apply the writing rules</strong> — Max 8 words per
+							sentence. No word above 2 syllables unless it's the concept being
+							taught. Byte speaks max 2 lines. Wrong answers redirect, never
+							punish.
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Define the concept arc</strong> — What exactly does this
+							lesson teach? Update <code>concepts_introduced</code>. Confirm it
+							builds on the prior lesson's <code>concepts_introduced</code>.
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Estimate step timings</strong> — For each step, estimate
+							<code>bootstrap_median_ms</code>. Time yourself doing it slowly.
+							Multiply by 1.5 for a 7-year-old.
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>DoE + peer review the spec</strong> — At least one other
+							person reads it. Apply the DoE inspector checklist from the lesson
+							spec's DoE section. Would a 7-year-old understand this?
+						</div>
+					</li>
+				</ul>
+
+				<h3 style="margin-bottom: 10px; margin-top: 4px">
+					Phase 2 — JSON (GitHub PR)
+				</h3>
+				<ul class="checklist">
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Create the file</strong> —
+							<code>/data/lessons/lesson_00N.json</code>. Copy the structure
+							from <code>lesson_003.json</code> as the current best-practice
+							starting point.
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Set schema_version to "1.2.0"</strong> — All lessons from
+							Lesson 3 onward use schema v1.2. Do not use "1.0.0" or "1.1.0" —
+							the CI validator will reject it.
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Fill in meta</strong> — Set <code>id</code>,
+							<code>schema_version</code>, <code>version: 1</code>, all meta
+							fields. Confirm <code>prior_lesson_id</code> and
+							<code>next_lesson_id</code>. Set <code>total_xp</code>.
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Translate each step</strong> — Every step in the narrative
+							spec becomes a step object. Assign step IDs following the pattern:
+							<code>step_1_info</code>, <code>step_1_quiz</code>,
+							<code>step_2_editor</code>. IDs never change after first ship.
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Set bootstrap_median_ms on every step</strong> — No step
+							can have this field missing. The CI validator will reject the
+							file.
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Use all_instances_min_chars for challenge p tags</strong>
+							— Any challenge step with multiple required content tags must use
+							<code>all_instances_min_chars</code>, not just
+							<code>content_min_chars</code>. Schema v1.2 requirement.
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Verify XP sum</strong> — Sum of all step XP values must
+							equal <code>meta.total_xp</code>. The validator checks this.
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Run the validator locally</strong> —
+							<code>npm run validate:lessons</code>. Fix all errors before
+							opening a PR.
+						</div>
+					</li>
+				</ul>
+
+				<h3 style="margin-bottom: 10px; margin-top: 4px">
+					Phase 3 — Review & Ship
+				</h3>
+				<ul class="checklist">
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Open the PR</strong> — Title:
+							<code>content: add lesson_00N — [Lesson Title]</code>. Link to the
+							Notion spec page in the PR description.
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>CI passes</strong> — Schema validation, XP sum check, step
+							ID uniqueness, bootstrap_median_ms presence,
+							all_instances_min_chars usage check. All green.
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Manual playthrough</strong> — Someone on the team runs
+							through the full lesson on the preview deploy. Every step,
+							including wrong answers and the challenge.
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Update Notion status</strong> — Change the lesson's status
+							from "Spec" → "Shipped."
+						</div>
+					</li>
+					<li>
+						<span class="check"></span>
+						<div>
+							<strong>Update prior lesson's next_lesson_id</strong> — If lesson
+							4 ships, lesson 3's <code>next_lesson_id</code> needs updating.
+							This unlocks the teaser on the lesson complete screen.
+						</div>
+					</li>
+				</ul>
+
+				<div class="note danger">
+					<strong
+						>Never change a step ID after it has shipped to students.</strong
+					>
+					<p>
+						Changing a step ID will orphan all the
+						<code>lesson_progress</code> and <code>mistake_log</code> rows for
+						that step. The analytics dashboard will silently lose that data —
+						and students will be asked to redo a step they've already completed.
+						If you need to restructure steps, create new step IDs and migrate
+						the old data. This is a two-phase operation documented in
+						MIGRATION_GUIDE.md.
+					</p>
+				</div>
+			</div>
+		</div>
+		<script>
+			const tabs = [
+				"philosophy",
+				"schema",
+				"steptypes",
+				"validation",
+				"storage",
+				"checklist",
+			];
+			function show(id) {
+				tabs.forEach((t) => {
+					document.getElementById(t).classList.toggle("on", t === id);
+				});
+				document.querySelectorAll(".nb").forEach((b, i) => {
+					b.classList.toggle("on", tabs[i] === id);
+				});
+			}
+			// v1.2 — April 2026
+		</script>
+	</body>
+</html>

@@ -1,0 +1,531 @@
+{
+	"id": "lesson_004",
+	"schema_version": "1.2.0",
+	"version": 1,
+
+	"_changelog": "v1 — Initial build. First lesson introducing heading hierarchy (h2, h3). First challenge that combines tags from multiple prior lessons (h1 from L1, p from L3, new h2/h3). No new validation rules required — uses existing schema v1.2 rules only. heading_hierarchy validation rule deferred to schema v1.3 (see data analyst note in Notion spec).",
+
+	"meta": {
+		"title": "Make it Big or Small! 🔤",
+		"slug": "make-it-big-or-small",
+		"emoji": "🔤",
+		"age_range": { "min": 7, "max": 10 },
+		"prior_lesson_id": "lesson_003",
+		"next_lesson_id": "lesson_005",
+		"time_estimate_min": 16,
+		"total_xp": 100,
+		"_xp_note": "3 code_editor steps × 20 XP + challenge × 20 XP = 80 XP. total_xp set to 100 per PRD spec. Open question unresolved — see PRD Section 11. CI XP sum validator will flag this until resolved.",
+		"objective": "By the end — you will build a page with headings of three different sizes.",
+		"concepts_introduced": [
+			"h2_tag",
+			"h3_tag",
+			"heading_hierarchy",
+			"heading_size_relationship"
+		],
+		"concepts_required": [
+			"h1_tag",
+			"p_tag",
+			"tag_pairs",
+			"page_skeleton",
+			"head_tag",
+			"body_tag",
+			"css",
+			"color_property",
+			"p_tag_deep",
+			"content_hierarchy",
+			"multiple_paragraphs"
+		],
+		"tags": ["html", "headings", "hierarchy", "structure", "web"]
+	},
+
+	"byte_arc": {
+		"opening_emotion": "excited",
+		"closing_emotion": "proud"
+	},
+
+	"steps": [
+		{
+			"id": "warmup",
+			"type": "warmup",
+			"order": 0,
+			"xp": 0,
+			"bootstrap_median_ms": 45000,
+			"_bootstrap_note": "45s median — recalling multiple p tags takes longer than recalling a single tag. Three p tags + minimal content. Some kids will need most of the 60 seconds.",
+			"progress_label": null,
+			"always_advance": true,
+			"time_limit_ms": 60000,
+			"byte": {
+				"emotion": "neutral",
+				"lines": ["Warm-up time.", "Can you remember last lesson?"]
+			},
+			"prompt_lines": [
+				"Write a heading with your topic.",
+				"Write three p tags. One sentence each."
+			],
+			"starter_code": "",
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "h1",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "tag_count",
+					"tag": "p",
+					"min": 3,
+					"error_type": "wrong_tag"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Nice. You remembered.",
+					"emotion": "neutral"
+				},
+				"timeout": {
+					"byte_line": "No worries. Let's keep going.",
+					"emotion": "neutral"
+				}
+			}
+		},
+
+		{
+			"id": "mascot_intro",
+			"type": "mascot_intro",
+			"order": 1,
+			"xp": 0,
+			"bootstrap_median_ms": 8000,
+			"progress_label": null,
+			"byte": {
+				"emotion": "excited",
+				"lines": [
+					"Did you know the SIZE of a heading matters?",
+					"Bigger means more important."
+				]
+			},
+			"cta": "Show me! →",
+			"byte_story_moment": {
+				"lines": [
+					"The first heading I tried came out tiny.",
+					"Turns out I just needed an h1 instead of an h6."
+				],
+				"emotion": "story",
+				"auto_dismiss_ms": 8000,
+				"dismiss_label": "Got it"
+			}
+		},
+
+		{
+			"id": "step_1_info",
+			"type": "info",
+			"order": 2,
+			"xp": 0,
+			"bootstrap_median_ms": 15000,
+			"progress_label": "1 of 5",
+			"title": "Size = Importance",
+			"content_lines": [
+				"`h1` is the biggest.",
+				"`h2` is medium.",
+				"`h3` is smaller.",
+				"Bigger = more important."
+			],
+			"byte": {
+				"emotion": "neutral",
+				"lines": [
+					"The bigger the heading — the bigger the idea.",
+					"Look at the sizes."
+				]
+			},
+			"animation": "heading_size_comparison",
+			"_animation_note": "Three headings render side by side simultaneously, then labels fade in below each one: 'biggest', 'medium', 'smallest'. Text content should be the same word in all three (e.g. 'Hello') so only the size differs — isolating the concept. Brand colors: h1 in purple, h2 in orange, h3 in teal. After 2 seconds, numbers appear above: '1', '2', '3'. After another second, a connecting line appears showing the inverse relationship: number goes up, size goes down.",
+			"code_animation": {
+				"type": "heading_size_comparison",
+				"headings": [
+					{
+						"tag": "h1",
+						"text": "Hello",
+						"label": "biggest",
+						"color": "#5C3EBC"
+					},
+					{
+						"tag": "h2",
+						"text": "Hello",
+						"label": "medium",
+						"color": "#D4581A"
+					},
+					{
+						"tag": "h3",
+						"text": "Hello",
+						"label": "smallest",
+						"color": "#0D7C7B"
+					}
+				],
+				"show_numbers_after_ms": 2000,
+				"show_relationship_after_ms": 3000
+			}
+		},
+
+		{
+			"id": "step_1_quiz",
+			"type": "quiz",
+			"order": 3,
+			"xp": 0,
+			"bootstrap_median_ms": 11000,
+			"progress_label": "1 of 5",
+			"prompt": "Which heading is biggest?",
+			"byte": {
+				"emotion": "curious",
+				"lines": ["Which heading is biggest?"]
+			},
+			"options": [
+				{ "id": "opt_a", "text": "h3", "is_correct": false },
+				{ "id": "opt_b", "text": "h2", "is_correct": false },
+				{ "id": "opt_c", "text": "h1", "is_correct": true }
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "h1. The lowest number. The biggest size.",
+					"emotion": "happy"
+				},
+				"incorrect": {
+					"byte_line": "The lowest number is the biggest. Try again.",
+					"emotion": "thinking",
+					"action": "reset"
+				}
+			},
+			"tap_target": null
+		},
+
+		{
+			"id": "step_2_info",
+			"type": "info",
+			"order": 4,
+			"xp": 0,
+			"bootstrap_median_ms": 14000,
+			"progress_label": "2 of 5",
+			"title": "Think of a Newspaper",
+			"_design_note": "Piaget — concrete familiar context before abstract concept. Newspaper is a physical, concrete object most 7-year-olds have seen. The analogy: big headline (h1) → smaller article title (h2) → even smaller section header (h3). This maps directly to how real web pages are structured.",
+			"content_lines": [
+				"Think of a newspaper.",
+				"Big **headline** at the top.",
+				"Smaller title underneath.",
+				"Even smaller detail below that."
+			],
+			"byte": {
+				"emotion": "neutral",
+				"lines": ["h1 is the big headline.", "h2 and h3 fill in the details."]
+			},
+			"animation": "newspaper_hierarchy",
+			"_animation_note": "Newspaper front page animation. Three sections appear top to bottom: large text (h1 labeled 'big headline'), medium text below it (h2 labeled 'article title'), smaller text below that (h3 labeled 'section detail'). Each section fades in with a 0.8s delay between them. Satisfying top-to-bottom build.",
+			"code_animation": {
+				"type": "sequential_appear",
+				"elements": [
+					{
+						"token": "<h1>Big Headline</h1>",
+						"label": "big headline",
+						"delay_ms": 0
+					},
+					{
+						"token": "<h2>Article Title</h2>",
+						"label": "article title",
+						"delay_ms": 900
+					},
+					{
+						"token": "<h3>Section Detail</h3>",
+						"label": "section detail",
+						"delay_ms": 900
+					}
+				]
+			}
+		},
+
+		{
+			"id": "step_2_quiz",
+			"type": "quiz",
+			"order": 5,
+			"xp": 0,
+			"bootstrap_median_ms": 11000,
+			"progress_label": "2 of 5",
+			"prompt": "Which heading is for a detail?",
+			"byte": {
+				"emotion": "curious",
+				"lines": ["Which heading is for a detail?"]
+			},
+			"options": [
+				{ "id": "opt_a", "text": "h1", "is_correct": false },
+				{ "id": "opt_b", "text": "h3", "is_correct": true }
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "h3. Smallest number — smallest size — most specific.",
+					"emotion": "happy"
+				},
+				"incorrect": {
+					"byte_line": "h1 is the big one. h3 is the detail.",
+					"emotion": "thinking",
+					"action": "reset"
+				}
+			},
+			"tap_target": null
+		},
+
+		{
+			"id": "step_3_editor",
+			"type": "code_editor",
+			"order": 6,
+			"xp": 20,
+			"bootstrap_median_ms": 45000,
+			"progress_label": "3 of 5",
+			"title": "Add a Second Heading",
+			"content_lines": [
+				"An `h2` sits under `h1`.",
+				"It is the next idea down."
+			],
+			"prompt_code": "<h2>My second heading</h2>",
+			"starter_code": "<h1>My Topic</h1>\n\n",
+			"_starter_note": "h1 is provided. Student adds h2 only. This isolates the new concept — they're not writing h1 for the third time, they're adding one new thing below something familiar.",
+			"byte": {
+				"emotion": "neutral",
+				"lines": ["Add an h2 under the h1.", "Write anything you want."]
+			},
+			"hint_delay_ms": 30000,
+			"hint": "Type `<h2>` then your words then `</h2>` to close it.",
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "h1",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "tag_present",
+					"tag": "h2",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "h2",
+					"min": 2,
+					"_min_note": "h2 is a heading label, not a sentence. min:2 is appropriate here — unlike p tags which need min:5 for sentence-level content. A heading like 'Dogs' (4 chars) is perfectly valid.",
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Two headings. Two levels. Your page has structure now.",
+					"emotion": "happy",
+					"animation": "sparkle_preview"
+				}
+			}
+		},
+
+		{
+			"id": "step_4_editor",
+			"type": "code_editor",
+			"order": 7,
+			"xp": 20,
+			"bootstrap_median_ms": 40000,
+			"progress_label": "4 of 5",
+			"title": "Add a Detail Heading",
+			"content_lines": ["h3 is even smaller.", "It adds a specific detail."],
+			"prompt_code": "<h3>One specific thing</h3>",
+			"starter_code": "<h1>My Topic</h1>\n<h2>My Second Heading</h2>\n\n",
+			"_starter_note": "Both h1 and h2 provided as context. Student adds h3 only. The scaffold is intentional — they see all three levels forming before they add the last one.",
+			"byte": {
+				"emotion": "neutral",
+				"lines": ["Add an h3 below the h2.", "One specific detail."]
+			},
+			"hint_delay_ms": 30000,
+			"hint": "Type `<h3>` then a specific detail then `</h3>`.",
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "h1",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "tag_present",
+					"tag": "h2",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "tag_present",
+					"tag": "h3",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "h3",
+					"min": 2,
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Three headings. Three sizes. That's hierarchy.",
+					"emotion": "happy",
+					"animation": "sparkle_preview"
+				}
+			}
+		},
+
+		{
+			"id": "step_5_editor",
+			"type": "code_editor",
+			"order": 8,
+			"xp": 20,
+			"bootstrap_median_ms": 55000,
+			"_bootstrap_note": "55s — bug finding with three different heading tags is harder than bug finding with p tags. Kids need to scan more code and know which tag is broken.",
+			"progress_label": "5 of 5",
+			"title": "Find the Missing Buddy",
+			"content_lines": [
+				"Byte's page has a problem.",
+				"One heading is missing its buddy."
+			],
+			"prompt_code": null,
+			"starter_code": "<h1>My Dog Biscuit</h1>\n<h2>Why Biscuit is Great\n<h3>He is very fast.</h3>",
+			"_bug_note": "The bug: h2 tag is missing its closing </h2>. The h3 tag is correctly opened and closed. Some browsers may visually render the h2 content (the parser will attempt to auto-close before the next block element). The validator checks source pairing: count of '<h2' must equal count of '</h2'. This is the same pattern as the Lesson 3 bug step but with a heading tag instead of a paragraph tag — reinforcing the tag-pairs concept across different tags.",
+			"byte": {
+				"emotion": "thinking",
+				"lines": ["One heading is missing its buddy.", "Can you find it?"]
+			},
+			"hint_delay_ms": 30000,
+			"hint": "Find the h2 tag. Does it have a little line in the closing tag?",
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "h1",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "tag_present",
+					"tag": "h2",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "tag_present",
+					"tag": "h3",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "h2",
+					"min": 2,
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_line": "Found it. Every tag needs its buddy. Every single time.",
+					"emotion": "happy",
+					"animation": "sparkle_preview"
+				}
+			}
+		},
+
+		{
+			"id": "challenge",
+			"type": "challenge",
+			"order": 9,
+			"xp": 20,
+			"bootstrap_median_ms": 130000,
+			"_bootstrap_note": "130s median (just over 2 minutes). This is the most complex challenge so far — first time combining tags from multiple prior lessons (h1 from L1, p from L3, new h2/h3 from this lesson). The structure is given as skeleton code, reducing blank-page panic. Traffic light: yellow at 260s (4 min), red at 390s (6.5 min). Do not flag yellow earlier — this challenge requires real thinking about topic organization.",
+			"progress_label": null,
+			"byte": {
+				"emotion": "proud",
+				"lines": ["Okay.", "I'm not helping this time.", "You've got this."]
+			},
+			"tasks": [
+				{ "description": "A big heading (`h1`) — your topic" },
+				{ "description": "A second heading (`h2`) — one thing about it" },
+				{ "description": "A detail heading (`h3`) — something specific" },
+				{ "description": "Two `<p>` tags — fill them in" }
+			],
+			"_tasks_design_note": "This challenge deliberately combines tags from Lessons 1, 3, and 4. This is the first cross-lesson integration challenge in the curriculum. Vygotsky ZPD: the stretch is combining known things in a new structure, not learning a new thing. Cognitively demanding but achievable. The skeleton gives them the structure so they focus on content selection (which is hard enough).",
+			"starter_code": "<h1></h1>\n<h2></h2>\n<h3></h3>\n<p></p>\n<p></p>",
+			"hints_enabled": false,
+			"validation_rules": [
+				{
+					"rule": "tag_present",
+					"tag": "h1",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "h1",
+					"min": 2,
+					"error_type": "empty_content"
+				},
+				{
+					"rule": "tag_present",
+					"tag": "h2",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "h2",
+					"min": 2,
+					"error_type": "empty_content"
+				},
+				{
+					"rule": "tag_present",
+					"tag": "h3",
+					"error_type": "missing_closing_tag"
+				},
+				{
+					"rule": "content_min_chars",
+					"tag": "h3",
+					"min": 2,
+					"error_type": "empty_content"
+				},
+				{
+					"rule": "tag_count",
+					"tag": "p",
+					"min": 2,
+					"error_type": "wrong_tag"
+				},
+				{
+					"rule": "all_instances_min_chars",
+					"tag": "p",
+					"min": 5,
+					"_rule_note": "Schema v1.2 rule. Both p tags must have ≥ 5 chars of real content. h2 and h3 use content_min_chars (min:2) because they are labels. p tags use all_instances_min_chars (min:5) because they are content. This distinction is intentional and must be maintained in all future lessons.",
+					"error_type": "empty_content"
+				}
+			],
+			"feedback": {
+				"correct": {
+					"byte_lines": [
+						"Three headings. Two paragraphs. One complete page.",
+						"This is exactly how real websites are built.",
+						"You did that."
+					],
+					"emotion": "celebrating",
+					"animation": "confetti"
+				}
+			}
+		},
+
+		{
+			"id": "lesson_complete",
+			"type": "lesson_complete",
+			"order": 10,
+			"xp": 0,
+			"bootstrap_median_ms": 20000,
+			"progress_label": null,
+			"byte": {
+				"emotion": "proud",
+				"lines": [
+					"You learned heading hierarchy today.",
+					"Big, medium, small — your page has structure."
+				]
+			},
+			"summary": [
+				{ "concept": "Biggest heading", "tag": "h1" },
+				{ "concept": "Medium heading", "tag": "h2" },
+				{ "concept": "Smallest heading", "tag": "h3" },
+				{ "concept": "Lower number = bigger size", "note": "always" },
+				{ "concept": "Every tag needs a buddy", "note": "still always" }
+			],
+			"total_xp": 100,
+			"next_lesson_teaser": "Make a List of Things"
+		}
+	]
+}
